@@ -19,11 +19,12 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { Plus, Filter, Command, Activity, Users, Target, CheckSquare, FileText, Sparkles, Square, CheckSquare as CheckedSquare, ArrowUpDown, Download } from "lucide-react"
+import { Plus, Filter, Command, Activity, Users, Target, CheckSquare, FileText, Sparkles, Square, CheckSquare as CheckedSquare, ArrowUpDown, Download, Settings } from "lucide-react"
 import { TaskColumn } from "./task-column"
 import { AddTaskDialog } from "./add-task-dialog"
 import { TaskTemplatePicker } from "./task-template-picker"
 import { BulkActionBar } from "./bulk-action-bar"
+import { ColumnCustomizationDialog } from "./column-customization-dialog"
 import { SectionErrorBoundary } from "@/components/ui/error-boundary"
 import { Task } from "./task-card"
 import { TaskTemplate, createTaskFromTemplate } from "@/lib/task-templates"
@@ -35,6 +36,7 @@ import { useToastActions } from "@/components/ui/toast"
 import { logTaskAction, logNavigationAction } from "@/lib/activity-logger"
 import { exportTasksAsCSV, exportTasksAsJSON, downloadFile, generateFilename } from "@/lib/export-utils"
 import { useUndoSystem } from "@/lib/undo-system"
+import { useKanbanColumns } from "@/hooks/use-kanban-columns"
 
 // Note: Tasks are now loaded from localStorage via loadTasks()
 
@@ -83,6 +85,7 @@ export function TasksBoard() {
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc')
   const toast = useToastActions()
   const { canUndo, popLastAction, addTaskCreate, addTaskDelete, addTaskUpdate, addTaskStatusChange } = useUndoSystem()
+  const { columns } = useKanbanColumns()
 
   // Load data from localStorage on mount
   useEffect(() => {
@@ -181,12 +184,22 @@ export function TasksBoard() {
 
   // Group tasks by status
   const tasksByStatus = useMemo(() => {
-    return {
-      todo: filteredTasks.filter(task => task.status === "todo"),
-      "in-progress": filteredTasks.filter(task => task.status === "in-progress"),
-      done: filteredTasks.filter(task => task.status === "done"),
+    const grouped: Record<string, Task[]> = {}
+    
+    columns.forEach(column => {
+      grouped[column.id] = filteredTasks.filter(task => task.status === column.id)
+    })
+    
+    // Handle tasks with status not matching any column (assign to first column)
+    const orphanTasks = filteredTasks.filter(task => 
+      !columns.some(col => col.id === task.status)
+    )
+    if (orphanTasks.length > 0 && columns.length > 0) {
+      grouped[columns[0].id] = [...(grouped[columns[0].id] || []), ...orphanTasks]
     }
-  }, [filteredTasks])
+    
+    return grouped
+  }, [filteredTasks, columns])
 
   const handleDragEnd = (result: DropResult) => {
     const { destination, source, draggableId } = result
@@ -196,7 +209,7 @@ export function TasksBoard() {
       return
     }
 
-    const newStatus = destination.droppableId as "todo" | "in-progress" | "done"
+    const newStatus = destination.droppableId
     const task = tasks.find(t => t._id === draggableId)
 
     if (task) {
@@ -674,6 +687,21 @@ export function TasksBoard() {
                   </Button>
                 </motion.div>
 
+                <ColumnCustomizationDialog 
+                  trigger={
+                    <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+                      <Button
+                        variant="outline"
+                        className="glass-morphism border-[hsl(var(--command-accent))]/30 text-[hsl(var(--command-accent))] hover:bg-[hsl(var(--command-accent))]/10 font-semibold px-4 min-h-[44px]"
+                        title="Customize kanban columns"
+                      >
+                        <Settings className="h-4 w-4 mr-2" />
+                        Columns
+                      </Button>
+                    </motion.div>
+                  }
+                />
+
                 <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
                   <Button
                     onClick={handleAddNewTask}
@@ -704,38 +732,22 @@ export function TasksBoard() {
                 />
               ) : (
                 <DragDropContext onDragEnd={handleDragEnd}>
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 overflow-x-auto pb-4">
-                  <TaskColumn
-                    title="Awaiting Deployment"
-                    status="todo"
-                    tasks={tasksByStatus.todo}
-                    onEditTask={handleEditTask}
-                    onDeleteTask={handleDeleteTask}
-                    selectedTasks={selectedTasks}
-                    onTaskSelect={handleTaskSelect}
-                    showSelection={bulkSelectionMode}
-                  />
-                  <TaskColumn
-                    title="Active Operations"
-                    status="in-progress"
-                    tasks={tasksByStatus["in-progress"]}
-                    onEditTask={handleEditTask}
-                    onDeleteTask={handleDeleteTask}
-                    selectedTasks={selectedTasks}
-                    onTaskSelect={handleTaskSelect}
-                    showSelection={bulkSelectionMode}
-                  />
-                  <TaskColumn
-                    title="Mission Complete"
-                    status="done"
-                    tasks={tasksByStatus.done}
-                    onEditTask={handleEditTask}
-                    onDeleteTask={handleDeleteTask}
-                    selectedTasks={selectedTasks}
-                    onTaskSelect={handleTaskSelect}
-                    showSelection={bulkSelectionMode}
-                  />
-                </div>
+                  <div className="grid gap-4 overflow-x-auto pb-4" style={{ gridTemplateColumns: `repeat(${columns.length}, minmax(300px, 1fr))` }}>
+                    {columns.map((column) => (
+                      <TaskColumn
+                        key={column.id}
+                        title={column.title}
+                        status={column.id}
+                        tasks={tasksByStatus[column.id] || []}
+                        onEditTask={handleEditTask}
+                        onDeleteTask={handleDeleteTask}
+                        selectedTasks={selectedTasks}
+                        onTaskSelect={handleTaskSelect}
+                        showSelection={bulkSelectionMode}
+                        color={column.color}
+                      />
+                    ))}
+                  </div>
               </DragDropContext>
             )}
           </motion.div>

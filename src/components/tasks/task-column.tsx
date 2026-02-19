@@ -11,13 +11,14 @@ import { StaggeredList } from "@/components/ui/staggered-list"
 
 interface TaskColumnProps {
   title: string
-  status: "todo" | "in-progress" | "done"
+  status: string
   tasks: Task[]
   onEditTask: (task: Task) => void
   onDeleteTask: (taskId: string) => void
   selectedTasks?: Set<string>
   onTaskSelect?: (taskId: string, selected: boolean) => void
   showSelection?: boolean
+  color?: string
 }
 
 const statusConfig = {
@@ -71,9 +72,9 @@ const taskVariants = {
   }
 }
 
-export function TaskColumn({ title, status, tasks, onEditTask, onDeleteTask, selectedTasks, onTaskSelect, showSelection }: TaskColumnProps) {
-  const config = statusConfig[status]
-  const IconComponent = config.icon
+export function TaskColumn({ title, status, tasks, onEditTask, onDeleteTask, selectedTasks, onTaskSelect, showSelection, color = "#6b7280" }: TaskColumnProps) {
+  // Dynamic configuration based on provided props
+  const IconComponent = status === "done" ? CheckCircle : status.includes("progress") ? Zap : Clock
 
   return (
     <motion.div
@@ -87,7 +88,7 @@ export function TaskColumn({ title, status, tasks, onEditTask, onDeleteTask, sel
         <div
           className="absolute inset-0 opacity-5 pointer-events-none"
           style={{
-            background: `radial-gradient(circle at 50% 0%, ${config.accent} 0%, transparent 50%)`
+            background: `radial-gradient(circle at 50% 0%, ${color} 0%, transparent 50%)`
           }}
         />
 
@@ -95,10 +96,10 @@ export function TaskColumn({ title, status, tasks, onEditTask, onDeleteTask, sel
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="p-2 glass-morphism rounded-lg">
-                <IconComponent className={cn("h-4 w-4", config.color)} />
+                <IconComponent className="h-4 w-4" style={{ color }} />
               </div>
               <CardTitle className={cn("text-body-large font-semibold status-indicator", `status-${status}`)}>
-                {config.title}
+                {title}
               </CardTitle>
             </div>
             <motion.div
@@ -108,9 +109,12 @@ export function TaskColumn({ title, status, tasks, onEditTask, onDeleteTask, sel
             >
               <Badge
                 variant="outline"
-                className={cn("text-xs font-bold", config.badgeColor)}
+                className="text-xs font-bold"
                 style={{
-                  boxShadow: tasks.length > 0 ? `0 0 10px ${config.glowColor}20` : undefined
+                  backgroundColor: `${color}10`,
+                  color: color,
+                  borderColor: `${color}20`,
+                  boxShadow: tasks.length > 0 ? `0 0 10px ${color}20` : undefined
                 }}
               >
                 {tasks.length}
