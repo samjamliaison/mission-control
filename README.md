@@ -11,6 +11,30 @@ Mission Control is a comprehensive web dashboard that provides real-time monitor
 
 Transform your OpenClaw workspace into a powerful command center with real-time agent status, dynamic task boards, team coordination, and seamless workflow automation.
 
+## 📸 Screenshots
+
+### Main Dashboard
+![Mission Control Dashboard](./public/screenshots/dashboard.png)
+*Real-time agent monitoring and system overview*
+
+### Task Management
+![Task Management](./public/screenshots/tasks.png)  
+*Dynamic Kanban boards with drag-and-drop functionality*
+
+### Agent Monitoring
+![Agent Status](./public/screenshots/agents.png)
+*Live agent status and performance metrics*
+
+### Calendar & Scheduling
+![Calendar](./public/screenshots/calendar.png)
+*Integrated scheduling and event management*
+
+### Knowledge Base
+![Memory System](./public/screenshots/memory.png)
+*Centralized knowledge base with search and tagging*
+
+*Additional screenshots coming soon - browser control temporarily unavailable*
+
 ## ✨ Features
 
 - 🤖 **Real-time Agent Monitoring** — Live status tracking of all OpenClaw agents

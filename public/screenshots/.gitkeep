@@ -1,0 +1,12 @@
+# Screenshots Directory
+
+This directory contains screenshot images used in the README.
+
+Images:
+- dashboard.png - Main dashboard view
+- tasks.png - Task management kanban board  
+- agents.png - Agent monitoring interface
+- calendar.png - Calendar and scheduling view
+- memory.png - Memory system and knowledge base
+- pipeline.png - Content creation pipeline
+- setup.png - Onboarding setup wizard
