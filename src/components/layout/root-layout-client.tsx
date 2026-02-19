@@ -2,6 +2,7 @@
 
 import { Navigation } from "@/components/navigation"
 import { Breadcrumbs } from "@/components/breadcrumbs"
+import { GlobalSearch } from "@/components/search/global-search"
 import { PageTransitionProvider } from "@/components/ui/page-transition"
 import { CommandPalette } from "@/components/command-palette/command-palette"
 import { ToastProvider } from "@/contexts/toast-context"
@@ -36,7 +37,11 @@ export function RootLayoutClient({ children }: RootLayoutClientProps) {
           <main id="main-content" className="flex-1 min-h-screen" role="main" aria-label="Main content area">
             <PageTransitionProvider>
               <div className="p-4 sm:p-6 lg:p-8">
-                <Breadcrumbs />
+                {/* Header with Breadcrumbs and Search */}
+                <div className="flex items-center justify-between mb-6">
+                  <Breadcrumbs />
+                  <GlobalSearch />
+                </div>
                 {children}
               </div>
             </PageTransitionProvider>
