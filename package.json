@@ -1,7 +1,28 @@
 {
   "name": "mission-control",
-  "version": "0.1.0",
-  "private": true,
+  "version": "1.0.0",
+  "description": "Advanced task management dashboard for OpenClaw operations with glass morphism design",
+  "author": "Mission Control Contributors",
+  "license": "MIT",
+  "homepage": "https://github.com/samjamliaison/mission-control",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/samjamliaison/mission-control.git"
+  },
+  "bugs": {
+    "url": "https://github.com/samjamliaison/mission-control/issues"
+  },
+  "keywords": [
+    "nextjs",
+    "react",
+    "typescript",
+    "tailwindcss",
+    "task-management",
+    "dashboard",
+    "glass-morphism",
+    "openclaw"
+  ],
+  "private": false,
   "scripts": {
     "dev": "next dev",
     "build": "next build",

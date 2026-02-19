@@ -1,36 +1,251 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Mission Control 🚀
 
-## Getting Started
+> Advanced task management dashboard for OpenClaw operations
 
-First, run the development server:
+[![Build Status](https://img.shields.io/badge/build-passing-brightgreen)](https://github.com/samjamliaison/mission-control)
+[![Next.js](https://img.shields.io/badge/Next.js-16.1.6-black)](https://nextjs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue)](https://www.typescriptlang.org/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+Mission Control is a premium, glass-morphism styled command center for managing tasks, content pipelines, team operations, and memory systems. Built with modern web technologies and designed for high-performance mission-critical operations.
+
+## ✨ Features
+
+### 🎯 **Task Management**
+- **Kanban Board**: Drag-and-drop task organization with visual status tracking
+- **Agent Assignment**: Assign tasks to team members (Hamza, Manus, Monica, Jarvis, Luna)
+- **Priority Levels**: Low, Medium, High priority with visual indicators
+- **Real-time Updates**: Instant synchronization with local storage persistence
+
+### 🎬 **Content Pipeline**
+- **Multi-Platform Support**: YouTube, Blog, X/Twitter content management
+- **Status Tracking**: Idea → Script → Production → Review → Published
+- **Rich Metadata**: Thumbnails, scripts, assignees, and platform-specific details
+- **Visual Progress**: Glass-morphism cards with status-based styling
+
+### 👥 **Team Dashboard**
+- **Agent Profiles**: Individual team member management and status tracking
+- **Efficiency Metrics**: Real-time performance monitoring
+- **Role-Based Views**: Mission Commander, Chief of Staff, Creative Director roles
+- **Interactive Agent Cards**: Detailed profiles with avatars and specializations
+
+### 🧠 **Memory System**
+- **Knowledge Base**: Persistent memory storage for important information
+- **Search & Filter**: Quickly find relevant memories and insights
+- **Categorization**: Organized memory entries with timestamps
+- **Export/Import**: Backup and restore memory data
+
+### 🏢 **Office View**
+- **3D Workspace**: Interactive office environment visualization
+- **Agent Workstations**: Individual workspace monitoring
+- **System Status**: Real-time operational status displays
+- **Ambient Animations**: Smooth, professional interface movements
+
+### ⚙️ **Settings & Data Management**
+- **Data Export/Import**: Full backup and restore capabilities
+- **Storage Analytics**: Visual storage usage and statistics
+- **Local Persistence**: Client-side data storage with localStorage
+- **Privacy First**: All data stays on your device
+
+## 🖼️ Screenshots
+
+*Screenshots coming soon - the interface features a stunning dark glass-morphism design with cyan accents, animated gradients, and premium visual effects.*
+
+## 🛠️ Tech Stack
+
+### **Frontend**
+- **[Next.js 16.1.6](https://nextjs.org/)** - React framework with App Router
+- **[TypeScript 5.0](https://www.typescriptlang.org/)** - Type-safe development
+- **[Tailwind CSS 4](https://tailwindcss.com/)** - Utility-first styling
+- **[Framer Motion](https://www.framer.com/motion/)** - Advanced animations
+
+### **UI/UX**
+- **[Lucide React](https://lucide.dev/)** - Beautiful icon system
+- **[Radix UI](https://www.radix-ui.com/)** - Accessible component primitives
+- **[Hello Pangea DnD](https://github.com/hello-pangea/dnd)** - Drag and drop interactions
+- **Custom Glass Morphism** - Premium visual effects
+
+### **Development**
+- **[Vitest](https://vitest.dev/)** - Fast unit testing
+- **[Playwright](https://playwright.dev/)** - End-to-end testing
+- **[ESLint](https://eslint.org/)** - Code linting
+- **Performance Optimizations** - Lazy loading, code splitting
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- **Node.js 18+** (recommended: use [nvm](https://github.com/nvm-sh/nvm))
+- **npm** or **yarn** or **pnpm**
+
+### Installation
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/samjamliaison/mission-control.git
+   cd mission-control
+   ```
+
+2. **Install dependencies**
+   ```bash
+   npm install
+   # or
+   yarn install
+   # or
+   pnpm install
+   ```
+
+3. **Start the development server**
+   ```bash
+   npm run dev
+   # or
+   yarn dev
+   # or
+   pnpm dev
+   ```
+
+4. **Open your browser**
+   
+   Navigate to [http://localhost:3000](http://localhost:3000) to see the application.
+
+### Production Build
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+# Build for production
+npm run build
+
+# Start production server
+npm start
+
+# Or export static files
+npm run build && npm run export
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 📁 Project Structure
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```
+src/
+├── app/                    # Next.js 13+ App Router
+│   ├── (routes)/          # Page routes
+│   ├── api/               # API routes
+│   ├── globals.css        # Global styles & design system
+│   └── layout.tsx         # Root layout
+├── components/            # React components
+│   ├── ui/                # Reusable UI components
+│   ├── tasks/             # Task management
+│   ├── pipeline/          # Content pipeline
+│   ├── team/              # Team dashboard
+│   ├── memory/            # Memory system
+│   └── settings/          # Settings & data management
+├── contexts/              # React contexts (Toast, etc.)
+├── hooks/                 # Custom React hooks
+├── lib/                   # Utility functions
+└── types/                 # TypeScript type definitions
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🎨 Design System
 
-## Learn More
+Mission Control uses a custom **Command Center Theme** with:
 
-To learn more about Next.js, take a look at the following resources:
+- **Dark Terminal Luxury** aesthetic
+- **Glass Morphism** effects with subtle transparency
+- **Gradient Mesh Blobs** for organic visual depth
+- **WCAG AA Compliant** contrast ratios (4.5:1+)
+- **Subtle Noise Textures** for premium feel
+- **Smooth Animations** with Framer Motion
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Color Palette
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```css
+/* Primary Colors */
+--command-accent: #06b6d4 (cyan)
+--command-success: #22c55e (green)
+--command-warning: #f59e0b (amber)
+--command-danger: #ef4444 (red)
 
-## Deploy on Vercel
+/* Surface Colors */
+--command-background: #09090b
+--command-surface: rgba(255,255,255,0.03)
+--command-border: rgba(255,255,255,0.06)
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 🧪 Testing
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Unit Tests
+```bash
+npm run test          # Run unit tests
+npm run test:ui       # Run with UI
+npm run test:coverage # Generate coverage report
+```
+
+### End-to-End Tests
+```bash
+npm run test:e2e      # Run E2E tests
+npm run test:e2e:ui   # Run with Playwright UI
+```
+
+### All Tests
+```bash
+npm run test:all      # Run both unit and E2E tests
+```
+
+## 📦 Scripts
+
+| Script | Description |
+|--------|-------------|
+| `dev` | Start development server |
+| `build` | Build for production |
+| `start` | Start production server |
+| `lint` | Run ESLint |
+| `test` | Run unit tests |
+| `test:e2e` | Run E2E tests |
+
+## 🤝 Contributing
+
+We welcome contributions! Please follow these steps:
+
+1. **Fork the repository**
+2. **Create your feature branch**
+   ```bash
+   git checkout -b feature/amazing-feature
+   ```
+3. **Commit your changes**
+   ```bash
+   git commit -m 'Add some amazing feature'
+   ```
+4. **Push to the branch**
+   ```bash
+   git push origin feature/amazing-feature
+   ```
+5. **Open a Pull Request**
+
+### Development Guidelines
+
+- **Code Style**: Follow the existing patterns and use TypeScript
+- **Testing**: Add tests for new features
+- **Performance**: Maintain lazy loading and optimization practices
+- **Accessibility**: Ensure WCAG AA compliance
+- **Design**: Follow the glass-morphism design system
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🙋‍♂️ Support
+
+If you have any questions or need help:
+
+- **Open an Issue**: [GitHub Issues](https://github.com/samjamliaison/mission-control/issues)
+- **Documentation**: Check the code comments and component documentation
+- **Community**: Join discussions in the repository
+
+## 🏆 Acknowledgments
+
+- **OpenClaw Team** for the mission requirements and vision
+- **Next.js Team** for the incredible framework
+- **Vercel** for the deployment platform
+- **Open Source Community** for the amazing tools and libraries
+
+---
+
+**Built with ❤️ for mission-critical operations** • [GitHub](https://github.com/samjamliaison/mission-control) • [Live Demo](https://mission-control.vercel.app)
