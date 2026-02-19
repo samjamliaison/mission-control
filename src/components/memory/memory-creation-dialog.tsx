@@ -12,6 +12,7 @@ import {
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
+import { MarkdownEditor } from "@/components/ui/markdown-editor"
 import {
   Select,
   SelectContent,
@@ -232,13 +233,12 @@ export function MemoryCreationDialog({ open, onOpenChange, onSave, editingMemory
                 {wordCount} words
               </div>
             </div>
-            <Textarea
-              id="content"
+            <MarkdownEditor
               value={content}
-              onChange={(e) => setContent(e.target.value)}
-              placeholder="Write your memory content here. You can include insights, notes, lessons learned, or any important information..."
+              onChange={setContent}
+              placeholder="Write your memory content here using Markdown. You can include insights, notes, lessons learned, or any important information..."
               rows={8}
-              className="glass-morphism border-[hsl(var(--command-border))] focus:ring-1 focus:ring-[hsl(var(--command-accent))] resize-none font-mono text-sm"
+              className="w-full"
             />
           </motion.div>
 
