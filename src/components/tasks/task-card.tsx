@@ -129,28 +129,41 @@ export function TaskCard({ task, index, onEdit, onDelete }: TaskCardProps) {
           variants={cardVariants}
           initial="hidden"
           animate="visible"
-          whileHover={{ y: -2, scale: 1.01 }}
-          whileTap={{ scale: 0.98 }}
-          transition={{ duration: 0.2, ease: "easeInOut" }}
+          whileHover={!snapshot.isDragging ? { y: -2, scale: 1.01 } : {}}
+          whileTap={!snapshot.isDragging ? { scale: 0.98 } : {}}
+          animate={{
+            scale: snapshot.isDragging ? 1.05 : 1,
+            rotate: snapshot.isDragging ? 2 : 0,
+            y: snapshot.isDragging ? -8 : 0,
+          }}
+          transition={{ 
+            duration: snapshot.isDragging ? 0.15 : 0.2, 
+            ease: snapshot.isDragging ? [0.2, 0, 0.2, 1] : "easeInOut"
+          }}
           className={cn(
-            "mb-3 cursor-grab active:cursor-grabbing group relative",
-            snapshot.isDragging && "z-50 rotate-3"
+            "mb-3 cursor-grab active:cursor-grabbing group relative select-none",
+            snapshot.isDragging && "z-50"
           )}
+          style={{
+            transformOrigin: "center"
+          }}
         >
           <Card
             className={cn(
               "backdrop-blur-xl bg-gradient-to-br from-[hsl(var(--command-surface-elevated))]/95 to-[hsl(var(--command-surface))]/90",
-              "border border-white/5 rounded-xl relative overflow-hidden card-hover-premium",
-              snapshot.isDragging && "shadow-2xl shadow-[hsl(var(--command-accent))]/30 ring-2 ring-[hsl(var(--command-accent))]/50 scale-[1.02]",
-              isCompleted && "opacity-70",
-              isActive && "ring-1 ring-[hsl(var(--command-accent))]/30"
+              "border border-white/5 rounded-xl relative overflow-hidden card-hover-premium transition-all duration-200",
+              snapshot.isDragging && "border-[hsl(var(--command-accent))]/40 bg-gradient-to-br from-[hsl(var(--command-surface-elevated))]/98 to-[hsl(var(--command-surface))]/95",
+              isCompleted && !snapshot.isDragging && "opacity-70",
+              isActive && !snapshot.isDragging && "ring-1 ring-[hsl(var(--command-accent))]/30"
             )}
             style={{
               boxShadow: snapshot.isDragging 
-                ? `0 25px 50px rgba(0,0,0,0.5), 0 0 20px ${priorityStyle.color}40`
+                ? `0 32px 64px rgba(0,0,0,0.6), 0 16px 32px rgba(0,0,0,0.4), 0 0 32px ${priorityStyle.color}60, 0 0 16px ${priorityStyle.color}40`
                 : isActive 
                   ? `0 8px 32px rgba(0,0,0,0.2), 0 0 10px ${priorityStyle.color}30`
-                  : "0 6px 24px rgba(0,0,0,0.15)"
+                  : "0 6px 24px rgba(0,0,0,0.15)",
+              filter: snapshot.isDragging ? "brightness(1.1) contrast(1.05)" : undefined,
+              backdropFilter: snapshot.isDragging ? "blur(20px)" : "blur(16px)"
             }}
           >
             {/* Priority left border indicator */}

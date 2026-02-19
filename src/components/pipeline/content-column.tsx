@@ -196,36 +196,95 @@ export function ContentColumn({ title, stage, content, config, onEditContent, on
                 ref={provided.innerRef}
                 {...provided.droppableProps}
                 className={cn(
-                  "min-h-[520px] transition-all duration-300 rounded-xl p-3 relative",
-                  snapshot.isDraggingOver && "ring-2 ring-dashed"
+                  "min-h-[520px] transition-all duration-300 rounded-xl p-3 relative overflow-hidden",
+                  snapshot.isDraggingOver && "ring-2 ring-dashed animate-pulse"
                 )}
                 style={{
-                  backgroundColor: snapshot.isDraggingOver ? `${stageStyle.accentColor}08` : undefined,
-                  borderColor: snapshot.isDraggingOver ? `${stageStyle.accentColor}30` : undefined,
+                  borderColor: snapshot.isDraggingOver ? `${stageStyle.accentColor}40` : undefined,
                   background: snapshot.isDraggingOver 
-                    ? `radial-gradient(circle at center, ${stageStyle.accentColor}08 0%, transparent 70%)`
+                    ? `radial-gradient(circle at center, ${stageStyle.accentColor}12 0%, ${stageStyle.accentColor}04 50%, transparent 70%)`
+                    : undefined,
+                  boxShadow: snapshot.isDraggingOver 
+                    ? `0 0 0 2px ${stageStyle.accentColor}30, 0 0 20px ${stageStyle.accentColor}20, inset 0 0 20px ${stageStyle.accentColor}08`
                     : undefined
                 }}
+                animate={{
+                  scale: snapshot.isDraggingOver ? 1.02 : 1,
+                  borderRadius: snapshot.isDraggingOver ? "16px" : "12px"
+                }}
+                transition={{ 
+                  duration: 0.2, 
+                  ease: "easeOut" 
+                }}
               >
-                {/* Drop zone indicator */}
+                {/* Enhanced Drop zone indicator */}
                 {snapshot.isDraggingOver && (
                   <motion.div
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    animate={{ opacity: 1, scale: 1 }}
+                    initial={{ opacity: 0, scale: 0.5, y: 20 }}
+                    animate={{ 
+                      opacity: 1, 
+                      scale: 1, 
+                      y: 0,
+                    }}
+                    exit={{ opacity: 0, scale: 0.5, y: -20 }}
+                    transition={{ type: "spring", stiffness: 300, damping: 20 }}
                     className="absolute inset-0 flex items-center justify-center pointer-events-none z-10"
                   >
-                    <div className="backdrop-blur-md bg-white/5 border border-white/10 p-4 rounded-xl">
+                    <motion.div 
+                      className="backdrop-blur-xl bg-white/10 p-6 rounded-2xl border-2 border-dashed"
+                      style={{ 
+                        borderColor: `${stageStyle.accentColor}60`,
+                        backgroundColor: `${stageStyle.accentColor}15`,
+                        boxShadow: `0 0 32px ${stageStyle.accentColor}30`
+                      }}
+                      animate={{
+                        scale: [1, 1.05, 1],
+                        rotate: [0, 1, -1, 0],
+                      }}
+                      transition={{
+                        duration: 2,
+                        repeat: Infinity,
+                        ease: "easeInOut"
+                      }}
+                    >
                       <motion.div
-                        animate={{ rotate: 360 }}
-                        transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+                        animate={{ 
+                          rotate: 360,
+                        }}
+                        transition={{
+                          duration: 3,
+                          repeat: Infinity,
+                          ease: "linear"
+                        }}
+                        className="relative"
                       >
-                        <Circle 
-                          className="h-8 w-8" 
+                        <IconComponent 
+                          className="h-12 w-12" 
                           style={{ color: stageStyle.accentColor }}
-                          strokeDasharray="4 4"
+                          strokeWidth={1.5}
+                        />
+                        <motion.div
+                          className="absolute inset-0 rounded-full border-2 border-dashed"
+                          style={{ borderColor: `${stageStyle.accentColor}60` }}
+                          animate={{
+                            rotate: -360,
+                            scale: [1, 1.2, 1],
+                          }}
+                          transition={{
+                            rotate: { duration: 4, repeat: Infinity, ease: "linear" },
+                            scale: { duration: 2, repeat: Infinity, ease: "easeInOut" }
+                          }}
                         />
                       </motion.div>
-                    </div>
+                      <motion.p 
+                        className="text-sm font-semibold mt-2 text-center"
+                        style={{ color: stageStyle.accentColor }}
+                        animate={{ opacity: [0.7, 1, 0.7] }}
+                        transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+                      >
+                        Drop here
+                      </motion.p>
+                    </motion.div>
                   </motion.div>
                 )}
                 
@@ -235,9 +294,32 @@ export function ContentColumn({ title, stage, content, config, onEditContent, on
                       <motion.div
                         key={item._id}
                         layout
-                        layoutId={item._id}
+                        layoutId={`content-${item._id}`}
+                        initial={{ opacity: 0, y: 20, scale: 0.8 }}
+                        animate={{ 
+                          opacity: 1, 
+                          y: 0, 
+                          scale: 1,
+                        }}
+                        exit={{ 
+                          opacity: 0, 
+                          y: -20, 
+                          scale: 0.8,
+                          transition: { duration: 0.2 }
+                        }}
                         transition={{
-                          layout: { duration: 0.3, ease: "easeInOut" }
+                          layout: { 
+                            duration: 0.4, 
+                            ease: [0.4, 0, 0.2, 1],
+                            type: "spring",
+                            stiffness: 350,
+                            damping: 25
+                          },
+                          opacity: { duration: 0.3 },
+                          scale: { duration: 0.3 }
+                        }}
+                        style={{
+                          zIndex: index
                         }}
                       >
                         <ContentItemCard
