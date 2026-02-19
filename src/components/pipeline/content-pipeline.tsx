@@ -20,6 +20,7 @@ import { PageHeader } from "@/components/ui/page-header"
 import { StatsCard } from "@/components/ui/stats-card"
 import { EmptyState } from "@/components/ui/empty-state"
 import { loadContent, saveContent } from "@/lib/data-persistence"
+import { useToastActions } from "@/components/ui/toast"
 
 // Note: Content is now loaded from localStorage via loadContent()
 
@@ -61,6 +62,7 @@ export function ContentPipeline() {
   const [dialogOpen, setDialogOpen] = useState(false)
   const [editingContent, setEditingContent] = useState<ContentItem | null>(null)
   const [mounted, setMounted] = useState(false)
+  const toast = useToastActions()
 
   // Load data from localStorage on mount
   useEffect(() => {
@@ -157,6 +159,7 @@ export function ContentPipeline() {
             : item
         )
       )
+      toast.success('Content Updated', `"${contentData.title}" has been successfully updated.`)
     } else {
       const newContent: ContentItem = {
         _id: `content-${Date.now()}`,
@@ -171,6 +174,7 @@ export function ContentPipeline() {
         updatedAt: Date.now(),
       }
       setContent(prevContent => [newContent, ...prevContent])
+      toast.success('Content Added', `"${contentData.title}" added to ${contentData.platform} pipeline.`)
     }
     setEditingContent(null)
   }

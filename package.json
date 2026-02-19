@@ -26,6 +26,7 @@
     "convex": "^1.32.0",
     "framer-motion": "^12.34.2",
     "lucide-react": "^0.574.0",
+    "nanoid": "^5.1.6",
     "next": "16.1.6",
     "puppeteer": "^24.37.4",
     "react": "19.2.3",

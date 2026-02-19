@@ -31,11 +31,13 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog"
 import { cn } from "@/lib/utils"
+import { useToastActions } from "@/components/ui/toast"
 
 export function DataManagement() {
   const [exportStatus, setExportStatus] = useState<'idle' | 'success' | 'error'>('idle')
   const [importStatus, setImportStatus] = useState<'idle' | 'success' | 'error'>('idle')
   const [clearConfirmOpen, setClearConfirmOpen] = useState(false)
+  const toast = useToastActions()
 
   const storageStats = getStorageStats()
 
@@ -55,10 +57,12 @@ export function DataManagement() {
       URL.revokeObjectURL(url)
       
       setExportStatus('success')
+      toast.success('Data Exported', `Backup file downloaded with ${data.tasks.length} tasks and ${data.content.length} content items.`)
       setTimeout(() => setExportStatus('idle'), 3000)
     } catch (error) {
       console.error('Export failed:', error)
       setExportStatus('error')
+      toast.error('Export Failed', 'Unable to export data. Please try again.')
       setTimeout(() => setExportStatus('idle'), 3000)
     }
   }
@@ -75,16 +79,19 @@ export function DataManagement() {
         
         if (success) {
           setImportStatus('success')
+          toast.success('Data Imported', `Successfully imported ${data.tasks.length} tasks and ${data.content.length} content items.`)
           // Refresh the page to load new data
           setTimeout(() => window.location.reload(), 1500)
         } else {
           setImportStatus('error')
+          toast.error('Import Failed', 'Invalid data format or corrupted file.')
         }
         
         setTimeout(() => setImportStatus('idle'), 3000)
       } catch (error) {
         console.error('Import failed:', error)
         setImportStatus('error')
+        toast.error('Import Failed', 'Unable to parse the backup file.')
         setTimeout(() => setImportStatus('idle'), 3000)
       }
     }
@@ -96,11 +103,15 @@ export function DataManagement() {
       const success = clearAllData()
       if (success) {
         setClearConfirmOpen(false)
+        toast.warning('Data Cleared', 'All tasks and content have been permanently deleted.')
         // Refresh the page to show empty states
         setTimeout(() => window.location.reload(), 500)
+      } else {
+        toast.error('Clear Failed', 'Unable to clear data. Please try again.')
       }
     } catch (error) {
       console.error('Clear data failed:', error)
+      toast.error('Clear Failed', 'An error occurred while clearing data.')
     }
   }
 

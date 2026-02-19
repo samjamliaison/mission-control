@@ -20,6 +20,7 @@ import { PageHeader } from "@/components/ui/page-header"
 import { StatsCard } from "@/components/ui/stats-card"
 import { EmptyState } from "@/components/ui/empty-state"
 import { loadTasks, saveTasks } from "@/lib/data-persistence"
+import { useToastActions } from "@/components/ui/toast"
 
 // Note: Tasks are now loaded from localStorage via loadTasks()
 
@@ -61,6 +62,7 @@ export function TasksBoard() {
   const [dialogOpen, setDialogOpen] = useState(false)
   const [editingTask, setEditingTask] = useState<Task | null>(null)
   const [mounted, setMounted] = useState(false)
+  const toast = useToastActions()
 
   // Load data from localStorage on mount
   useEffect(() => {
@@ -136,6 +138,7 @@ export function TasksBoard() {
             : task
         )
       )
+      toast.success('Task Updated', `"${taskData.title}" has been successfully updated.`)
     } else {
       const newTask: Task = {
         _id: `task-${Date.now()}`,
@@ -148,6 +151,7 @@ export function TasksBoard() {
         updatedAt: Date.now(),
       }
       setTasks(prevTasks => [newTask, ...prevTasks])
+      toast.success('Task Created', `"${taskData.title}" assigned to ${taskData.assignee}.`)
     }
     setEditingTask(null)
   }
@@ -158,7 +162,11 @@ export function TasksBoard() {
   }
 
   const handleDeleteTask = (taskId: string) => {
+    const taskToDelete = tasks.find(task => task._id === taskId)
     setTasks(prevTasks => prevTasks.filter(task => task._id !== taskId))
+    if (taskToDelete) {
+      toast.success('Task Deleted', `"${taskToDelete.title}" has been removed.`)
+    }
   }
 
   const handleAddNewTask = () => {
