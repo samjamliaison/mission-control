@@ -2,7 +2,7 @@
 
 import { useParams, useRouter } from "next/navigation"
 import { useState, useEffect } from "react"
-import { ArrowLeft, MessageCircle, CheckSquare, Plus, Trash2 } from "lucide-react"
+import { ArrowLeft, MessageCircle, CheckSquare, Plus, Trash2, Ban, Link2 } from "lucide-react"
 import { motion } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
@@ -41,7 +41,31 @@ export default function TaskDetailPage() {
     }
   }
 
+  // Get all tasks for dependency resolution
+  const getAllTasks = () => {
+    try {
+      return JSON.parse(localStorage.getItem('mission-control-tasks') || '[]')
+    } catch {
+      return []
+    }
+  }
+
   const task = getTaskDetails()
+  const allTasks = getAllTasks()
+  
+  // Get blocked by tasks (dependencies)
+  const getBlockedByTasks = () => {
+    if (!task?.blockedBy) return []
+    return allTasks.filter((t: any) => task.blockedBy?.includes(t._id))
+  }
+
+  // Get tasks that are blocked by this task
+  const getBlockingTasks = () => {
+    return allTasks.filter((t: any) => t.blockedBy?.includes(taskId))
+  }
+
+  const blockedByTasks = getBlockedByTasks()
+  const blockingTasks = getBlockingTasks()
 
   // Load comments and subtasks from localStorage
   useEffect(() => {
@@ -192,6 +216,105 @@ export default function TaskDetailPage() {
           )}
         </div>
       </motion.div>
+
+      {/* Dependencies Section */}
+      {(blockedByTasks.length > 0 || blockingTasks.length > 0) && (
+        <motion.div
+          className="backdrop-blur-xl bg-[hsl(var(--command-surface-elevated))]/95 border border-white/10 rounded-2xl p-6"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.15 }}
+        >
+          <div className="flex items-center gap-2 mb-4">
+            <Link2 className="h-5 w-5 text-[hsl(var(--command-accent))]" />
+            <h2 className="text-heading-3 text-premium">Task Dependencies</h2>
+          </div>
+
+          {/* Blocked By */}
+          {blockedByTasks.length > 0 && (
+            <div className="mb-6">
+              <div className="flex items-center gap-2 mb-3">
+                <Ban className="h-4 w-4 text-orange-400" />
+                <h3 className="text-body-large font-semibold text-white/90">Blocked By</h3>
+                <span className="text-sm text-muted bg-orange-500/20 text-orange-300 px-2 py-1 rounded-full">
+                  {blockedByTasks.length}
+                </span>
+              </div>
+              <p className="text-body-small text-white/60 mb-3">
+                This task cannot proceed until the following tasks are completed:
+              </p>
+              <div className="space-y-2">
+                {blockedByTasks.map((blockedTask: any) => (
+                  <motion.div
+                    key={blockedTask._id}
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    className="bg-[hsl(var(--command-surface))]/30 border border-orange-500/20 rounded-lg p-3 flex items-center justify-between"
+                  >
+                    <div>
+                      <h4 className="text-body font-semibold text-white/90">{blockedTask.title}</h4>
+                      <p className="text-body-small text-white/60">
+                        Status: <span className={`capitalize ${
+                          blockedTask.status === 'done' ? 'text-green-400' : 'text-orange-400'
+                        }`}>{blockedTask.status}</span>
+                      </p>
+                    </div>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => router.push(`/tasks/${blockedTask._id}`)}
+                      className="text-[hsl(var(--command-accent))] hover:bg-[hsl(var(--command-accent))]/20"
+                    >
+                      View Task
+                    </Button>
+                  </motion.div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Blocking */}
+          {blockingTasks.length > 0 && (
+            <div>
+              <div className="flex items-center gap-2 mb-3">
+                <CheckSquare className="h-4 w-4 text-blue-400" />
+                <h3 className="text-body-large font-semibold text-white/90">Blocking</h3>
+                <span className="text-sm text-muted bg-blue-500/20 text-blue-300 px-2 py-1 rounded-full">
+                  {blockingTasks.length}
+                </span>
+              </div>
+              <p className="text-body-small text-white/60 mb-3">
+                The following tasks are waiting for this task to be completed:
+              </p>
+              <div className="space-y-2">
+                {blockingTasks.map((blockingTask: any) => (
+                  <motion.div
+                    key={blockingTask._id}
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    className="bg-[hsl(var(--command-surface))]/30 border border-blue-500/20 rounded-lg p-3 flex items-center justify-between"
+                  >
+                    <div>
+                      <h4 className="text-body font-semibold text-white/90">{blockingTask.title}</h4>
+                      <p className="text-body-small text-white/60">
+                        Assignee: <span className="text-white/90">{blockingTask.assignee}</span>
+                      </p>
+                    </div>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => router.push(`/tasks/${blockingTask._id}`)}
+                      className="text-[hsl(var(--command-accent))] hover:bg-[hsl(var(--command-accent))]/20"
+                    >
+                      View Task
+                    </Button>
+                  </motion.div>
+                ))}
+              </div>
+            </div>
+          )}
+        </motion.div>
+      )}
 
       {/* Comments Section */}
       <motion.div
