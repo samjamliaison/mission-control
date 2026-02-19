@@ -230,8 +230,9 @@ export function EnhancedMemoryViewer() {
   }, [memories, allTags])
 
   // Event handlers
-  const handleCreateMemory = (memoryData: Partial<MemoryEntry>) => {
+  const handleCreateMemory = async (memoryData: Partial<MemoryEntry>) => {
     if (editingMemory) {
+      // For now, editing still uses local state (could be enhanced later to use PUT API)
       setMemories(prev =>
         prev.map(memory =>
           memory._id === editingMemory._id
@@ -241,20 +242,46 @@ export function EnhancedMemoryViewer() {
       )
       toast.success('Memory Updated', `"${memoryData.title}" has been successfully updated.`)
     } else {
-      const newMemory: MemoryEntry = {
-        _id: `memory-${Date.now()}`,
-        title: memoryData.title!,
-        content: memoryData.content!,
-        category: memoryData.category!,
-        author: memoryData.author!,
-        tags: memoryData.tags || [],
-        wordCount: memoryData.wordCount!,
-        pinned: memoryData.pinned || false,
-        createdAt: Date.now(),
-        updatedAt: Date.now()
+      try {
+        // Save to filesystem via API
+        const response = await fetch('/api/memory', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            title: memoryData.title,
+            content: memoryData.content,
+            type: memoryData.category === 'daily' ? 'daily' : 'longterm',
+          }),
+        })
+
+        if (!response.ok) {
+          throw new Error('Failed to save memory')
+        }
+
+        const result = await response.json()
+        
+        // Also add to local state for immediate UI update
+        const newMemory: MemoryEntry = {
+          _id: `memory-${Date.now()}`,
+          title: memoryData.title!,
+          content: memoryData.content!,
+          category: memoryData.category!,
+          author: memoryData.author!,
+          tags: memoryData.tags || [],
+          wordCount: memoryData.wordCount!,
+          pinned: memoryData.pinned || false,
+          createdAt: Date.now(),
+          updatedAt: Date.now()
+        }
+        setMemories(prev => [newMemory, ...prev])
+        
+        toast.success('Memory Saved to Filesystem', `"${memoryData.title}" has been written to ${result.file}.`)
+      } catch (error) {
+        console.error('Error saving memory:', error)
+        toast.error('Failed to Save Memory', 'Could not write to filesystem. Check console for details.')
       }
-      setMemories(prev => [newMemory, ...prev])
-      toast.success('Memory Created', `"${memoryData.title}" has been saved to the memory vault.`)
     }
     setEditingMemory(null)
   }

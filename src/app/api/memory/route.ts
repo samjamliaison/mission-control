@@ -187,3 +187,89 @@ export async function GET(request: NextRequest) {
     );
   }
 }
+
+export async function POST(request: NextRequest) {
+  try {
+    const body = await request.json();
+    const { title, content, type = 'daily', date } = body;
+
+    if (!title || !content) {
+      return NextResponse.json(
+        { error: 'Title and content are required' },
+        { status: 400 }
+      );
+    }
+
+    const now = new Date();
+    const memoryDate = date || now.toISOString().split('T')[0]; // YYYY-MM-DD
+    const timestamp = now.toISOString();
+
+    if (type === 'daily') {
+      // Write to daily memory file
+      const memoryDir = path.join(OPENCLAW_WORKSPACE, 'memory');
+      await fs.mkdir(memoryDir, { recursive: true });
+      
+      const dailyFile = path.join(memoryDir, `${memoryDate}.md`);
+      
+      // Check if file exists to determine if we need a header
+      let needsHeader = false;
+      try {
+        await fs.access(dailyFile);
+      } catch {
+        needsHeader = true;
+      }
+      
+      const entry = `
+${needsHeader ? `# Daily Memory - ${memoryDate}\n` : ''}
+## ${title} (${now.toTimeString().split(' ')[0]})
+
+${content}
+
+---
+`;
+      
+      await fs.appendFile(dailyFile, entry);
+      
+      return NextResponse.json({
+        success: true,
+        type: 'daily',
+        file: `memory/${memoryDate}.md`,
+        message: `Memory saved to daily file for ${memoryDate}`
+      });
+      
+    } else if (type === 'longterm') {
+      // Append to MEMORY.md
+      const memoryFile = path.join(OPENCLAW_WORKSPACE, 'MEMORY.md');
+      
+      const entry = `
+## ${title}
+
+${content}
+
+*Added: ${timestamp}*
+
+`;
+      
+      await fs.appendFile(memoryFile, entry);
+      
+      return NextResponse.json({
+        success: true,
+        type: 'longterm',
+        file: 'MEMORY.md',
+        message: 'Memory saved to long-term memory'
+      });
+    } else {
+      return NextResponse.json(
+        { error: 'Invalid memory type. Use "daily" or "longterm"' },
+        { status: 400 }
+      );
+    }
+    
+  } catch (error) {
+    console.error('Memory POST Error:', error);
+    return NextResponse.json(
+      { error: 'Failed to save memory', details: error instanceof Error ? error.message : 'Unknown error' },
+      { status: 500 }
+    );
+  }
+}
