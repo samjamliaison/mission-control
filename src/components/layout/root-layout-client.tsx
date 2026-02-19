@@ -15,6 +15,7 @@ import { ThemeToggle } from "@/components/ui/theme-toggle"
 import { FocusModeProvider, useFocusMode } from "@/hooks/use-focus-mode"
 import { FocusModeToggle } from "@/components/ui/focus-mode-toggle"
 import { PWARegistration } from "@/components/pwa/pwa-registration"
+import { OfflineBanner } from "@/components/ui/offline-banner"
 
 interface RootLayoutClientProps {
   children: React.ReactNode
@@ -35,6 +36,9 @@ function LayoutContent({ children }: RootLayoutClientProps) {
         >
           Skip to content
         </a>
+
+        {/* Offline Banner */}
+        <OfflineBanner />
 
         <div className="min-h-screen bg-[hsl(var(--command-background))] flex">
           {/* Navigation - hidden in focus mode */}

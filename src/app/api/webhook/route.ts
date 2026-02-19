@@ -2,6 +2,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import fs from 'fs/promises';
 import path from 'path';
+import { handleAPIError, validateRequired, validateString, sanitizePath } from '@/lib/api-error-handler';
 
 interface OpenClawEvent {
   id: string
@@ -115,6 +116,15 @@ function validateEvent(data: any): OpenClawEvent | null {
 
 export async function POST(request: NextRequest) {
   try {
+    // Validate content type
+    const contentType = request.headers.get('content-type')
+    if (!contentType?.includes('application/json')) {
+      return NextResponse.json(
+        { error: 'Content-Type must be application/json', code: 'INVALID_CONTENT_TYPE' },
+        { status: 400 }
+      )
+    }
+
     const body = await request.json()
     
     // Handle single event or array of events
@@ -172,14 +182,7 @@ export async function POST(request: NextRequest) {
     })
     
   } catch (error) {
-    console.error('Webhook error:', error)
-    return NextResponse.json(
-      { 
-        error: 'Failed to process webhook', 
-        details: error instanceof Error ? error.message : 'Unknown error' 
-      },
-      { status: 500 }
-    )
+    return handleAPIError(error)
   }
 }
 
