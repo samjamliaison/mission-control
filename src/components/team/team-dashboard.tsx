@@ -28,6 +28,7 @@ import {
 } from "lucide-react"
 import { AgentCard } from "./agent-card"
 import { AgentProfile } from "./agent-profile"
+import { AgentChat } from "./agent-chat"
 import { cn } from "@/lib/utils"
 
 // Real agent data from OpenClaw API
@@ -131,9 +132,22 @@ const itemVariants = {
 export function TeamDashboard() {
   const [agents, setAgents] = useState<RealAgent[]>([])
   const [selectedAgent, setSelectedAgent] = useState<RealAgent | null>(null)
+  const [chatAgent, setChatAgent] = useState<RealAgent | null>(null)
+  const [isChatOpen, setIsChatOpen] = useState(false)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [lastUpdated, setLastUpdated] = useState<string | null>(null)
+
+  // Chat handlers
+  const openChat = (agent: RealAgent) => {
+    setChatAgent(agent)
+    setIsChatOpen(true)
+  }
+
+  const closeChat = () => {
+    setIsChatOpen(false)
+    setChatAgent(null)
+  }
 
   // Load data from OpenClaw API
   const loadAgentsFromApi = async () => {
@@ -329,7 +343,7 @@ export function TeamDashboard() {
                   key={agent.name}
                   // @ts-ignore - Type mismatch between RealAgent and Agent interface
                   agent={agent}
-                  onClick={() => setSelectedAgent(agent)}
+                  onClick={() => openChat(agent)}
                 />
               ))}
             </StaggeredList>
@@ -350,7 +364,7 @@ export function TeamDashboard() {
                     key={agent.id}
                     className="flex items-center gap-4 p-3 glass-morphism rounded-lg cursor-pointer"
                     whileHover={{ scale: 1.01 }}
-                    onClick={() => setSelectedAgent(agent)}
+                    onClick={() => openChat(agent)}
                   >
                     <div className="text-2xl">{agent.avatar}</div>
                     <div className="flex-1">
@@ -406,6 +420,13 @@ export function TeamDashboard() {
           />
         )}
       </AnimatePresence>
+
+      {/* Agent Chat Modal */}
+      <AgentChat
+        agent={chatAgent}
+        isOpen={isChatOpen}
+        onClose={closeChat}
+      />
     </div>
   )
 }
