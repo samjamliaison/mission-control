@@ -34,6 +34,7 @@ import { loadTasks, saveTasks } from "@/lib/data-persistence"
 import { useToastActions } from "@/components/ui/toast"
 import { logTaskAction, logNavigationAction } from "@/lib/activity-logger"
 import { exportTasksAsCSV, exportTasksAsJSON, downloadFile, generateFilename } from "@/lib/export-utils"
+import { useUndoSystem } from "@/lib/undo-system"
 
 // Note: Tasks are now loaded from localStorage via loadTasks()
 
@@ -81,6 +82,7 @@ export function TasksBoard() {
   const [sortBy, setSortBy] = useState<string>('dateCreated')
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc')
   const toast = useToastActions()
+  const { canUndo, popLastAction, addTaskCreate, addTaskDelete, addTaskUpdate, addTaskStatusChange } = useUndoSystem()
 
   // Load data from localStorage on mount
   useEffect(() => {
@@ -107,7 +109,7 @@ export function TasksBoard() {
     }
   }, [tasks, mounted])
 
-  // Keyboard shortcuts: N to add new task, T for template picker
+  // Keyboard shortcuts: N to add new task, T for template picker, Ctrl+Z for undo
   useEffect(() => {
     const handleKeydown = (e: KeyboardEvent) => {
       // Don't trigger if user is typing in an input/textarea
@@ -124,11 +126,17 @@ export function TasksBoard() {
         e.preventDefault()
         setShowTemplatePicker(true)
       }
+
+      // Ctrl+Z for undo
+      if ((e.ctrlKey || e.metaKey) && e.key === 'z') {
+        e.preventDefault()
+        handleUndo()
+      }
     }
 
     document.addEventListener('keydown', handleKeydown)
     return () => document.removeEventListener('keydown', handleKeydown)
-  }, [])
+  }, [canUndo])
 
   // Filter and sort tasks
   const filteredTasks = useMemo(() => {
@@ -193,6 +201,10 @@ export function TasksBoard() {
     
     if (task) {
       const oldStatus = task.status
+      const updatedTask = { ...task, status: newStatus, updatedAt: Date.now() }
+      
+      // Add to undo history
+      addTaskStatusChange(task, updatedTask)
       
       // Log the status change activity
       if (newStatus === 'done' && oldStatus !== 'done') {
@@ -250,10 +262,13 @@ export function TasksBoard() {
 
   const handleAddTask = (taskData: Partial<Task>) => {
     if (editingTask) {
+      const updatedTask = { ...editingTask, ...taskData, updatedAt: Date.now() }
+      addTaskUpdate(editingTask, updatedTask)
+      
       setTasks(prevTasks =>
         prevTasks.map(task =>
           task._id === editingTask._id
-            ? { ...task, ...taskData, updatedAt: Date.now() }
+            ? updatedTask
             : task
         )
       )
@@ -268,7 +283,10 @@ export function TasksBoard() {
         priority: taskData.priority!,
         createdAt: Date.now(),
         updatedAt: Date.now(),
+        ...(taskData.dueDate && { dueDate: taskData.dueDate }),
       }
+      
+      addTaskCreate(newTask)
       setTasks(prevTasks => [newTask, ...prevTasks])
       toast.success('Task Created', `"${taskData.title}" assigned to ${taskData.assignee}.`)
     }
@@ -282,8 +300,10 @@ export function TasksBoard() {
 
   const handleDeleteTask = (taskId: string) => {
     const taskToDelete = tasks.find(task => task._id === taskId)
-    setTasks(prevTasks => prevTasks.filter(task => task._id !== taskId))
     if (taskToDelete) {
+      addTaskDelete(taskToDelete)
+      setTasks(prevTasks => prevTasks.filter(task => task._id !== taskId))
+      
       // Log the deletion activity
       logTaskAction(
         'deleted',
@@ -320,6 +340,7 @@ export function TasksBoard() {
       updatedAt: Date.now(),
     }
 
+    addTaskCreate(newTask)
     setTasks(prevTasks => [...prevTasks, newTask])
     setShowTemplatePicker(false)
     
@@ -422,6 +443,46 @@ export function TasksBoard() {
     const jsonContent = exportTasksAsJSON(tasks)
     downloadFile(jsonContent, generateFilename('mission-control-tasks', 'json'), 'application/json')
     toast.success('Export Complete', `Tasks exported as JSON (${tasks.length} items)`)
+  }
+
+  const handleUndo = () => {
+    if (!canUndo) return
+
+    const lastAction = popLastAction()
+    if (!lastAction) return
+
+    const { revertData } = lastAction
+
+    switch (lastAction.action) {
+      case 'create':
+        // Remove the created task
+        if (revertData.taskId) {
+          setTasks(prevTasks => prevTasks.filter(task => task._id !== revertData.taskId))
+          toast.success('Action Undone', `Removed task: ${revertData.currentTask?.title}`)
+        }
+        break
+
+      case 'delete':
+        // Restore the deleted task
+        if (revertData.previousTask) {
+          setTasks(prevTasks => [...prevTasks, revertData.previousTask!])
+          toast.success('Action Undone', `Restored task: ${revertData.previousTask.title}`)
+        }
+        break
+
+      case 'update':
+      case 'status_change':
+        // Revert to previous state
+        if (revertData.taskId && revertData.previousTask) {
+          setTasks(prevTasks =>
+            prevTasks.map(task =>
+              task._id === revertData.taskId ? revertData.previousTask! : task
+            )
+          )
+          toast.success('Action Undone', `Reverted changes to: ${revertData.previousTask.title}`)
+        }
+        break
+    }
   }
 
   const totalTasks = tasks.length
