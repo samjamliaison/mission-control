@@ -20,10 +20,12 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Badge } from "@/components/ui/badge"
-import { Rocket, User, Flag, X, Zap, AlertTriangle, CheckCircle } from "lucide-react"
+import { Rocket, User, Flag, X, Zap, AlertTriangle, CheckCircle, FileTemplate, Sparkles } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { logTaskAction } from "@/lib/activity-logger"
 import { Task } from "./task-card"
+import { TaskTemplatePicker } from "./task-template-picker"
+import { TaskTemplate, createTaskFromTemplate } from "@/lib/task-templates"
 
 interface AddTaskDialogProps {
   open: boolean
@@ -60,6 +62,21 @@ export function AddTaskDialog({ open, onOpenChange, onSave, editingTask }: AddTa
   const [description, setDescription] = useState("")
   const [assignee, setAssignee] = useState("")
   const [priority, setPriority] = useState<"low" | "medium" | "high">("medium")
+  const [showTemplatePicker, setShowTemplatePicker] = useState(false)
+  const [selectedTemplate, setSelectedTemplate] = useState<TaskTemplate | null>(null)
+  const [templateUsed, setTemplateUsed] = useState(false)
+
+  // Handle template selection
+  const handleTemplateSelect = (template: TaskTemplate) => {
+    const taskData = createTaskFromTemplate(template)
+    setTitle(taskData.title || "")
+    setDescription(taskData.description || "")
+    setAssignee(taskData.assignee || "")
+    setPriority(taskData.priority || "medium")
+    setSelectedTemplate(template)
+    setTemplateUsed(true)
+    setShowTemplatePicker(false)
+  }
 
   // Update form when dialog opens or editingTask changes
   useEffect(() => {
@@ -69,11 +86,15 @@ export function AddTaskDialog({ open, onOpenChange, onSave, editingTask }: AddTa
         setDescription(editingTask.description)
         setAssignee(editingTask.assignee)
         setPriority(editingTask.priority)
+        setSelectedTemplate(null)
+        setTemplateUsed(false)
       } else {
         setTitle("")
         setDescription("")
         setAssignee("")
         setPriority("medium")
+        setSelectedTemplate(null)
+        setTemplateUsed(false)
       }
     }
   }, [open, editingTask])
@@ -147,6 +168,96 @@ export function AddTaskDialog({ open, onOpenChange, onSave, editingTask }: AddTa
         </div>
         
         <div className="px-6 pb-6 space-y-6">
+          {/* Template Selection */}
+          {!editingTask && (
+            <motion.div 
+              className="space-y-3"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.05 }}
+            >
+              {!templateUsed ? (
+                <div className="text-center py-4">
+                  <div className="space-y-3">
+                    <div className="text-sm text-[hsl(var(--command-text-muted))]">
+                      Start with a template or create from scratch
+                    </div>
+                    <Button
+                      variant="outline"
+                      onClick={() => setShowTemplatePicker(true)}
+                      className="bg-gradient-to-r from-[hsl(var(--command-accent))]/10 to-purple-500/10 border-[hsl(var(--command-accent))]/20 hover:from-[hsl(var(--command-accent))]/20 hover:to-purple-500/20"
+                    >
+                      <Sparkles className="h-4 w-4 mr-2" />
+                      Choose Template
+                      <FileTemplate className="h-4 w-4 ml-2" />
+                    </Button>
+                  </div>
+                </div>
+              ) : (
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  className="p-4 glass-morphism rounded-xl border-[hsl(var(--command-accent))]/20"
+                >
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div 
+                        className="w-8 h-8 rounded-lg flex items-center justify-center text-sm"
+                        style={{ 
+                          backgroundColor: `${selectedTemplate?.color}15`,
+                          border: `1px solid ${selectedTemplate?.color}30`
+                        }}
+                      >
+                        {selectedTemplate?.icon}
+                      </div>
+                      <div>
+                        <div className="text-sm font-semibold">Template Applied</div>
+                        <div className="text-xs text-[hsl(var(--command-text-muted))]">
+                          {selectedTemplate?.name} • {selectedTemplate?.category}
+                        </div>
+                      </div>
+                    </div>
+                    <div className="flex gap-2">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => setShowTemplatePicker(true)}
+                        className="h-8 px-3 text-xs"
+                      >
+                        Change
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => {
+                          setTitle("")
+                          setDescription("")
+                          setAssignee("")
+                          setPriority("medium")
+                          setSelectedTemplate(null)
+                          setTemplateUsed(false)
+                        }}
+                        className="h-8 px-3 text-xs text-[hsl(var(--command-text-muted))]"
+                      >
+                        Clear
+                      </Button>
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+            </motion.div>
+          )}
+          
+          {/* Divider */}
+          {!editingTask && templateUsed && (
+            <div className="flex items-center gap-4">
+              <div className="h-px bg-[hsl(var(--command-border))] flex-1" />
+              <span className="text-xs text-[hsl(var(--command-text-muted))] font-medium">
+                Customize Template
+              </span>
+              <div className="h-px bg-[hsl(var(--command-border))] flex-1" />
+            </div>
+          )}
           {/* Mission Title */}
           <motion.div 
             className="space-y-2"
@@ -316,6 +427,13 @@ export function AddTaskDialog({ open, onOpenChange, onSave, editingTask }: AddTa
             </motion.div>
           </div>
         </div>
+        
+        {/* Template Picker Modal */}
+        <TaskTemplatePicker
+          open={showTemplatePicker}
+          onOpenChange={setShowTemplatePicker}
+          onSelectTemplate={handleTemplateSelect}
+        />
       </DialogContent>
     </Dialog>
   )
