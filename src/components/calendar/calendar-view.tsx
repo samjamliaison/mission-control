@@ -18,7 +18,20 @@ import {
   Zap
 } from "lucide-react"
 import { CalendarEventData } from "@/lib/data-persistence"
-import { loadEvents, saveEvents } from "@/lib/data-persistence"
+// import { loadEvents, saveEvents } from "@/lib/data-persistence" - Replaced with API calls
+
+// API functions for calendar/cron integration
+async function fetchCronJobs() {
+  try {
+    const response = await fetch('/api/cron')
+    if (!response.ok) throw new Error('Failed to fetch cron jobs')
+    const data = await response.json()
+    return data.jobs || []
+  } catch (error) {
+    console.error('Error fetching cron jobs:', error)
+    return []
+  }
+}
 import { EventCreationDialog } from "./event-creation-dialog"
 import { EventDetails } from "./event-details"
 import { useToastActions } from "@/components/ui/toast"
@@ -111,17 +124,37 @@ export function CalendarView() {
   const [mounted, setMounted] = useState(false)
   const toast = useToastActions()
 
-  // Load events on mount
+  // Load events and cron jobs on mount
   useEffect(() => {
     setMounted(true)
-    const loadedEvents = loadEvents()
-    setEvents(loadedEvents)
+    // Load stored events from localStorage
+    const stored = localStorage.getItem('mission-control-events')
+    const loadedEvents = stored ? JSON.parse(stored) : []
+    
+    // Load cron jobs and convert to calendar events
+    fetchCronJobs().then(cronJobs => {
+      const cronEvents = cronJobs.map((job: any) => ({
+        _id: `cron-${job.id}`,
+        title: job.description || job.command,
+        description: `Cron: ${job.schedule}\nCommand: ${job.command}`,
+        type: "cron" as const,
+        agent: job.agent || "system",
+        scheduledTime: job.nextRun || Date.now(),
+        status: job.enabled ? "scheduled" : "cancelled" as const,
+        createdAt: job.createdAt || Date.now(),
+        updatedAt: job.updatedAt || Date.now()
+      }))
+      
+      // Combine loaded events with cron events
+      setEvents([...loadedEvents, ...cronEvents])
+    })
   }, [])
 
-  // Save events when they change
+  // Save only user events (not cron events) when they change
   useEffect(() => {
     if (mounted) {
-      saveEvents(events)
+      const userEvents = events.filter(event => !event._id.startsWith('cron-'))
+      localStorage.setItem('mission-control-events', JSON.stringify(userEvents))
     }
   }, [events, mounted])
 
