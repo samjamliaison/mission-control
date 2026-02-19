@@ -78,7 +78,7 @@ export function TaskColumn({ title, status, tasks, onEditTask, onDeleteTask }: T
       animate="visible"
       className="w-full min-w-[320px]"
     >
-      <Card className="glass-morphism border-[hsl(var(--command-border-bright))] min-h-[600px] relative overflow-hidden">
+      <Card className="glass-morphism border-[hsl(var(--command-border-bright))] min-h-[500px] relative overflow-hidden">
         {/* Column glow effect */}
         <div 
           className="absolute inset-0 opacity-5 pointer-events-none"
@@ -132,7 +132,7 @@ export function TaskColumn({ title, status, tasks, onEditTask, onDeleteTask }: T
                 ref={provided.innerRef}
                 {...provided.droppableProps}
                 className={cn(
-                  "min-h-[520px] transition-all duration-300 rounded-xl p-3 relative",
+                  "min-h-[420px] transition-all duration-300 rounded-xl p-3 relative",
                   snapshot.isDraggingOver && "bg-[hsl(var(--command-accent))]/5 ring-2 ring-[hsl(var(--command-accent))]/20 ring-dashed"
                 )}
                 style={{

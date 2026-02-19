@@ -31,7 +31,7 @@ export default function RootLayout({
         <div className="min-h-screen bg-[#09090b] flex">
           <Navigation />
           <main className="flex-1 min-h-screen">
-            <div className="p-6 lg:p-8">
+            <div className="p-8">
               {children}
             </div>
           </main>

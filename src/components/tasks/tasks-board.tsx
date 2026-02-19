@@ -212,12 +212,12 @@ export function TasksBoard() {
       <div className="fixed inset-0 bg-gradient-to-br from-[hsl(var(--command-background))] via-[hsl(220_13%_3%)] to-[hsl(var(--command-background))] pointer-events-none" />
       
       <motion.div 
-        className="relative z-10 p-6"
+        className="relative z-10"
         variants={containerVariants}
         initial="hidden"
         animate="visible"
       >
-        <div className="max-w-7xl mx-auto space-y-8">
+        <div className="max-w-none space-y-6">
           {/* Page Header */}
           <PageHeader
             icon={CheckSquare}
@@ -233,7 +233,7 @@ export function TasksBoard() {
             />
           </PageHeader>
 
-          <motion.div variants={itemVariants} className="space-y-6">
+          <motion.div variants={itemVariants} className="space-y-4">
             {/* Command Controls */}
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-6">
@@ -325,7 +325,7 @@ export function TasksBoard() {
           {/* Task Board */}
           <motion.div variants={itemVariants}>
             <DragDropContext onDragEnd={handleDragEnd}>
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 overflow-x-auto pb-4">
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 overflow-x-auto pb-4">
                 <TaskColumn
                   title="Awaiting Deployment"
                   status="todo"

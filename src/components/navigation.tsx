@@ -63,7 +63,7 @@ export function Navigation() {
       animate={{ 
         x: 0, 
         opacity: 1,
-        width: isCollapsed ? "80px" : "280px"
+        width: isCollapsed ? "64px" : "240px"
       }}
       transition={{ duration: 0.3, ease: "easeInOut" }}
     >

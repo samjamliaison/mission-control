@@ -130,7 +130,7 @@ export function TaskCard({ task, index, onEdit, onDelete }: TaskCardProps) {
           whileTap={{ scale: 0.98 }}
           transition={{ duration: 0.2, ease: "easeInOut" }}
           className={cn(
-            "mb-4 cursor-grab active:cursor-grabbing group relative",
+            "mb-3 cursor-grab active:cursor-grabbing group relative",
             snapshot.isDragging && "z-50 rotate-3"
           )}
         >
@@ -216,7 +216,7 @@ export function TaskCard({ task, index, onEdit, onDelete }: TaskCardProps) {
               </div>
             </CardHeader>
             
-            <CardContent className="pt-0 pb-5 px-5 space-y-4">
+            <CardContent className="pt-0 pb-5 px-5 space-y-3">
               {task.description && (
                 <p className={cn(
                   "text-body-small text-secondary line-clamp-3",
