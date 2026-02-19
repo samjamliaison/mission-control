@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation"
 import Link from "next/link"
 import { motion, AnimatePresence } from "framer-motion"
 import { Command, CheckSquare, Film, Calendar, Brain, Users, Building, ChevronLeft, ChevronRight, Settings, Activity } from "lucide-react"
+import { CommandHint } from "@/components/command-palette/command-hint"
 import { cn } from "@/lib/utils"
 
 const navigationItems = [
@@ -205,8 +206,22 @@ export function Navigation() {
             })}
           </div>
 
-          {/* Bottom Section - System Status & Settings */}
+          {/* Bottom Section - Command Palette, System Status & Settings */}
           <div className="space-y-3 pt-4 border-t border-white/[0.06]">
+            {/* Command Palette Hint */}
+            {!isCollapsed && (
+              <CommandHint 
+                onClick={() => {
+                  // This will be handled by the global keyboard listener
+                  const event = new KeyboardEvent('keydown', {
+                    key: 'k',
+                    metaKey: true,
+                    bubbles: true
+                  })
+                  document.dispatchEvent(event)
+                }}
+              />
+            )}
             {/* System Status */}
             <motion.div 
               className={cn(

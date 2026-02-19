@@ -1,7 +1,6 @@
 import type { Metadata } from "next"
 import { Geist, Plus_Jakarta_Sans } from "next/font/google"
-import { Navigation } from "@/components/navigation"
-import { PageTransitionProvider } from "@/components/ui/page-transition"
+import { RootLayoutClient } from "@/components/layout/root-layout-client"
 import "./globals.css"
 
 const geist = Geist({
@@ -29,16 +28,9 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <body className={`${geist.variable} ${plusJakarta.variable} antialiased`}>
-        <div className="min-h-screen bg-[#09090b] flex">
-          <Navigation />
-          <main className="flex-1 min-h-screen">
-            <PageTransitionProvider>
-              <div className="p-4 sm:p-6 lg:p-8">
-                {children}
-              </div>
-            </PageTransitionProvider>
-          </main>
-        </div>
+        <RootLayoutClient>
+          {children}
+        </RootLayoutClient>
       </body>
     </html>
   )
