@@ -265,6 +265,7 @@ export function TeamDashboard() {
             />
           </PageHeader>
 
+          <motion.div variants={itemVariants} className="space-y-6">
             {/* Team Overview */}
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
               <Card className="glass-morphism border-[hsl(var(--command-border-bright))]">

@@ -194,6 +194,7 @@ export function OfficeView() {
             />
           </PageHeader>
 
+          <motion.div variants={itemVariants} className="space-y-6">
             {/* Office Controls */}
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-6">

@@ -358,6 +358,7 @@ export function MemoryViewer() {
             />
           </PageHeader>
 
+          <motion.div variants={itemVariants} className="space-y-6">
             {/* Search and Filters */}
             <div className="flex items-center gap-6">
               {/* Search */}
