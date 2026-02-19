@@ -1,242 +1,177 @@
-# Mission Control 🚀
+# 🎯 Mission Control
 
-[![Version](https://img.shields.io/badge/version-1.0.0-brightgreen)](https://github.com/samjamliaison/mission-control)
-[![Next.js](https://img.shields.io/badge/Next.js-16.1.6-black)](https://nextjs.org/)
-[![OpenClaw](https://img.shields.io/badge/OpenClaw-Compatible-blue)](https://openclaw.com/)
+[![MIT License](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/samjamliaison/mission-control/blob/master/LICENSE)
+[![Next.js](https://img.shields.io/badge/Next.js-16.1.6-000000?logo=next.js&logoColor=white)](https://nextjs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.3-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![OpenClaw](https://img.shields.io/badge/OpenClaw-Compatible-00D4FF)](https://openclaw.com/)
 
 **Advanced Command Center Dashboard for OpenClaw Operations**
 
-Mission Control is a comprehensive task management and operational dashboard designed specifically for OpenClaw environments. Built with Next.js and featuring real-time agent integration, advanced visualization, and enterprise-grade functionality.
+Mission Control is a comprehensive web dashboard that provides real-time monitoring, task management, and operational control for OpenClaw AI agent environments. Built with Next.js and designed for teams who need professional-grade agent orchestration and project management.
 
-## 🌟 Features Overview
+Transform your OpenClaw workspace into a powerful command center with real-time agent status, dynamic task boards, team coordination, and seamless workflow automation.
 
-### **Core Dashboard**
-- **Real-time System Monitoring** - Live OpenClaw agent status, session tracking, and cron job management
-- **Advanced Analytics** - Performance insights, team efficiency metrics, and activity feeds
-- **Command Center Interface** - Military-inspired UI with glass morphism design
-- **Responsive Design** - Works seamlessly across desktop, tablet, and mobile devices
+## ✨ Features
 
-### **Task Management**
-- **Dynamic Kanban Board** - Customizable columns with drag-and-drop functionality
-- **Column Customization** - Rename, add/remove columns, custom colors, persistent settings
-- **Time Tracking** - Start/stop timers on tasks, elapsed time display, session persistence
-- **Bulk Operations** - Multi-select tasks, bulk status changes, assignee updates
-- **Smart Filtering** - Filter by assignee, status, priority, and due dates
-- **Task Templates** - Pre-configured templates for common task types
-- **Keyboard Shortcuts** - Quick actions and navigation with hotkeys
-- **Print Support** - Clean print layouts for offline task management
-
-### **Team Management** 
-- **Live Agent Status** - Real-time monitoring of all OpenClaw agents
-- **Agent Chat Simulation** - Interactive chat interfaces with personality-based conversations
-- **Team Performance** - Efficiency metrics, task completion rates, and workload distribution
-- **Agent Profiles** - Detailed views with skills, expertise, and recent activity
-- **Workspace Integration** - Direct connection to OpenClaw API for live data
-
-### **Content Pipeline**
-- **Content Creation Workflow** - From ideation to publication tracking
-- **Multi-platform Support** - YouTube, Blog, X (Twitter), and custom platforms
-- **Status Tracking** - Draft, review, scheduled, published states
-- **Collaborative Features** - Team assignments and review processes
-- **Export Capabilities** - JSON export for backup and analysis
-- **Print Support** - Professional layouts for content planning
-
-### **Calendar & Scheduling**
-- **Event Management** - Create, edit, and track scheduled events
-- **Agent Assignments** - Assign events to specific OpenClaw agents
-- **Visual Calendar** - Monthly grid view with event details
-- **Time-based Filtering** - View events by date ranges and agent assignments
-- **Print Support** - Calendar layouts for offline planning
-
-### **Memory System**
-- **Knowledge Base** - Store and organize important information
-- **Agent Memories** - Track insights and learnings from agent interactions
-- **Search & Filter** - Quick access to stored knowledge
-- **Tagging System** - Organize memories with custom tags
-- **Export Features** - Backup and share knowledge bases
-
-### **Advanced Features**
-- **Starred/Favorites System** - Quick access to important items across all sections
-- **Command Palette** - Global search and quick actions (Cmd/Ctrl+K)
-- **Undo System** - Revert recent actions with confidence
-- **Dark Mode** - Professional dark interface optimized for extended use
-- **Activity Logging** - Comprehensive audit trail of all system actions
-- **Export Tools** - CSV and JSON export for all data types
-- **Offline Capabilities** - Print support for all major sections
-
-### **Data Persistence**
-- **LocalStorage Integration** - Client-side data persistence for offline work
-- **Real-time Sync** - Live updates from OpenClaw APIs when connected
-- **Data Export** - Backup capabilities for all stored information
-- **Session Management** - Maintains state across browser sessions
-
-### **User Experience**
-- **Glass Morphism UI** - Modern, translucent design elements
-- **Smooth Animations** - Framer Motion powered transitions and interactions
-- **Loading States** - Skeleton loaders and progress indicators
-- **Error Boundaries** - Graceful error handling and recovery
-- **Accessibility** - Keyboard navigation and screen reader support
+- 🤖 **Real-time Agent Monitoring** — Live status tracking of all OpenClaw agents
+- 📋 **Dynamic Task Management** — Kanban boards with drag-and-drop functionality
+- 👥 **Team Collaboration** — Agent assignments and workload distribution  
+- 📅 **Integrated Calendar** — Event scheduling and timeline management
+- 🧠 **Memory System** — Centralized knowledge base with search and tagging
+- 📊 **Analytics Dashboard** — Performance metrics and activity insights
+- 🔄 **Cron Job Management** — Schedule and monitor automated tasks
+- 📱 **Responsive Design** — Works on desktop, tablet, and mobile
+- 🌙 **Dark Mode** — Professional interface optimized for extended use
+- 💾 **Offline Capable** — Local storage with API sync when available
+- 🔧 **Environment Flexible** — Configurable paths for any OpenClaw setup
+- 🚀 **One-Click Setup** — Automated onboarding wizard
 
 ## 🚀 Quick Start
-
-### Prerequisites
-- Node.js 18+ 
-- OpenClaw environment (for live agent integration)
-
-### Installation
 
 ```bash
 # Clone the repository
 git clone https://github.com/samjamliaison/mission-control.git
-cd mission-control
 
-# Install dependencies
+# Install dependencies  
 npm install
 
 # Start development server
 npm run dev
-
-# Build for production
-npm run build
-npm run start
 ```
 
-### Configuration
+Visit `http://localhost:3000` and the setup wizard will guide you through configuration.
 
-1. **Environment Setup**
-   ```bash
-   cp .env.example .env.local
-   ```
+## ⚙️ Environment Setup
 
-2. **OpenClaw Integration**
-   - Ensure OpenClaw APIs are accessible
-   - Configure agent endpoints in environment variables
+Mission Control automatically detects your OpenClaw environment on first run. If you need to configure manually:
 
-3. **Development**
-   ```bash
-   # Development server with hot reload
-   npm run dev
+### 1. Copy Environment Template
+```bash
+cp .env.local.example .env.local
+```
 
-   # Run tests
-   npm test
+### 2. Configure Paths
+```env
+# OpenClaw Integration
+OPENCLAW_WORKSPACE=/path/to/your/openclaw/workspace
+OPENCLAW_CONFIG=/path/to/your/openclaw.json
 
-   # Lint and format
-   npm run lint
-   npm run format
-   ```
+# Data Directory  
+DATA_DIR=./data
 
-## 📋 Usage
+# Application URL
+NEXT_PUBLIC_APP_URL=http://localhost:3000
+```
 
-### Task Management
-1. **Create Tasks** - Use the "Deploy Task" button or press `N`
-2. **Organize** - Drag tasks between customizable columns
-3. **Track Time** - Click the timer icon on any task card
-4. **Bulk Actions** - Enable selection mode for multi-task operations
-5. **Print** - Use the print button for offline task lists
+### 3. Verify OpenClaw Paths
+Ensure your OpenClaw workspace and config file exist at the specified paths. Mission Control will validate these during setup.
 
-### Team Monitoring  
-1. **View Agents** - Real-time status of all OpenClaw agents
-2. **Chat Simulation** - Click any agent to open chat interface
-3. **Performance** - Monitor efficiency and task completion rates
+## 🐳 Docker Deployment
 
-### Content Pipeline
-1. **Create Content** - Add new content items with platform targeting
-2. **Track Progress** - Move through draft, review, and published states
-3. **Collaborate** - Assign content to team members
+### Quick Deploy with Docker Compose
+```bash
+# Clone and deploy
+git clone https://github.com/samjamliaison/mission-control.git
+cd mission-control
+docker-compose up -d
+```
 
-### Calendar
-1. **Schedule Events** - Click any date to create new events
-2. **Assign Agents** - Delegate events to specific team members
-3. **View Planning** - Monthly overview of all scheduled activities
+### Manual Docker Build
+```bash
+# Build image
+docker build -t mission-control .
 
-## 🔧 Technical Stack
+# Run container
+docker run -d \
+  -p 3000:3000 \
+  -e OPENCLAW_WORKSPACE=/path/to/workspace \
+  -e OPENCLAW_CONFIG=/path/to/config.json \
+  -v /your/openclaw/workspace:/app/workspace \
+  mission-control
+```
 
-- **Framework**: Next.js 16.1.6 with Turbopack
-- **UI Framework**: React 19 with TypeScript
-- **Styling**: Tailwind CSS with custom design system
-- **Animations**: Framer Motion
-- **Drag & Drop**: @hello-pangea/dnd
-- **State Management**: React Hooks + LocalStorage
-- **Build Tool**: Next.js with TypeScript
-- **Deployment**: Vercel-ready with Docker support
+The application will be available at `http://localhost:3000`.
 
-## 🎨 Design System
+## 📚 API Documentation
 
-Mission Control features a custom design system inspired by command centers and military operations:
+Mission Control provides a comprehensive REST API for integration and automation:
 
-- **Color Palette**: Dark theme with cyan accents and glass morphism
-- **Typography**: Geist and Plus Jakarta Sans for professional readability
-- **Components**: Reusable UI components with consistent styling
-- **Animations**: Smooth transitions and micro-interactions
-- **Responsive**: Mobile-first design with desktop optimizations
+### Agent Management
+- `GET /api/agents` — List all agents with status and metadata
+- `GET /api/agents/status` — Real-time agent status summary  
+- `GET /api/agents/[id]/files` — Agent workspace file browser
 
-## 📖 API Integration
+### Task Management  
+- `GET /api/tasks` — List all tasks with filtering options
+- `POST /api/tasks` — Create new task
+- `PUT /api/tasks/[id]` — Update existing task
+- `DELETE /api/tasks/[id]` — Delete task
 
-### OpenClaw Endpoints
-- `/api/agents` - Live agent status and management
-- `/api/sessions` - Active session monitoring
-- `/api/cron` - Scheduled task management
-- `/api/tasks` - Task CRUD operations
-- `/api/calendar` - Event management
-- `/api/memory` - Knowledge base operations
+### Session Monitoring
+- `GET /api/sessions` — Active session information
+- `GET /api/sessions/[id]` — Detailed session data
 
-### Data Flow
-1. **Real-time Updates** - Live polling of OpenClaw APIs
-2. **Local Persistence** - Client-side storage for offline capability
-3. **Sync Strategy** - Merge remote and local changes intelligently
+### Memory System
+- `GET /api/memory` — List memory entries (daily and long-term)
+- `POST /api/memory` — Create new memory entry
 
-## 🔒 Security & Privacy
+### Calendar & Events
+- `GET /api/calendar` — List calendar events
+- `POST /api/calendar` — Create new event
+- `PUT /api/calendar/[id]` — Update event
+- `DELETE /api/calendar/[id]` — Delete event
 
-- **Client-side Data** - Sensitive information stays in browser
-- **API Authentication** - Secure communication with OpenClaw services
-- **Data Validation** - Input sanitization and type checking
-- **Error Handling** - Graceful degradation for security failures
+### Automation
+- `GET /api/cron` — List scheduled jobs
+- `POST /api/cron` — Create cron job  
+- `PUT /api/cron/[id]` — Update job
+- `DELETE /api/cron/[id]` — Delete job
 
-## 📱 Mobile Experience
+### System
+- `GET /api/health` — Application health check
+- `GET /api/setup-status` — Environment configuration status
+- `POST /api/setup` — Initialize environment configuration
 
-Mission Control is fully responsive with mobile-optimized features:
-- **Touch Interactions** - Optimized for mobile gestures
-- **Compact Layouts** - Efficient use of screen space
-- **Offline Capability** - Full functionality without internet
-- **Performance** - Optimized loading and smooth animations
+All endpoints return JSON and support standard HTTP status codes. Rate limiting and authentication depend on your OpenClaw configuration.
 
-## 🤝 Contributing
+## 🛠️ Contributing
 
-We welcome contributions to Mission Control! Please see our [Contributing Guidelines](CONTRIBUTING.md) for details.
+We welcome contributions! Here's how to get started:
 
 ### Development Setup
 1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Add tests if applicable
-5. Submit a pull request
+2. Clone your fork: `git clone https://github.com/your-username/mission-control.git`
+3. Install dependencies: `npm install`  
+4. Create a branch: `git checkout -b feature/your-feature`
+5. Make your changes and test thoroughly
+6. Commit: `git commit -m "Add your feature"`
+7. Push: `git push origin feature/your-feature`
+8. Open a Pull Request
 
-### Code Standards
-- TypeScript for type safety
-- ESLint and Prettier for code formatting
-- Component-based architecture
-- Responsive design principles
+### Code Guidelines
+- **TypeScript** — All new code must be typed
+- **Testing** — Add tests for new features (`npm run test`)
+- **Linting** — Code must pass ESLint (`npm run lint`)
+- **Formatting** — Use Prettier (`npm run format`)
+- **Responsive** — Ensure mobile compatibility
+- **Accessibility** — Follow WCAG guidelines
+
+### Issue Reporting
+- Use clear, descriptive titles
+- Provide reproduction steps
+- Include environment details (OS, Node version, etc.)
+- Add screenshots for UI issues
+
+## 🔗 Links
+
+- **GitHub**: [samjamliaison/mission-control](https://github.com/samjamliaison/mission-control)
+- **Issues**: [Report bugs or request features](https://github.com/samjamliaison/mission-control/issues)
+- **OpenClaw**: [Learn about OpenClaw](https://openclaw.com/)
 
 ## 📄 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 🙏 Acknowledgments
-
-- **OpenClaw Team** - For the powerful agent framework
-- **Next.js Team** - For the excellent React framework
-- **Tailwind CSS** - For the utility-first CSS framework
-- **Framer Motion** - For beautiful animations
-
-## 📞 Support
-
-For support and questions:
-- **Issues**: [GitHub Issues](https://github.com/samjamliaison/mission-control/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/samjamliaison/mission-control/discussions)
-- **Documentation**: [Wiki](https://github.com/samjamliaison/mission-control/wiki)
+MIT License - see [LICENSE](LICENSE) file for details.
 
 ---
 
-**Mission Control v1.0.0** - Built with ❤️ for the OpenClaw community
-
-*"Command your operations with precision and style"*
+**Built for the OpenClaw community** • **Made with Next.js & TypeScript** • **v1.2.0**
