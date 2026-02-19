@@ -18,7 +18,44 @@ const plusJakarta = Plus_Jakarta_Sans({
 
 export const metadata: Metadata = {
   title: "Mission Control | Command Center",
-  description: "Advanced task management dashboard for OpenClaw operations",
+  description: "Advanced task management dashboard for OpenClaw operations. Manage agents, track activities, organize tasks with an intuitive isometric interface.",
+  keywords: "task management, agent control, dashboard, OpenClaw, mission control, productivity, automation",
+  authors: [{ name: "OpenClaw Team" }],
+  creator: "OpenClaw",
+  publisher: "OpenClaw",
+  robots: "index, follow",
+  openGraph: {
+    title: "Mission Control | Command Center",
+    description: "Advanced task management dashboard for OpenClaw operations. Manage agents, track activities, organize tasks with an intuitive isometric interface.",
+    type: "website",
+    locale: "en_US",
+    siteName: "Mission Control",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Mission Control Dashboard"
+      }
+    ]
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Mission Control | Command Center", 
+    description: "Advanced task management dashboard for OpenClaw operations",
+    images: ["/og-image.png"],
+  },
+  viewport: "width=device-width, initial-scale=1",
+  icons: {
+    icon: "/favicon.ico",
+    shortcut: "/favicon.ico",
+    apple: "/apple-touch-icon.png",
+    other: {
+      rel: "apple-touch-icon-precomposed",
+      url: "/apple-touch-icon.png",
+    },
+  },
+  manifest: "/manifest.json",
 }
 
 export default function RootLayout({
