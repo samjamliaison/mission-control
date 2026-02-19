@@ -12,18 +12,20 @@ import { useKeyboardShortcuts } from "@/hooks/use-keyboard-shortcuts"
 import { ShortcutsHelpModal } from "@/components/keyboard-shortcuts/shortcuts-help-modal"
 import { ThemeProvider } from "@/lib/theme-context"
 import { ThemeToggle } from "@/components/ui/theme-toggle"
+import { FocusModeProvider, useFocusMode } from "@/hooks/use-focus-mode"
+import { FocusModeToggle } from "@/components/ui/focus-mode-toggle"
 
 interface RootLayoutClientProps {
   children: React.ReactNode
 }
 
-export function RootLayoutClient({ children }: RootLayoutClientProps) {
+function LayoutContent({ children }: RootLayoutClientProps) {
   const { open, setOpen } = useCommandPalette()
   const { shortcuts, showHelp, setShowHelp, pendingSequence } = useKeyboardShortcuts()
+  const { isFocusMode } = useFocusMode()
 
   return (
-    <ThemeProvider>
-      <ToastProvider>
+    <>
         {/* Skip to content link for screen readers */}
         <a
           href="#main-content"
@@ -34,18 +36,36 @@ export function RootLayoutClient({ children }: RootLayoutClientProps) {
         </a>
 
         <div className="min-h-screen bg-[hsl(var(--command-background))] flex">
-          <Navigation />
-          <main id="main-content" className="flex-1 min-h-screen" role="main" aria-label="Main content area">
+          {/* Navigation - hidden in focus mode */}
+          {!isFocusMode && <Navigation />}
+          
+          <main 
+            id="main-content" 
+            className={`flex-1 min-h-screen ${isFocusMode ? 'w-full' : ''}`} 
+            role="main" 
+            aria-label="Main content area"
+          >
             <PageTransitionProvider>
-              <div className="p-4 sm:p-6 lg:p-8">
-                {/* Header with Breadcrumbs and Search */}
-                <div className="flex items-center justify-between mb-6">
-                  <Breadcrumbs />
-                  <div className="flex items-center gap-3">
-                    <GlobalSearch />
-                    <ThemeToggle />
+              <div className={`${isFocusMode ? 'p-2' : 'p-4 sm:p-6 lg:p-8'}`}>
+                {/* Header with Breadcrumbs and Search - hidden in focus mode */}
+                {!isFocusMode && (
+                  <div className="flex items-center justify-between mb-6">
+                    <Breadcrumbs />
+                    <div className="flex items-center gap-3">
+                      <GlobalSearch />
+                      <FocusModeToggle />
+                      <ThemeToggle />
+                    </div>
                   </div>
-                </div>
+                )}
+                
+                {/* Focus mode toggle button - shown in focus mode */}
+                {isFocusMode && (
+                  <div className="fixed top-4 right-4 z-50">
+                    <FocusModeToggle variant="default" size="default" />
+                  </div>
+                )}
+                
                 {children}
               </div>
             </PageTransitionProvider>
@@ -65,7 +85,18 @@ export function RootLayoutClient({ children }: RootLayoutClientProps) {
           {/* Toast Container */}
           <ToastContainer />
         </div>
-      </ToastProvider>
+    </>
+  )
+}
+
+export function RootLayoutClient({ children }: RootLayoutClientProps) {
+  return (
+    <ThemeProvider>
+      <FocusModeProvider>
+        <ToastProvider>
+          <LayoutContent>{children}</LayoutContent>
+        </ToastProvider>
+      </FocusModeProvider>
     </ThemeProvider>
   )
 }
