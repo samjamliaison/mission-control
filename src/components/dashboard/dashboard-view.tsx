@@ -186,15 +186,15 @@ export function DashboardView() {
           {/* Overview Stats */}
           <motion.div variants={itemVariants}>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              <Card className="glass-morphism border-[hsl(var(--command-border-bright))]">
+              <Card className="stats-glass stats-mesh-bg border-[hsl(var(--command-border-bright))]">
                 <CardContent className="p-6">
                   <div className="flex items-center gap-4">
                     <div className="p-3 bg-[hsl(var(--command-accent))]/10 rounded-xl">
                       <CheckSquare className="h-6 w-6 text-[hsl(var(--command-accent))]" />
                     </div>
                     <div>
-                      <div className="text-2xl font-display font-bold">{stats.tasks.total}</div>
-                      <div className="text-sm text-[hsl(var(--command-text-muted))]">
+                      <div className="text-2xl font-display font-bold text-contrast-high">{stats.tasks.total}</div>
+                      <div className="text-sm text-contrast-medium">
                         Active Tasks
                       </div>
                       <div className="text-xs text-[hsl(var(--command-success))]">
@@ -205,15 +205,15 @@ export function DashboardView() {
                 </CardContent>
               </Card>
 
-              <Card className="glass-morphism border-[hsl(var(--command-border-bright))]">
+              <Card className="stats-glass stats-mesh-bg border-[hsl(var(--command-border-bright))]">
                 <CardContent className="p-6">
                   <div className="flex items-center gap-4">
                     <div className="p-3 bg-purple-500/10 rounded-xl">
                       <Film className="h-6 w-6 text-purple-400" />
                     </div>
                     <div>
-                      <div className="text-2xl font-display font-bold">{stats.content.total}</div>
-                      <div className="text-sm text-[hsl(var(--command-text-muted))]">
+                      <div className="text-2xl font-display font-bold text-contrast-high">{stats.content.total}</div>
+                      <div className="text-sm text-contrast-medium">
                         Content Items
                       </div>
                       <div className="text-xs text-[hsl(var(--command-success))]">
@@ -224,15 +224,15 @@ export function DashboardView() {
                 </CardContent>
               </Card>
 
-              <Card className="glass-morphism border-[hsl(var(--command-border-bright))]">
+              <Card className="stats-glass stats-mesh-bg border-[hsl(var(--command-border-bright))]">
                 <CardContent className="p-6">
                   <div className="flex items-center gap-4">
                     <div className="p-3 bg-blue-500/10 rounded-xl">
                       <Calendar className="h-6 w-6 text-blue-400" />
                     </div>
                     <div>
-                      <div className="text-2xl font-display font-bold">{stats.events.upcoming}</div>
-                      <div className="text-sm text-[hsl(var(--command-text-muted))]">
+                      <div className="text-2xl font-display font-bold text-contrast-high">{stats.events.upcoming}</div>
+                      <div className="text-sm text-contrast-medium">
                         Upcoming Events
                       </div>
                       <div className="text-xs text-[hsl(var(--command-success))]">
@@ -243,15 +243,15 @@ export function DashboardView() {
                 </CardContent>
               </Card>
 
-              <Card className="glass-morphism border-[hsl(var(--command-border-bright))]">
+              <Card className="stats-glass stats-mesh-bg border-[hsl(var(--command-border-bright))]">
                 <CardContent className="p-6">
                   <div className="flex items-center gap-4">
                     <div className="p-3 bg-green-500/10 rounded-xl">
                       <Brain className="h-6 w-6 text-green-400" />
                     </div>
                     <div>
-                      <div className="text-2xl font-display font-bold">{stats.memories.total}</div>
-                      <div className="text-sm text-[hsl(var(--command-text-muted))]">
+                      <div className="text-2xl font-display font-bold text-contrast-high">{stats.memories.total}</div>
+                      <div className="text-sm text-contrast-medium">
                         Memory Entries
                       </div>
                       <div className="text-xs text-[hsl(var(--command-accent))]">
