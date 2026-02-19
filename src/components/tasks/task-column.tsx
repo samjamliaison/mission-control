@@ -62,7 +62,7 @@ const taskVariants = {
     y: 0,
     transition: {
       duration: 0.3,
-      ease: "easeOut"
+      ease: [0.04, 0.62, 0.23, 0.98] as any
     }
   }
 }

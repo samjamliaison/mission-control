@@ -93,7 +93,7 @@ const contentVariants = {
     y: 0,
     transition: {
       duration: 0.3,
-      ease: "easeOut"
+      ease: [0.04, 0.62, 0.23, 0.98] as any
     }
   }
 }
@@ -140,9 +140,10 @@ export function ContentColumn({ title, stage, content, config, onEditContent, on
                   {stageStyle.title}
                 </CardTitle>
                 <div className="text-xs text-[hsl(var(--command-text-dim))]">
-                  {stage === 'ideas' && "Conceptualization"}
-                  {stage === 'production' && "Active Creation"}
-                  {stage === 'review' && "Quality Check"}
+                  {stage === 'idea' && "Conceptualization"}
+                  {stage === 'script' && "Writing"}
+                  {stage === 'thumbnail' && "Design"}
+                  {stage === 'filming' && "Production"}
                   {stage === 'published' && "Live Content"}
                 </div>
               </div>
@@ -170,14 +171,14 @@ export function ContentColumn({ title, stage, content, config, onEditContent, on
           </div>
           
           {/* Enhanced progress indicator for active stages */}
-          {(stage === "production" || stage === "review") && content.length > 0 && (
+          {(stage === "filming" || stage === "thumbnail") && content.length > 0 && (
             <motion.div
               initial={{ scaleX: 0 }}
               animate={{ scaleX: 1 }}
               transition={{ delay: 0.5, duration: 0.8 }}
               className={cn(
                 "h-1 rounded-full mt-3 bg-gradient-to-r",
-                stage === "production" ? stageStyle.gradientFrom : stageStyle.gradientFrom,
+                stage === "filming" ? stageStyle.gradientFrom : stageStyle.gradientFrom,
                 stageStyle.gradientTo
               )}
               style={{
@@ -270,9 +271,10 @@ export function ContentColumn({ title, stage, content, config, onEditContent, on
                       </div>
                       <div>
                         <p className="text-[hsl(var(--command-text-dim))] text-sm font-medium">
-                          {stage === "ideas" && "Ready for new ideas"}
-                          {stage === "production" && "No content in production"}
-                          {stage === "review" && "No content under review"}
+                          {stage === "idea" && "Ready for new ideas"}
+                          {stage === "script" && "No scripts in progress"}
+                          {stage === "thumbnail" && "No designs in progress"}
+                          {stage === "filming" && "No content in production"}
                           {stage === "published" && "No published content"}
                         </p>
                         <p className="text-[hsl(var(--command-text-dim))] text-xs mt-1">
