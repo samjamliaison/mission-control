@@ -128,14 +128,14 @@ export function TaskCard({ task, index, onEdit, onDelete }: TaskCardProps) {
           }}
           variants={cardVariants}
           initial="hidden"
-          animate="visible"
-          whileHover={!snapshot.isDragging ? { y: -2, scale: 1.01 } : {}}
-          whileTap={!snapshot.isDragging ? { scale: 0.98 } : {}}
           animate={{
+            ...cardVariants.visible,
             scale: snapshot.isDragging ? 1.05 : 1,
             rotate: snapshot.isDragging ? 2 : 0,
             y: snapshot.isDragging ? -8 : 0,
           }}
+          whileHover={!snapshot.isDragging ? { y: -2, scale: 1.01 } : {}}
+          whileTap={!snapshot.isDragging ? { scale: 0.98 } : {}}
           transition={{ 
             duration: snapshot.isDragging ? 0.15 : 0.2, 
             ease: snapshot.isDragging ? [0.2, 0, 0.2, 1] : "easeInOut"

@@ -24,8 +24,8 @@ test.describe('Comprehensive Navigation Tests', () => {
       await expect(page.locator('h1')).toContainText(route.header)
       
       // Check that page loads without errors
-      const errors = []
-      page.on('pageerror', error => errors.push(error))
+      const errors: Error[] = []
+      page.on('pageerror', (error: Error) => errors.push(error))
       await page.waitForLoadState('networkidle')
       expect(errors).toHaveLength(0)
     }

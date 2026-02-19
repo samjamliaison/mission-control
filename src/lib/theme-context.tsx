@@ -7,7 +7,7 @@ export type Theme = 'dark' | 'midnight' | 'terminal'
 interface ThemeContextType {
   theme: Theme
   setTheme: (theme: Theme) => void
-  themes: {
+  themes: readonly {
     id: Theme
     name: string
     description: string
