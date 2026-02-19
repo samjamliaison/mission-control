@@ -39,6 +39,7 @@ import { ContentItem } from "@/types/content"
 import { MemoryEntry } from "@/components/memory/memory-entry"
 import { CalendarEventData } from "@/lib/data-persistence"
 import { cn } from "@/lib/utils"
+import { MiniSparkline, generateTrendData } from "@/components/ui/mini-sparkline"
 
 // OpenClaw API Types
 interface AgentStatus {
@@ -261,10 +262,25 @@ export function DashboardView() {
     const totalMemories = memories.length
 
     return {
-      tasks: { total: totalTasks, completed: completedTasks },
-      content: { total: totalContent, published: publishedContent },
-      events: { upcoming: upcomingEvents, total: events.length },
-      memories: { total: totalMemories }
+      tasks: { 
+        total: totalTasks, 
+        completed: completedTasks,
+        trend: generateTrendData(totalTasks, 0.2)
+      },
+      content: { 
+        total: totalContent, 
+        published: publishedContent,
+        trend: generateTrendData(totalContent, 0.3)
+      },
+      events: { 
+        upcoming: upcomingEvents, 
+        total: events.length,
+        trend: generateTrendData(upcomingEvents, 0.4)
+      },
+      memories: { 
+        total: totalMemories,
+        trend: generateTrendData(totalMemories, 0.1)
+      }
     }
   }, [tasks, content, events, memories])
 
@@ -370,76 +386,104 @@ export function DashboardView() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               <Card className="stats-glass stats-mesh-bg border-[hsl(var(--command-border-bright))]">
                 <CardContent className="p-6">
-                  <div className="flex items-center gap-4">
-                    <div className="p-3 bg-[hsl(var(--command-accent))]/10 rounded-xl">
-                      <CheckSquare className="h-6 w-6 text-[hsl(var(--command-accent))]" />
-                    </div>
-                    <div>
-                      <div className="text-2xl font-display font-bold text-contrast-high">{stats.tasks.total}</div>
-                      <div className="text-sm text-contrast-medium">
-                        Active Tasks
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-4">
+                      <div className="p-3 bg-[hsl(var(--command-accent))]/10 rounded-xl">
+                        <CheckSquare className="h-6 w-6 text-[hsl(var(--command-accent))]" />
                       </div>
-                      <div className="text-xs text-[hsl(var(--command-success))]">
-                        {stats.tasks.completed} completed
+                      <div>
+                        <div className="text-2xl font-display font-bold text-contrast-high">{stats.tasks.total}</div>
+                        <div className="text-sm text-contrast-medium">
+                          Active Tasks
+                        </div>
+                        <div className="text-xs text-[hsl(var(--command-success))]">
+                          {stats.tasks.completed} completed
+                        </div>
                       </div>
                     </div>
+                    <MiniSparkline 
+                      data={stats.tasks.trend} 
+                      color="hsl(var(--command-accent))"
+                      className="w-16"
+                    />
                   </div>
                 </CardContent>
               </Card>
 
               <Card className="stats-glass stats-mesh-bg border-[hsl(var(--command-border-bright))]">
                 <CardContent className="p-6">
-                  <div className="flex items-center gap-4">
-                    <div className="p-3 bg-purple-500/10 rounded-xl">
-                      <Film className="h-6 w-6 text-purple-400" />
-                    </div>
-                    <div>
-                      <div className="text-2xl font-display font-bold text-contrast-high">{stats.content.total}</div>
-                      <div className="text-sm text-contrast-medium">
-                        Content Items
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-4">
+                      <div className="p-3 bg-purple-500/10 rounded-xl">
+                        <Film className="h-6 w-6 text-purple-400" />
                       </div>
-                      <div className="text-xs text-[hsl(var(--command-success))]">
-                        {stats.content.published} published
+                      <div>
+                        <div className="text-2xl font-display font-bold text-contrast-high">{stats.content.total}</div>
+                        <div className="text-sm text-contrast-medium">
+                          Content Items
+                        </div>
+                        <div className="text-xs text-[hsl(var(--command-success))]">
+                          {stats.content.published} published
+                        </div>
                       </div>
                     </div>
+                    <MiniSparkline 
+                      data={stats.content.trend} 
+                      color="#a855f7"
+                      className="w-16"
+                    />
                   </div>
                 </CardContent>
               </Card>
 
               <Card className="stats-glass stats-mesh-bg border-[hsl(var(--command-border-bright))]">
                 <CardContent className="p-6">
-                  <div className="flex items-center gap-4">
-                    <div className="p-3 bg-blue-500/10 rounded-xl">
-                      <Calendar className="h-6 w-6 text-blue-400" />
-                    </div>
-                    <div>
-                      <div className="text-2xl font-display font-bold text-contrast-high">{stats.events.upcoming}</div>
-                      <div className="text-sm text-contrast-medium">
-                        Upcoming Events
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-4">
+                      <div className="p-3 bg-blue-500/10 rounded-xl">
+                        <Calendar className="h-6 w-6 text-blue-400" />
                       </div>
-                      <div className="text-xs text-[hsl(var(--command-success))]">
-                        {stats.events.total} total scheduled
+                      <div>
+                        <div className="text-2xl font-display font-bold text-contrast-high">{stats.events.upcoming}</div>
+                        <div className="text-sm text-contrast-medium">
+                          Upcoming Events
+                        </div>
+                        <div className="text-xs text-[hsl(var(--command-success))]">
+                          {stats.events.total} total scheduled
+                        </div>
                       </div>
                     </div>
+                    <MiniSparkline 
+                      data={stats.events.trend} 
+                      color="#60a5fa"
+                      className="w-16"
+                    />
                   </div>
                 </CardContent>
               </Card>
 
               <Card className="stats-glass stats-mesh-bg border-[hsl(var(--command-border-bright))]">
                 <CardContent className="p-6">
-                  <div className="flex items-center gap-4">
-                    <div className="p-3 bg-green-500/10 rounded-xl">
-                      <Brain className="h-6 w-6 text-green-400" />
-                    </div>
-                    <div>
-                      <div className="text-2xl font-display font-bold text-contrast-high">{stats.memories.total}</div>
-                      <div className="text-sm text-contrast-medium">
-                        Memory Entries
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-4">
+                      <div className="p-3 bg-green-500/10 rounded-xl">
+                        <Brain className="h-6 w-6 text-green-400" />
                       </div>
-                      <div className="text-xs text-[hsl(var(--command-accent))]">
-                        Knowledge base
+                      <div>
+                        <div className="text-2xl font-display font-bold text-contrast-high">{stats.memories.total}</div>
+                        <div className="text-sm text-contrast-medium">
+                          Memory Entries
+                        </div>
+                        <div className="text-xs text-[hsl(var(--command-accent))]">
+                          Knowledge base
+                        </div>
                       </div>
                     </div>
+                    <MiniSparkline 
+                      data={stats.memories.trend} 
+                      color="#4ade80"
+                      className="w-16"
+                    />
                   </div>
                 </CardContent>
               </Card>
