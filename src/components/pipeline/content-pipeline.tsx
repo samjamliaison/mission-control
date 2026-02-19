@@ -363,7 +363,7 @@ export function ContentPipeline() {
           {/* Content Pipeline */}
           <motion.div variants={itemVariants}>
             <DragDropContext onDragEnd={handleDragEnd}>
-              <div className="grid grid-cols-1 xl:grid-cols-5 gap-4 overflow-x-auto pb-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 overflow-x-auto pb-4">
                 <ContentColumn
                   title="Ideation"
                   stage="idea"

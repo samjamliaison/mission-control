@@ -386,7 +386,7 @@ export function CalendarView() {
             {viewMode === "month" ? (
               <Card className="glass-morphism border-[hsl(var(--command-border-bright))] overflow-hidden">
                 <CardHeader className="pb-4">
-                  <div className="grid grid-cols-7 gap-2">
+                  <div className="grid grid-cols-7 gap-1 sm:gap-2">
                     {["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"].map((day, index) => (
                       <div 
                         key={day} 
@@ -408,8 +408,8 @@ export function CalendarView() {
                       <motion.div
                         key={index}
                         className={cn(
-                          "min-h-[120px] p-3 backdrop-blur-md bg-gradient-to-br from-white/3 to-white/0",
-                          "border border-white/5 rounded-xl relative group cursor-pointer",
+                          "min-h-[80px] sm:min-h-[120px] p-2 sm:p-3 backdrop-blur-md bg-gradient-to-br from-white/3 to-white/0",
+                          "border border-white/5 rounded-lg sm:rounded-xl relative group cursor-pointer",
                           "hover:from-white/8 hover:to-white/0 hover:border-white/10",
                           "transition-all duration-200",
                           !day.isCurrentMonth && "opacity-40",

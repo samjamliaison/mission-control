@@ -193,24 +193,24 @@ export function TaskCard({ task, index, onEdit, onDelete }: TaskCardProps) {
                   <Button
                     variant="ghost"
                     size="icon"
-                    className="h-7 w-7 hover:bg-[hsl(var(--command-accent))]/20 hover:text-[hsl(var(--command-accent))] rounded-lg transition-all duration-200 hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#06b6d4] focus-visible:ring-opacity-60"
+                    className="h-9 w-9 sm:h-7 sm:w-7 hover:bg-[hsl(var(--command-accent))]/20 hover:text-[hsl(var(--command-accent))] rounded-lg transition-all duration-200 hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#06b6d4] focus-visible:ring-opacity-60"
                     onClick={(e) => {
                       e.stopPropagation()
                       onEdit(task)
                     }}
                   >
-                    <Edit className="h-3.5 w-3.5" />
+                    <Edit className="h-4 w-4 sm:h-3.5 sm:w-3.5" />
                   </Button>
                   <Button
                     variant="ghost"
                     size="icon"
-                    className="h-7 w-7 hover:bg-[hsl(var(--command-danger))]/20 hover:text-[hsl(var(--command-danger))] rounded-lg transition-all duration-200 hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#06b6d4] focus-visible:ring-opacity-60"
+                    className="h-9 w-9 sm:h-7 sm:w-7 hover:bg-[hsl(var(--command-danger))]/20 hover:text-[hsl(var(--command-danger))] rounded-lg transition-all duration-200 hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#06b6d4] focus-visible:ring-opacity-60"
                     onClick={(e) => {
                       e.stopPropagation()
                       onDelete(task._id)
                     }}
                   >
-                    <Trash2 className="h-3.5 w-3.5" />
+                    <Trash2 className="h-4 w-4 sm:h-3.5 sm:w-3.5" />
                   </Button>
                 </div>
               </div>

@@ -330,7 +330,7 @@ export function TasksBoard() {
               <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
                 <Button 
                   onClick={handleAddNewTask} 
-                  className="btn-premium text-body font-semibold px-6 relative group"
+                  className="btn-premium text-body font-semibold px-6 relative group min-h-[44px]"
                   title="Press 'N' to quickly add a new task"
                 >
                   <Plus className="h-4 w-4 mr-2" />
@@ -346,7 +346,7 @@ export function TasksBoard() {
           {/* Task Board */}
           <motion.div variants={itemVariants}>
             <DragDropContext onDragEnd={handleDragEnd}>
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 overflow-x-auto pb-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 overflow-x-auto pb-4">
                 <TaskColumn
                   title="Awaiting Deployment"
                   status="todo"

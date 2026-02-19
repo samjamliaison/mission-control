@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { usePathname } from "next/navigation"
 import Link from "next/link"
 import { motion, AnimatePresence } from "framer-motion"
@@ -55,6 +55,18 @@ const navigationItems = [
 export function Navigation() {
   const [isCollapsed, setIsCollapsed] = useState(false)
   const pathname = usePathname()
+
+  // Auto-collapse on mobile
+  useEffect(() => {
+    const checkMobile = () => {
+      const isMobile = window.innerWidth < 768
+      setIsCollapsed(isMobile)
+    }
+    
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
+    return () => window.removeEventListener('resize', checkMobile)
+  }, [])
 
   return (
     <motion.aside
@@ -128,6 +140,8 @@ export function Navigation() {
                     href={item.href}
                     className={cn(
                       "relative w-full py-3 px-4 rounded-xl transition-all duration-200 group flex items-center interactive-element focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#06b6d4] focus-visible:ring-opacity-60",
+                      // Ensure minimum 44px touch target on mobile
+                      "min-h-[44px]",
                       isCollapsed ? "justify-center" : "gap-3",
                       isActive 
                         ? "text-[#06b6d4] bg-white/[0.05] border-white/[0.08]" 
