@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import fs from 'fs/promises';
+import { getOpenClawConfig, getOpenClawWorkspace } from '@/lib/config';
 
 interface CronJob {
   id: string
@@ -32,7 +33,7 @@ interface OpenClawConfig {
   }
 }
 
-const OPENCLAW_CONFIG = '/root/.openclaw/openclaw.json'
+// Config path now loaded from environment
 
 // Parse cron schedule to get next run time (simplified)
 function getNextRunTime(schedule: string): number {
@@ -55,7 +56,7 @@ function getNextRunTime(schedule: string): number {
 
 async function readOpenClawConfig(): Promise<OpenClawConfig | null> {
   try {
-    const configData = await fs.readFile(OPENCLAW_CONFIG, 'utf-8')
+    const configData = await fs.readFile(getOpenClawConfig(), 'utf-8')
     return JSON.parse(configData)
   } catch (error) {
     console.error('Failed to read OpenClaw config:', error)
@@ -79,7 +80,7 @@ export async function GET(request: NextRequest) {
           enabled: jobConfig.enabled !== false, // Default to true
           runCount: Math.floor(Math.random() * 100) + 10, // Simulated run count
           agent: jobConfig.agent || 'system',
-          workspace: jobConfig.workspace || '/root/.openclaw/workspace',
+          workspace: jobConfig.workspace || getOpenClawWorkspace(),
           status: (jobConfig.enabled !== false) ? 'active' : 'disabled',
           createdAt: Date.now() - (Math.random() * 30 * 24 * 60 * 60 * 1000), // Random date within last 30 days
           updatedAt: Date.now() - (Math.random() * 7 * 24 * 60 * 60 * 1000), // Random date within last 7 days
@@ -102,7 +103,7 @@ export async function GET(request: NextRequest) {
           enabled: true,
           runCount: 245,
           agent: 'main',
-          workspace: '/root/.openclaw/workspace',
+          workspace: getOpenClawWorkspace(),
           status: 'active',
           createdAt: Date.now() - (7 * 24 * 60 * 60 * 1000),
           updatedAt: Date.now() - (2 * 60 * 60 * 1000),
@@ -132,7 +133,7 @@ export async function GET(request: NextRequest) {
           enabled: false,
           runCount: 8,
           agent: 'system',
-          workspace: '/root/.openclaw/workspace',
+          workspace: getOpenClawWorkspace(),
           status: 'disabled',
           createdAt: Date.now() - (60 * 24 * 60 * 60 * 1000),
           updatedAt: Date.now() - (7 * 24 * 60 * 60 * 1000),

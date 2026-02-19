@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import fs from 'fs/promises';
 import path from 'path';
+import { getOpenClawConfig, getOpenClawWorkspace } from '@/lib/config';
 
 // Interface for OpenClaw config structure
 interface OpenClawConfig {
@@ -39,13 +40,12 @@ interface Task {
   source: 'memory' | 'cron' | 'agent' | 'user';
 }
 
-const OPENCLAW_WORKSPACE = '/root/.openclaw/workspace';
-const OPENCLAW_CONFIG = '/root/.openclaw/openclaw.json';
+// Config and workspace paths now loaded from environment
 const TASKS_DATA_FILE = '/root/.openclaw/workspace/mission-control/data/tasks.json';
 
 async function readOpenClawConfig(): Promise<OpenClawConfig | null> {
   try {
-    const configData = await fs.readFile(OPENCLAW_CONFIG, 'utf-8');
+    const configData = await fs.readFile(getOpenClawConfig(), 'utf-8');
     return JSON.parse(configData);
   } catch (error) {
     console.error('Failed to read OpenClaw config:', error);
@@ -73,11 +73,11 @@ async function writeTasksToFile(tasks: Task[]): Promise<void> {
 
 async function readMemoryFiles(): Promise<Task[]> {
   const tasks: Task[] = [];
-  const memoryDir = path.join(OPENCLAW_WORKSPACE, 'memory');
+  const memoryDir = path.join(getOpenClawWorkspace(), 'memory');
 
   try {
     // Read MEMORY.md
-    const memoryPath = path.join(OPENCLAW_WORKSPACE, 'MEMORY.md');
+    const memoryPath = path.join(getOpenClawWorkspace(), 'MEMORY.md');
     try {
       const memoryContent = await fs.readFile(memoryPath, 'utf-8');
 

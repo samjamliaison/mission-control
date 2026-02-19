@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import fs from 'fs/promises';
 import path from 'path';
+import { getOpenClawConfig, getOpenClawWorkspace } from '@/lib/config';
 
 interface AgentStatus {
   id: string
@@ -38,12 +39,11 @@ interface OpenClawConfig {
   }
 }
 
-const OPENCLAW_CONFIG = '/root/.openclaw/openclaw.json'
-const BASE_WORKSPACE = '/root/.openclaw/workspace'
+// Config paths now loaded from environment
 
 async function readOpenClawConfig(): Promise<OpenClawConfig | null> {
   try {
-    const configData = await fs.readFile(OPENCLAW_CONFIG, 'utf-8')
+    const configData = await fs.readFile(getOpenClawConfig(), 'utf-8')
     return JSON.parse(configData)
   } catch (error) {
     console.error('Failed to read OpenClaw config:', error)
@@ -141,7 +141,7 @@ export async function GET(request: NextRequest) {
     const agentStatuses: AgentStatus[] = []
 
     for (const agentConfig of config.agents.list) {
-      const workspacePath = agentConfig.workspace || BASE_WORKSPACE
+      const workspacePath = agentConfig.workspace || getOpenClawWorkspace()
       const activity = await analyzeAgentActivity(workspacePath)
       const metrics = simulateSystemMetrics()
 

@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import fs from 'fs/promises';
 import path from 'path';
+import { getOpenClawWorkspace } from '@/lib/config';
 
-const OPENCLAW_WORKSPACE = '/root/.openclaw/workspace';
+// Workspace path now loaded from environment
 
 interface FileTreeItem {
   name: string;
@@ -93,15 +94,15 @@ async function buildFileTree(dirPath: string, basePath: string = '', maxDepth: n
 async function getAgentWorkspace(agentId: string) {
   // For now, we'll assume all agents use the same workspace
   // In the future, this could map to specific agent directories
-  let agentDir = OPENCLAW_WORKSPACE;
+  let agentDir = getOpenClawWorkspace();
   
   // Map known agent IDs to their potential workspace paths
   const agentPaths: Record<string, string> = {
-    'main': OPENCLAW_WORKSPACE,
-    'manus': OPENCLAW_WORKSPACE,
-    'monica': OPENCLAW_WORKSPACE,
-    'jarvis': OPENCLAW_WORKSPACE,
-    'luna': OPENCLAW_WORKSPACE,
+    'main': getOpenClawWorkspace(),
+    'manus': getOpenClawWorkspace(),
+    'monica': getOpenClawWorkspace(),
+    'jarvis': getOpenClawWorkspace(),
+    'luna': getOpenClawWorkspace(),
   };
   
   if (agentPaths[agentId.toLowerCase()]) {

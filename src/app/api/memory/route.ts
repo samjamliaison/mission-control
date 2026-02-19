@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import fs from 'fs/promises';
 import path from 'path';
+import { getOpenClawWorkspace } from '@/lib/config';
 
 interface MemoryEntry {
   id: string;
@@ -12,11 +13,9 @@ interface MemoryEntry {
   wordCount: number;
 }
 
-const OPENCLAW_WORKSPACE = '/root/.openclaw/workspace';
-
 async function readLongTermMemory(): Promise<MemoryEntry[]> {
   const entries: MemoryEntry[] = [];
-  const memoryPath = path.join(OPENCLAW_WORKSPACE, 'MEMORY.md');
+  const memoryPath = path.join(getOpenClawWorkspace(), 'MEMORY.md');
 
   try {
     const content = await fs.readFile(memoryPath, 'utf-8');
@@ -75,7 +74,7 @@ async function readLongTermMemory(): Promise<MemoryEntry[]> {
 
 async function readDailyMemories(): Promise<MemoryEntry[]> {
   const entries: MemoryEntry[] = [];
-  const memoryDir = path.join(OPENCLAW_WORKSPACE, 'memory');
+  const memoryDir = path.join(getOpenClawWorkspace(), 'memory');
 
   try {
     const files = await fs.readdir(memoryDir);
@@ -206,7 +205,7 @@ export async function POST(request: NextRequest) {
 
     if (type === 'daily') {
       // Write to daily memory file
-      const memoryDir = path.join(OPENCLAW_WORKSPACE, 'memory');
+      const memoryDir = path.join(getOpenClawWorkspace(), 'memory');
       await fs.mkdir(memoryDir, { recursive: true });
       
       const dailyFile = path.join(memoryDir, `${memoryDate}.md`);
@@ -239,7 +238,7 @@ ${content}
       
     } else if (type === 'longterm') {
       // Append to MEMORY.md
-      const memoryFile = path.join(OPENCLAW_WORKSPACE, 'MEMORY.md');
+      const memoryFile = path.join(getOpenClawWorkspace(), 'MEMORY.md');
       
       const entry = `
 ## ${title}
