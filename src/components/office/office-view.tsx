@@ -17,7 +17,8 @@ import {
   CheckCircle,
   Eye,
   Wifi,
-  Volume2
+  Volume2,
+  X
 } from "lucide-react"
 import { AgentWorkstation } from "./agent-workstation"
 import { OfficeAgent } from "./office-agent"
