@@ -27,20 +27,20 @@
     --ring: 196 94% 67%;
     --radius: 0.75rem;
     
-    /* Command Center Specific Variables - Exact colors from spec */
+    /* Command Center Specific Variables - EXACT SPECS */
     --command-background: 220 8% 4%; /* #09090b */
-    --command-surface: 224 15% 6%;
-    --command-surface-elevated: 224 15% 8%;
-    --command-border: 215 25% 16%;
-    --command-border-bright: 215 30% 22%;
-    --command-accent: 196 94% 67%; /* #06b6d4 cyan-400 */
-    --command-accent-secondary: 199 89% 64%; /* #0ea5e9 blue-500 */
-    --command-success: 142 69% 58%;
-    --command-warning: 38 92% 50%;
-    --command-danger: 0 84% 60%;
-    --command-text: 210 40% 98%;
-    --command-text-muted: 215 20% 65%;
-    --command-text-dim: 215 15% 45%;
+    --command-surface: 0 0% 100% / 0.03; /* rgba(255,255,255,0.03) */
+    --command-surface-elevated: 0 0% 100% / 0.05;
+    --command-border: 0 0% 100% / 0.06; /* rgba(255,255,255,0.06) */
+    --command-border-bright: 0 0% 100% / 0.12; /* rgba(255,255,255,0.12) */
+    --command-accent: 188 100% 44%; /* #06b6d4 */
+    --command-accent-secondary: 199 89% 64%;
+    --command-success: 142 69% 58%; /* #22c55e */
+    --command-warning: 38 92% 50%; /* #f59e0b */
+    --command-danger: 0 84% 60%; /* #ef4444 */
+    --command-text: 0 0% 100% / 0.9; /* rgba(255,255,255,0.9) */
+    --command-text-muted: 0 0% 100% / 0.5; /* rgba(255,255,255,0.5) */
+    --command-text-dim: 0 0% 100% / 0.3;
   }
 }
 
@@ -55,8 +55,8 @@
   }
   
   body {
-    background: linear-gradient(135deg, hsl(var(--command-background)) 0%, hsl(220 8% 3%) 100%);
-    color: hsl(var(--command-text));
+    background: #09090b;
+    color: rgba(255, 255, 255, 0.9);
     font-family: var(--font-geist), -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
     font-weight: 400;
     line-height: 1.6;
@@ -426,4 +426,32 @@
       transform: scale(1);
     }
   }
+  
+  /* Exact Color System Utilities */
+  .bg-spec-background { background-color: #09090b; }
+  .bg-spec-surface { background-color: rgba(255, 255, 255, 0.03); }
+  .bg-spec-surface-hover { background-color: rgba(255, 255, 255, 0.05); }
+  
+  .border-spec-default { border-color: rgba(255, 255, 255, 0.06); }
+  .border-spec-bright { border-color: rgba(255, 255, 255, 0.12); }
+  
+  .text-spec-primary { color: rgba(255, 255, 255, 0.9); }
+  .text-spec-secondary { color: rgba(255, 255, 255, 0.5); }
+  .text-spec-dim { color: rgba(255, 255, 255, 0.3); }
+  
+  .text-spec-accent { color: #06b6d4; }
+  .bg-spec-accent { background-color: #06b6d4; }
+  .border-spec-accent { border-color: #06b6d4; }
+  
+  .text-spec-success { color: #22c55e; }
+  .bg-spec-success { background-color: #22c55e; }
+  .border-spec-success { border-color: #22c55e; }
+  
+  .text-spec-warning { color: #f59e0b; }
+  .bg-spec-warning { background-color: #f59e0b; }
+  .border-spec-warning { border-color: #f59e0b; }
+  
+  .text-spec-danger { color: #ef4444; }
+  .bg-spec-danger { background-color: #ef4444; }
+  .border-spec-danger { border-color: #ef4444; }
 }
