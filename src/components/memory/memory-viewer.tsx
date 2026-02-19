@@ -28,17 +28,43 @@ import {
   Eye,
   Archive,
   Zap,
-  X
+  X,
+  RefreshCw,
+  Database
 } from "lucide-react"
-import { MemoryEntry } from "./memory-entry"
 import { MemoryCard } from "./memory-card"
 import { EmptyState } from "@/components/ui/empty-state"
-import { loadMemories, saveMemories } from "@/lib/data-persistence"
 import { cn } from "@/lib/utils"
 
-// Note: Memories are now loaded from localStorage via loadMemories()
+// Real memory entry from OpenClaw API
+interface ApiMemoryEntry {
+  id: string
+  title: string
+  content: string
+  date: string
+  type: 'daily' | 'longterm' | 'section'
+  tags: string[]
+  wordCount: number
+}
 
-const categoryOptions = ["All", "daily", "knowledge", "lessons"]
+// API response structure
+interface MemoryApiResponse {
+  memories: ApiMemoryEntry[]
+  meta: {
+    total: number
+    byType: {
+      longterm: number
+      daily: number
+      section: number
+    }
+    totalWords: number
+    latestDaily: string | null
+    allTags: string[]
+  }
+  timestamp: string
+}
+
+const categoryOptions = ["All", "daily", "longterm", "section"]
 const categoryConfig = {
   "daily": {
     icon: Calendar,
@@ -47,19 +73,19 @@ const categoryConfig = {
     border: "border-blue-500/20",
     label: "Daily Notes"
   },
-  "knowledge": {
+  "longterm": {
     icon: BookOpen,
     color: "text-green-400", 
     bg: "bg-green-500/10",
     border: "border-green-500/20",
-    label: "Knowledge Base"
+    label: "Long-term Memory"
   },
-  "lessons": {
+  "section": {
     icon: Lightbulb,
     color: "text-yellow-400",
     bg: "bg-yellow-500/10", 
     border: "border-yellow-500/20",
-    label: "Lessons Learned"
+    label: "Knowledge Sections"
   }
 }
 
@@ -86,25 +112,40 @@ const itemVariants = {
 }
 
 export function MemoryViewer() {
-  const [memories, setMemories] = useState<MemoryEntry[]>([])
+  const [memories, setMemories] = useState<ApiMemoryEntry[]>([])
   const [searchQuery, setSearchQuery] = useState("")
   const [selectedCategory, setSelectedCategory] = useState("All")
-  const [selectedMemory, setSelectedMemory] = useState<MemoryEntry | null>(null)
-  const [mounted, setMounted] = useState(false)
+  const [selectedMemory, setSelectedMemory] = useState<ApiMemoryEntry | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+  const [lastUpdated, setLastUpdated] = useState<string | null>(null)
 
-  // Load data from localStorage on mount
-  useEffect(() => {
-    setMounted(true)
-    const loadedMemories = loadMemories()
-    setMemories(loadedMemories)
-  }, [])
-
-  // Save memories whenever they change
-  useEffect(() => {
-    if (mounted) {
-      saveMemories(memories)
+  // Load data from OpenClaw API
+  const loadMemoriesFromApi = async () => {
+    try {
+      setLoading(true)
+      setError(null)
+      
+      const response = await fetch('/api/memory')
+      if (!response.ok) {
+        throw new Error(`API Error: ${response.status} ${response.statusText}`)
+      }
+      
+      const data: MemoryApiResponse = await response.json()
+      setMemories(data.memories)
+      setLastUpdated(data.timestamp)
+    } catch (err) {
+      console.error('Failed to load memories:', err)
+      setError(err instanceof Error ? err.message : 'Failed to load memories')
+    } finally {
+      setLoading(false)
     }
-  }, [memories, mounted])
+  }
+
+  // Load memories on component mount
+  useEffect(() => {
+    loadMemoriesFromApi()
+  }, [])
 
   // Filter and search memories
   const filteredMemories = useMemo(() => {
@@ -112,7 +153,7 @@ export function MemoryViewer() {
 
     // Category filter
     if (selectedCategory !== "All") {
-      filtered = filtered.filter(memory => memory.category === selectedCategory)
+      filtered = filtered.filter(memory => memory.type === selectedCategory)
     }
 
     // Search filter  
@@ -125,19 +166,63 @@ export function MemoryViewer() {
       )
     }
 
-    // Sort by most recent
-    return filtered.sort((a, b) => b.updatedAt - a.updatedAt)
+    // Sort by date (most recent first)
+    return filtered.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
   }, [memories, searchQuery, selectedCategory])
 
   // Memory statistics
   const totalMemories = memories.length
   const totalWords = memories.reduce((sum, memory) => sum + memory.wordCount, 0)
   const categoryCounts = memories.reduce((acc, memory) => {
-    acc[memory.category] = (acc[memory.category] || 0) + 1
+    acc[memory.type] = (acc[memory.type] || 0) + 1
     return acc
   }, {} as Record<string, number>)
 
-  if (!mounted) return null
+  if (loading) {
+    return (
+      <div className="min-h-[calc(100vh-5rem)] relative">
+        <div className="fixed inset-0 bg-gradient-to-br from-[hsl(var(--command-background))] via-[hsl(220_13%_3%)] to-[hsl(var(--command-background))] pointer-events-none" />
+        <div className="relative z-10 p-6 flex items-center justify-center min-h-[60vh]">
+          <div className="text-center space-y-4">
+            <div className="w-16 h-16 mx-auto glass-morphism rounded-full flex items-center justify-center">
+              <RefreshCw className="h-6 w-6 text-[hsl(var(--command-accent))] animate-spin" />
+            </div>
+            <div>
+              <h3 className="font-heading font-semibold text-lg mb-2">Loading Memory Vault</h3>
+              <p className="text-[hsl(var(--command-text-muted))]">
+                Retrieving memories from OpenClaw workspace...
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-[calc(100vh-5rem)] relative">
+        <div className="fixed inset-0 bg-gradient-to-br from-[hsl(var(--command-background))] via-[hsl(220_13%_3%)] to-[hsl(var(--command-background))] pointer-events-none" />
+        <div className="relative z-10 p-6 flex items-center justify-center min-h-[60vh]">
+          <div className="text-center space-y-4">
+            <div className="w-16 h-16 mx-auto glass-morphism rounded-full flex items-center justify-center">
+              <Database className="h-6 w-6 text-red-400" />
+            </div>
+            <div>
+              <h3 className="font-heading font-semibold text-lg mb-2 text-red-400">Memory Access Error</h3>
+              <p className="text-[hsl(var(--command-text-muted))] mb-4">
+                {error}
+              </p>
+              <Button onClick={loadMemoriesFromApi} className="gap-2">
+                <RefreshCw className="h-4 w-4" />
+                Retry
+              </Button>
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="min-h-[calc(100vh-5rem)] relative">
@@ -155,15 +240,27 @@ export function MemoryViewer() {
           <PageHeader
             icon={Brain}
             title="Memory Vault"
-            subtitle="Centralized knowledge repository and learning archive. Searchable insights, daily notes, and accumulated wisdom."
+            subtitle="Real-time OpenClaw memory repository. Daily notes, long-term knowledge, and accumulated wisdom from the workspace."
           >
-            <StatsCard
-              icon={Archive}
-              label="Knowledge Base"
-              value={totalMemories}
-              subLabel="words"
-              subValue={totalWords.toLocaleString()}
-            />
+            <div className="flex items-center gap-4">
+              <StatsCard
+                icon={Archive}
+                label="Live Memories"
+                value={totalMemories}
+                subLabel="words"
+                subValue={totalWords.toLocaleString()}
+              />
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={loadMemoriesFromApi}
+                disabled={loading}
+                className="glass-morphism"
+                title="Refresh from OpenClaw"
+              >
+                <RefreshCw className={cn("h-4 w-4", loading && "animate-spin")} />
+              </Button>
+            </div>
           </PageHeader>
 
           <motion.div variants={itemVariants} className="space-y-6">
@@ -208,7 +305,7 @@ export function MemoryViewer() {
                                 })()}
                               </>
                             )}
-                            {category === "All" && <span>All Categories</span>}
+                            {category === "All" && <span>All Types</span>}
                           </div>
                         </SelectItem>
                       ))}
@@ -249,20 +346,17 @@ export function MemoryViewer() {
             {memories.length === 0 ? (
               <EmptyState
                 icon="🧠"
-                title="Memory Vault Initializing"
-                description="Your knowledge repository is empty. Begin capturing insights, daily notes, and lessons learned. Every great mission starts with documenting the journey."
-                actionLabel="Create First Memory"
-                onAction={() => {
-                  // TODO: Add memory creation functionality
-                  console.log('Add memory functionality to be implemented')
-                }}
+                title="No Memories Found"
+                description="The OpenClaw workspace memory files are empty or not accessible. Check that MEMORY.md and memory/*.md files exist in the workspace."
+                actionLabel="Refresh Data"
+                onAction={loadMemoriesFromApi}
               />
             ) : filteredMemories.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
                 <AnimatePresence>
                   {filteredMemories.map((memory) => (
-                    <MemoryCard
-                      key={memory._id}
+                    <RealMemoryCard
+                      key={memory.id}
                       memory={memory}
                       onClick={() => setSelectedMemory(memory)}
                     />
@@ -305,15 +399,71 @@ export function MemoryViewer() {
   )
 }
 
+// Real Memory Card Component for API data
+function RealMemoryCard({ memory, onClick }: { memory: ApiMemoryEntry, onClick: () => void }) {
+  const config = categoryConfig[memory.type as keyof typeof categoryConfig]
+  const IconComponent = config?.icon || FileText
+
+  return (
+    <motion.div
+      variants={itemVariants}
+      whileHover={{ scale: 1.02, y: -4 }}
+      whileTap={{ scale: 0.98 }}
+      className="glass-morphism p-6 border-[hsl(var(--command-border))] hover:border-[hsl(var(--command-accent))]/50 cursor-pointer group transition-all duration-300"
+      onClick={onClick}
+    >
+      <div className="flex items-start gap-4">
+        <div className={cn("p-2 glass-morphism rounded-lg group-hover:scale-110 transition-transform", config?.bg)}>
+          <IconComponent className={cn("h-4 w-4", config?.color || "text-[hsl(var(--command-accent))]")} />
+        </div>
+        <div className="flex-1 min-w-0">
+          <h3 className="font-display font-semibold text-lg mb-2 line-clamp-2 group-hover:text-[hsl(var(--command-accent))] transition-colors">
+            {memory.title}
+          </h3>
+          <p className="text-[hsl(var(--command-text-muted))] text-sm line-clamp-3 mb-4">
+            {memory.content.substring(0, 150)}
+            {memory.content.length > 150 && '...'}
+          </p>
+          
+          <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center gap-3 text-xs text-[hsl(var(--command-text-muted))]">
+              <div className="flex items-center gap-1">
+                <Calendar className="h-3 w-3" />
+                {new Date(memory.date).toLocaleDateString()}
+              </div>
+              <div className="flex items-center gap-1">
+                <FileText className="h-3 w-3" />
+                {memory.wordCount} words
+              </div>
+            </div>
+            <Badge variant="outline" className={cn("text-xs", config?.color)}>
+              {config?.label || memory.type}
+            </Badge>
+          </div>
+          
+          {memory.tags.length > 0 && (
+            <div className="flex flex-wrap gap-1">
+              {memory.tags.slice(0, 3).map((tag) => (
+                <Badge key={tag} variant="secondary" className="text-xs px-2 py-1">
+                  {tag}
+                </Badge>
+              ))}
+              {memory.tags.length > 3 && (
+                <Badge variant="secondary" className="text-xs px-2 py-1">
+                  +{memory.tags.length - 3}
+                </Badge>
+              )}
+            </div>
+          )}
+        </div>
+      </div>
+    </motion.div>
+  )
+}
+
 // Memory Detail Modal Component
-function MemoryDetailModal({ memory, onClose }: { memory: MemoryEntry, onClose: () => void }) {
-  const categoryConfig = {
-    "daily": { icon: Calendar, color: "text-blue-400" },
-    "knowledge": { icon: BookOpen, color: "text-green-400" },
-    "lessons": { icon: Lightbulb, color: "text-yellow-400" }
-  }
-  
-  const config = categoryConfig[memory.category as keyof typeof categoryConfig]
+function MemoryDetailModal({ memory, onClose }: { memory: ApiMemoryEntry, onClose: () => void }) {
+  const config = categoryConfig[memory.type as keyof typeof categoryConfig]
   const IconComponent = config?.icon || FileText
 
   return (
@@ -343,7 +493,7 @@ function MemoryDetailModal({ memory, onClose }: { memory: MemoryEntry, onClose: 
                 <div className="flex items-center gap-4 mt-2 text-sm text-[hsl(var(--command-text-muted))]">
                   <div className="flex items-center gap-1">
                     <Clock className="h-4 w-4" />
-                    {new Date(memory.updatedAt).toLocaleDateString()}
+                    {new Date(memory.date).toLocaleDateString()}
                   </div>
                   <div className="flex items-center gap-1">
                     <Eye className="h-4 w-4" />
@@ -353,6 +503,9 @@ function MemoryDetailModal({ memory, onClose }: { memory: MemoryEntry, onClose: 
                     <Tag className="h-4 w-4" />
                     {memory.tags.length} tags
                   </div>
+                  <Badge variant="outline" className={cn("text-xs ml-2", config?.color)}>
+                    {config?.label || memory.type}
+                  </Badge>
                 </div>
               </div>
             </div>
@@ -372,7 +525,7 @@ function MemoryDetailModal({ memory, onClose }: { memory: MemoryEntry, onClose: 
         {/* Footer */}
         <div className="p-6 border-t border-[hsl(var(--command-border))] bg-[hsl(var(--command-surface))]/30">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 flex-wrap">
               {memory.tags.map((tag) => (
                 <Badge key={tag} variant="outline" className="text-xs">
                   {tag}
@@ -380,7 +533,7 @@ function MemoryDetailModal({ memory, onClose }: { memory: MemoryEntry, onClose: 
               ))}
             </div>
             <div className="text-xs text-[hsl(var(--command-text-muted))]">
-              Created by {memory.author}
+              OpenClaw Memory • {memory.type}
             </div>
           </div>
         </div>

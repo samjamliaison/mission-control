@@ -20,17 +20,48 @@ import {
   Activity,
   Target,
   Zap,
-  X
+  X,
+  RefreshCw,
+  Database
 } from "lucide-react"
 import { CalendarEvent } from "./calendar-event"
 import { EmptyState } from "@/components/ui/empty-state"
-import { loadEvents, saveEvents, CalendarEventData } from "@/lib/data-persistence"
-
-// CalendarEventData interface is now imported from data-persistence
 import { EventDetails } from "./event-details"
 import { cn } from "@/lib/utils"
 
-// Note: Events are now loaded from localStorage via loadEvents()
+// Real calendar event from OpenClaw API
+interface ApiCalendarEvent {
+  id: string
+  title: string
+  description?: string
+  start: string
+  end?: string
+  type: 'cron' | 'scheduled' | 'reminder'
+  status: 'active' | 'inactive' | 'completed'
+  recurrence?: string
+  priority: 'low' | 'medium' | 'high'
+  agent?: string
+}
+
+// API response structure
+interface CalendarApiResponse {
+  events: ApiCalendarEvent[]
+  meta: {
+    total: number
+    byType: {
+      cron: number
+      scheduled: number
+      reminder: number
+    }
+    byStatus: {
+      active: number
+      inactive: number
+      completed: number
+    }
+    nextEvent: string | null
+  }
+  timestamp: string
+}
 
 const agentAvatars = {
   "Hamza": "👤",
@@ -103,26 +134,41 @@ const itemVariants = {
 type ViewMode = "month" | "week"
 
 export function CalendarView() {
-  const [currentDate, setCurrentDate] = useState(new Date(2024, 1, 19)) // Feb 19, 2024
+  const [currentDate, setCurrentDate] = useState(new Date()) // Current date
   const [viewMode, setViewMode] = useState<ViewMode>("month")
-  const [selectedEvent, setSelectedEvent] = useState<CalendarEventData | null>(null)
+  const [selectedEvent, setSelectedEvent] = useState<ApiCalendarEvent | null>(null)
   const [selectedDate, setSelectedDate] = useState<Date | null>(null)
-  const [events, setEvents] = useState<CalendarEventData[]>([])
-  const [mounted, setMounted] = useState(false)
+  const [events, setEvents] = useState<ApiCalendarEvent[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+  const [lastUpdated, setLastUpdated] = useState<string | null>(null)
 
-  // Load data from localStorage on mount
-  useEffect(() => {
-    setMounted(true)
-    const loadedEvents = loadEvents()
-    setEvents(loadedEvents)
-  }, [])
-
-  // Save events whenever they change
-  useEffect(() => {
-    if (mounted) {
-      saveEvents(events)
+  // Load data from OpenClaw API
+  const loadEventsFromApi = async () => {
+    try {
+      setLoading(true)
+      setError(null)
+      
+      const response = await fetch('/api/calendar')
+      if (!response.ok) {
+        throw new Error(`API Error: ${response.status} ${response.statusText}`)
+      }
+      
+      const data: CalendarApiResponse = await response.json()
+      setEvents(data.events)
+      setLastUpdated(data.timestamp)
+    } catch (err) {
+      console.error('Failed to load calendar events:', err)
+      setError(err instanceof Error ? err.message : 'Failed to load events')
+    } finally {
+      setLoading(false)
     }
-  }, [events, mounted])
+  }
+
+  // Load events on component mount
+  useEffect(() => {
+    loadEventsFromApi()
+  }, [])
 
   // Get events for current view
   const viewEvents = useMemo(() => {
@@ -131,7 +177,7 @@ export function CalendarView() {
     
     if (viewMode === "month") {
       return events.filter(event => {
-        const eventDate = new Date(event.scheduledTime)
+        const eventDate = new Date(event.start)
         return eventDate >= startOfMonth && eventDate <= endOfMonth
       })
     } else {
@@ -142,7 +188,7 @@ export function CalendarView() {
       endOfWeek.setDate(startOfWeek.getDate() + 6)
       
       return events.filter(event => {
-        const eventDate = new Date(event.scheduledTime)
+        const eventDate = new Date(event.start)
         return eventDate >= startOfWeek && eventDate <= endOfWeek
       })
     }
@@ -150,10 +196,10 @@ export function CalendarView() {
 
   // Calendar statistics
   const totalEvents = viewEvents.length
+  const activeEvents = viewEvents.filter(e => e.status === "active").length
   const completedEvents = viewEvents.filter(e => e.status === "completed").length
-  const pendingEvents = viewEvents.filter(e => e.status === "pending").length
-  const failedEvents = viewEvents.filter(e => e.status === "failed").length
-  const completionRate = totalEvents > 0 ? Math.round((completedEvents / totalEvents) * 100) : 0
+  const inactiveEvents = viewEvents.filter(e => e.status === "inactive").length
+  const completionRate = totalEvents > 0 ? Math.round((activeEvents / totalEvents) * 100) : 0
 
   // Navigation functions
   const goToPrevious = () => {
@@ -205,7 +251,51 @@ export function CalendarView() {
     return days
   }
 
-  if (!mounted) return null
+  if (loading) {
+    return (
+      <div className="min-h-[calc(100vh-5rem)] relative">
+        <div className="fixed inset-0 bg-gradient-to-br from-[hsl(var(--command-background))] via-[hsl(220_13%_3%)] to-[hsl(var(--command-background))] pointer-events-none" />
+        <div className="relative z-10 p-6 flex items-center justify-center min-h-[60vh]">
+          <div className="text-center space-y-4">
+            <div className="w-16 h-16 mx-auto glass-morphism rounded-full flex items-center justify-center">
+              <RefreshCw className="h-6 w-6 text-[hsl(var(--command-accent))] animate-spin" />
+            </div>
+            <div>
+              <h3 className="font-heading font-semibold text-lg mb-2">Loading Mission Calendar</h3>
+              <p className="text-[hsl(var(--command-text-muted))]">
+                Retrieving scheduled events from OpenClaw...
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-[calc(100vh-5rem)] relative">
+        <div className="fixed inset-0 bg-gradient-to-br from-[hsl(var(--command-background))] via-[hsl(220_13%_3%)] to-[hsl(var(--command-background))] pointer-events-none" />
+        <div className="relative z-10 p-6 flex items-center justify-center min-h-[60vh]">
+          <div className="text-center space-y-4">
+            <div className="w-16 h-16 mx-auto glass-morphism rounded-full flex items-center justify-center">
+              <Database className="h-6 w-6 text-red-400" />
+            </div>
+            <div>
+              <h3 className="font-heading font-semibold text-lg mb-2 text-red-400">Calendar Access Error</h3>
+              <p className="text-[hsl(var(--command-text-muted))] mb-4">
+                {error}
+              </p>
+              <Button onClick={loadEventsFromApi} className="gap-2">
+                <RefreshCw className="h-4 w-4" />
+                Retry
+              </Button>
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+  }
 
   const calendarGrid = viewMode === "month" ? generateCalendarGrid() : []
   const monthName = currentDate.toLocaleString('en-US', { month: 'long', year: 'numeric' })
@@ -226,15 +316,27 @@ export function CalendarView() {
           <PageHeader
             icon={Calendar}
             title="Mission Calendar"
-            subtitle="Strategic scheduling and timeline coordination. Real-time tracking of all scheduled operations and automated processes."
+            subtitle="Real-time OpenClaw cron jobs and scheduled events. Live tracking of automated processes and upcoming tasks."
           >
-            <StatsCard
-              icon={Target}
-              label="Execution Rate"
-              value={`${completionRate}%`}
-              subLabel="Complete"
-              subValue={`${completedEvents}/${totalEvents}`}
-            />
+            <div className="flex items-center gap-4">
+              <StatsCard
+                icon={Target}
+                label="Active Events"
+                value={`${activeEvents}`}
+                subLabel="Total"
+                subValue={`${totalEvents}`}
+              />
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={loadEventsFromApi}
+                disabled={loading}
+                className="glass-morphism"
+                title="Refresh from OpenClaw"
+              >
+                <RefreshCw className={cn("h-4 w-4", loading && "animate-spin")} />
+              </Button>
+            </div>
           </PageHeader>
 
           <motion.div variants={itemVariants} className="space-y-6">
