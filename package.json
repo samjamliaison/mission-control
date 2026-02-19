@@ -4,6 +4,9 @@
   "description": "Advanced task management dashboard for OpenClaw operations with glass morphism design",
   "author": "Mission Control Contributors",
   "license": "MIT",
+  "bin": {
+    "mission-control-setup": "./bin/setup.js"
+  },
   "homepage": "https://github.com/samjamliaison/mission-control",
   "repository": {
     "type": "git",

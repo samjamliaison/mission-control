@@ -52,9 +52,17 @@ Transform your OpenClaw workspace into a powerful command center with real-time 
 
 ## 🚀 Quick Start
 
+### Option 1: One-Command Setup (Recommended)
+```bash
+npx mission-control-setup
+```
+This will clone, install, configure, and start Mission Control automatically.
+
+### Option 2: Manual Installation  
 ```bash
 # Clone the repository
 git clone https://github.com/samjamliaison/mission-control.git
+cd mission-control
 
 # Install dependencies  
 npm install
