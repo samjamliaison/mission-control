@@ -136,24 +136,31 @@ export function TaskCard({ task, index, onEdit, onDelete }: TaskCardProps) {
         >
           <Card
             className={cn(
-              "glass-morphism-premium border-[hsl(var(--command-border-bright))] relative overflow-hidden card-hover-premium",
-              "priority-bar",
-              `priority-${task.priority}`,
-              snapshot.isDragging && "shadow-2xl shadow-[hsl(var(--command-accent))]/20 ring-2 ring-[hsl(var(--command-accent))]/40",
-              isCompleted && "opacity-75",
-              isActive && "ring-1 ring-[hsl(var(--command-accent))]/20"
+              "backdrop-blur-xl bg-gradient-to-br from-[hsl(var(--command-surface-elevated))]/95 to-[hsl(var(--command-surface))]/90",
+              "border border-white/5 rounded-xl relative overflow-hidden card-hover-premium",
+              snapshot.isDragging && "shadow-2xl shadow-[hsl(var(--command-accent))]/30 ring-2 ring-[hsl(var(--command-accent))]/50 scale-[1.02]",
+              isCompleted && "opacity-70",
+              isActive && "ring-1 ring-[hsl(var(--command-accent))]/30"
             )}
             style={{
               boxShadow: snapshot.isDragging 
-                ? `0 20px 40px rgba(0,0,0,0.4), ${priorityStyle.glow}`
+                ? `0 25px 50px rgba(0,0,0,0.5), 0 0 20px ${priorityStyle.color}40`
                 : isActive 
-                  ? `0 4px 20px rgba(0,0,0,0.1), ${priorityStyle.glow}`
-                  : "0 4px 20px rgba(0,0,0,0.1)"
+                  ? `0 8px 32px rgba(0,0,0,0.2), 0 0 10px ${priorityStyle.color}30`
+                  : "0 6px 24px rgba(0,0,0,0.15)"
             }}
           >
+            {/* Priority left border indicator */}
+            <div 
+              className="absolute left-0 top-0 bottom-0 w-1 rounded-l-xl"
+              style={{
+                background: `linear-gradient(180deg, ${priorityStyle.color}, ${priorityStyle.color}80)`
+              }}
+            />
+            
             {/* Priority glow overlay */}
             <div 
-              className="absolute inset-0 opacity-5 pointer-events-none"
+              className="absolute inset-0 opacity-3 pointer-events-none rounded-xl"
               style={{
                 background: `radial-gradient(circle at 0% 50%, ${priorityStyle.color} 0%, transparent 50%)`
               }}
@@ -174,42 +181,42 @@ export function TaskCard({ task, index, onEdit, onDelete }: TaskCardProps) {
               />
             )}
 
-            <CardHeader className="pb-3 relative">
-              <div className="flex items-start justify-between gap-2">
+            <CardHeader className="pb-3 pt-5 px-5 relative">
+              <div className="flex items-start justify-between gap-3">
                 <h3 className={cn(
-                  "font-heading font-semibold text-sm leading-tight pr-2",
+                  "font-heading font-semibold text-sm leading-tight flex-1",
                   isCompleted && "line-through text-[hsl(var(--command-text-muted))]"
                 )}>
                   {task.title}
                 </h3>
-                <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200 shrink-0">
                   <Button
                     variant="ghost"
                     size="icon"
-                    className="h-6 w-6 hover:bg-[hsl(var(--command-accent))]/20 hover:text-[hsl(var(--command-accent))]"
+                    className="h-7 w-7 hover:bg-[hsl(var(--command-accent))]/20 hover:text-[hsl(var(--command-accent))] rounded-lg"
                     onClick={(e) => {
                       e.stopPropagation()
                       onEdit(task)
                     }}
                   >
-                    <Edit className="h-3 w-3" />
+                    <Edit className="h-3.5 w-3.5" />
                   </Button>
                   <Button
                     variant="ghost"
                     size="icon"
-                    className="h-6 w-6 hover:bg-[hsl(var(--command-danger))]/20 hover:text-[hsl(var(--command-danger))]"
+                    className="h-7 w-7 hover:bg-[hsl(var(--command-danger))]/20 hover:text-[hsl(var(--command-danger))] rounded-lg"
                     onClick={(e) => {
                       e.stopPropagation()
                       onDelete(task._id)
                     }}
                   >
-                    <Trash2 className="h-3 w-3" />
+                    <Trash2 className="h-3.5 w-3.5" />
                   </Button>
                 </div>
               </div>
             </CardHeader>
             
-            <CardContent className="pt-0 space-y-4">
+            <CardContent className="pt-0 pb-5 px-5 space-y-4">
               {task.description && (
                 <p className={cn(
                   "text-xs text-[hsl(var(--command-text-muted))] line-clamp-3",
@@ -220,30 +227,37 @@ export function TaskCard({ task, index, onEdit, onDelete }: TaskCardProps) {
               )}
               
               {/* Agent Assignment */}
-              <div className="flex items-center gap-2">
-                <div 
-                  className={cn(
-                    "flex items-center gap-2 px-2 py-1 rounded-lg glass-morphism",
-                    agentColor.bg,
-                    agentColor.border
-                  )}
-                  style={{
-                    boxShadow: agentColor.glow
-                  }}
-                >
-                  <span className="text-base">
-                    {agentAvatars[task.assignee as keyof typeof agentAvatars]}
-                  </span>
-                  <span className={cn("text-xs font-medium", agentColor.text)}>
-                    {task.assignee}
-                  </span>
+              <div className="flex items-center gap-3">
+                <div className="flex items-center gap-2">
+                  {/* Agent Avatar Circle */}
+                  <div 
+                    className={cn(
+                      "w-8 h-8 rounded-full flex items-center justify-center text-sm",
+                      "backdrop-blur-md border",
+                      agentColor.bg,
+                      agentColor.border
+                    )}
+                    style={{
+                      boxShadow: `0 0 12px ${agentColor.glow.match(/hsl\([^)]+\)/)?.[0]}40`
+                    }}
+                  >
+                    <span>{agentAvatars[task.assignee as keyof typeof agentAvatars]}</span>
+                  </div>
+                  <div className="flex flex-col">
+                    <span className={cn("text-xs font-medium", agentColor.text)}>
+                      {task.assignee}
+                    </span>
+                    <span className="text-[10px] text-[hsl(var(--command-text-dim))]">
+                      Agent
+                    </span>
+                  </div>
                 </div>
                 
                 {isActive && (
                   <motion.div
                     animate={{ rotate: 360 }}
                     transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-                    className="p-1"
+                    className="p-1 bg-[hsl(var(--command-accent))]/10 rounded-full"
                   >
                     <Zap className="h-3 w-3 text-[hsl(var(--command-accent))]" />
                   </motion.div>
@@ -252,20 +266,30 @@ export function TaskCard({ task, index, onEdit, onDelete }: TaskCardProps) {
               
               {/* Priority & Metadata */}
               <div className="flex items-center justify-between text-xs">
-                <Badge 
-                  variant="outline"
-                  className={cn(
-                    "text-xs font-bold",
-                    priorityStyle.bg,
-                    priorityStyle.text,
-                    priorityStyle.border
-                  )}
-                  style={{
-                    boxShadow: priorityStyle.glow
-                  }}
-                >
-                  {task.priority.toUpperCase()}
-                </Badge>
+                <div className="flex items-center gap-2">
+                  {/* Priority dot indicator */}
+                  <div className="flex items-center gap-1.5">
+                    <motion.div
+                      className="w-2.5 h-2.5 rounded-full"
+                      style={{ backgroundColor: priorityStyle.color }}
+                      animate={{
+                        boxShadow: isActive 
+                          ? [`0 0 0px ${priorityStyle.color}`, `0 0 8px ${priorityStyle.color}`, `0 0 0px ${priorityStyle.color}`]
+                          : `0 0 4px ${priorityStyle.color}`
+                      }}
+                      transition={{
+                        boxShadow: {
+                          duration: 2,
+                          repeat: isActive ? Infinity : 0,
+                          ease: "easeInOut"
+                        }
+                      }}
+                    />
+                    <span className={cn("text-xs font-medium uppercase tracking-wider", priorityStyle.text)}>
+                      {task.priority}
+                    </span>
+                  </div>
+                </div>
                 
                 <div className="flex items-center gap-1 text-[hsl(var(--command-text-dim))]">
                   <Calendar className="h-3 w-3" />

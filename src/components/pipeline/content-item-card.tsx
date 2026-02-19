@@ -3,23 +3,10 @@
 import { Draggable } from "@hello-pangea/dnd"
 import { motion } from "framer-motion"
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { Edit, Trash2, User, Calendar, Clock, Video, ExternalLink, FileText, Users, Zap } from "lucide-react"
+import { Edit, Trash2, Calendar, Clock, Video, FileText, Mic, Users, Zap, Eye, TrendingUp } from "lucide-react"
 import { cn } from "@/lib/utils"
-
-export interface ContentItem {
-  _id: string
-  title: string
-  description: string
-  platform: "YouTube" | "Blog" | "X"
-  scriptText: string
-  thumbnailUrl: string
-  status: "idea" | "script" | "thumbnail" | "filming" | "published"
-  assignee: string
-  createdAt: number
-  updatedAt: number
-}
+import { ContentItem } from "@/types/content"
 
 interface ContentItemCardProps {
   content: ContentItem
@@ -41,55 +28,72 @@ const agentColors = {
     bg: "bg-blue-500/10",
     text: "text-blue-400",
     border: "border-blue-500/20",
-    glow: "0 0 15px hsl(199 89% 48% / 0.3)"
+    glow: "hsl(199 89% 48%)"
   },
   "Manus": {
     bg: "bg-purple-500/10",
-    text: "text-purple-400",
+    text: "text-purple-400", 
     border: "border-purple-500/20",
-    glow: "0 0 15px hsl(270 70% 50% / 0.3)"
+    glow: "hsl(270 70% 50%)"
   },
   "Monica": {
     bg: "bg-pink-500/10",
     text: "text-pink-400",
     border: "border-pink-500/20",
-    glow: "0 0 15px hsl(320 70% 60% / 0.3)"
+    glow: "hsl(320 70% 60%)"
   },
   "Jarvis": {
     bg: "bg-indigo-500/10",
     text: "text-indigo-400",
     border: "border-indigo-500/20",
-    glow: "0 0 15px hsl(240 70% 60% / 0.3)"
+    glow: "hsl(240 70% 60%)"
   },
   "Luna": {
     bg: "bg-cyan-500/10",
     text: "text-cyan-400",
     border: "border-cyan-500/20",
-    glow: "0 0 15px hsl(180 70% 60% / 0.3)"
+    glow: "hsl(180 70% 60%)"
   }
 }
 
-const platformConfig = {
-  "YouTube": {
+const typeConfig = {
+  "video": {
     icon: Video,
-    color: "text-red-400",
-    bg: "bg-red-500/10",
-    border: "border-red-500/20",
-    glow: "0 0 10px hsl(0 70% 50% / 0.3)"
+    color: "hsl(0 70% 60%)",
+    emoji: "🎥"
   },
-  "Blog": {
+  "article": {
     icon: FileText,
-    color: "text-green-400",
-    bg: "bg-green-500/10",
-    border: "border-green-500/20", 
-    glow: "0 0 10px hsl(120 70% 50% / 0.3)"
+    color: "hsl(120 70% 50%)",
+    emoji: "📝"
   },
-  "X": {
+  "social": {
     icon: Users,
-    color: "text-blue-400",
-    bg: "bg-blue-500/10",
-    border: "border-blue-500/20",
-    glow: "0 0 10px hsl(210 70% 50% / 0.3)"
+    color: "hsl(210 70% 50%)",
+    emoji: "💬"
+  },
+  "podcast": {
+    icon: Mic,
+    color: "hsl(270 70% 50%)",
+    emoji: "🎙️"
+  }
+}
+
+const priorityConfig = {
+  low: {
+    color: "hsl(var(--command-success))",
+    bg: "bg-[hsl(var(--command-success))]/10",
+    text: "text-[hsl(var(--command-success))]"
+  },
+  medium: {
+    color: "hsl(var(--command-warning))",
+    bg: "bg-[hsl(var(--command-warning))]/10",
+    text: "text-[hsl(var(--command-warning))]"
+  },
+  high: {
+    color: "hsl(var(--command-danger))",
+    bg: "bg-[hsl(var(--command-danger))]/10",
+    text: "text-[hsl(var(--command-danger))]"
   }
 }
 
@@ -102,9 +106,13 @@ export function ContentItemCard({ content, index, onEdit, onDelete }: ContentIte
   }
 
   const agentColor = agentColors[content.assignee as keyof typeof agentColors] || agentColors["Hamza"]
-  const platformStyle = platformConfig[content.platform]
-  const isPublished = content.status === "published"
-  const isInProduction = content.status === "filming" || content.status === "thumbnail"
+  const platformToType: Record<string, string> = { "YouTube": "video", "Blog": "article", "X": "social", "Podcast": "podcast" }
+  const contentType = content.type || platformToType[content.platform] || "article"
+  const typeStyle = typeConfig[contentType] || typeConfig["article"]
+  const priorityStyle = priorityConfig[content.priority || "medium"] || priorityConfig["medium"]
+  const isPublished = content.stage === "published"
+  const isActive = content.stage === "production"
+  const hasDeadline = content.deadline && content.deadline > Date.now()
 
   const cardVariants = {
     hidden: { opacity: 0, y: 20 },
@@ -138,29 +146,38 @@ export function ContentItemCard({ content, index, onEdit, onDelete }: ContentIte
         >
           <Card
             className={cn(
-              "glass-morphism border-[hsl(var(--command-border-bright))] relative overflow-hidden transition-all duration-300",
-              snapshot.isDragging && "shadow-2xl shadow-[hsl(var(--command-accent))]/20 ring-2 ring-[hsl(var(--command-accent))]/40",
-              isPublished && "opacity-75",
-              isInProduction && "ring-1 ring-[hsl(var(--command-accent))]/20"
+              "backdrop-blur-xl bg-gradient-to-br from-[hsl(var(--command-surface-elevated))]/95 to-[hsl(var(--command-surface))]/90",
+              "border border-white/5 rounded-xl relative overflow-hidden card-hover-premium",
+              snapshot.isDragging && "shadow-2xl shadow-[hsl(var(--command-accent))]/30 ring-2 ring-[hsl(var(--command-accent))]/50 scale-[1.02]",
+              isPublished && "opacity-70",
+              isActive && "ring-1 ring-[hsl(var(--command-accent))]/30"
             )}
             style={{
               boxShadow: snapshot.isDragging 
-                ? `0 20px 40px rgba(0,0,0,0.4), ${platformStyle.glow}`
-                : isInProduction 
-                  ? `0 4px 20px rgba(0,0,0,0.1), ${platformStyle.glow}`
-                  : "0 4px 20px rgba(0,0,0,0.1)"
+                ? `0 25px 50px rgba(0,0,0,0.5), 0 0 20px ${priorityStyle.color}40`
+                : isActive 
+                  ? `0 8px 32px rgba(0,0,0,0.2), 0 0 10px ${priorityStyle.color}30`
+                  : "0 6px 24px rgba(0,0,0,0.15)"
             }}
           >
-            {/* Platform glow overlay */}
+            {/* Priority left border indicator */}
             <div 
-              className="absolute inset-0 opacity-3 pointer-events-none"
+              className="absolute left-0 top-0 bottom-0 w-1 rounded-l-xl"
               style={{
-                background: `radial-gradient(circle at 0% 50%, ${platformStyle.color.replace('text-', 'hsl(var(--')} 0%, transparent 50%)`
+                background: `linear-gradient(180deg, ${priorityStyle.color}, ${priorityStyle.color}80)`
+              }}
+            />
+            
+            {/* Type glow overlay */}
+            <div 
+              className="absolute inset-0 opacity-3 pointer-events-none rounded-xl"
+              style={{
+                background: `radial-gradient(circle at 0% 50%, ${typeStyle.color} 0%, transparent 50%)`
               }}
             />
 
             {/* Active pulse for in-production content */}
-            {isInProduction && (
+            {isActive && (
               <motion.div
                 animate={{
                   opacity: [0.3, 0.8, 0.3],
@@ -174,42 +191,42 @@ export function ContentItemCard({ content, index, onEdit, onDelete }: ContentIte
               />
             )}
 
-            <CardHeader className="pb-3 relative">
-              <div className="flex items-start justify-between gap-2">
+            <CardHeader className="pb-3 pt-5 px-5 relative">
+              <div className="flex items-start justify-between gap-3">
                 <h3 className={cn(
-                  "font-heading font-semibold text-sm leading-tight pr-2",
+                  "font-heading font-semibold text-sm leading-tight flex-1",
                   isPublished && "line-through text-[hsl(var(--command-text-muted))]"
                 )}>
                   {content.title}
                 </h3>
-                <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200 shrink-0">
                   <Button
                     variant="ghost"
                     size="icon"
-                    className="h-6 w-6 hover:bg-[hsl(var(--command-accent))]/20 hover:text-[hsl(var(--command-accent))]"
+                    className="h-7 w-7 hover:bg-[hsl(var(--command-accent))]/20 hover:text-[hsl(var(--command-accent))] rounded-lg"
                     onClick={(e) => {
                       e.stopPropagation()
                       onEdit(content)
                     }}
                   >
-                    <Edit className="h-3 w-3" />
+                    <Edit className="h-3.5 w-3.5" />
                   </Button>
                   <Button
                     variant="ghost"
                     size="icon"
-                    className="h-6 w-6 hover:bg-[hsl(var(--command-danger))]/20 hover:text-[hsl(var(--command-danger))]"
+                    className="h-7 w-7 hover:bg-[hsl(var(--command-danger))]/20 hover:text-[hsl(var(--command-danger))] rounded-lg"
                     onClick={(e) => {
                       e.stopPropagation()
                       onDelete(content._id)
                     }}
                   >
-                    <Trash2 className="h-3 w-3" />
+                    <Trash2 className="h-3.5 w-3.5" />
                   </Button>
                 </div>
               </div>
             </CardHeader>
             
-            <CardContent className="pt-0 space-y-4">
+            <CardContent className="pt-0 pb-5 px-5 space-y-4">
               {content.description && (
                 <p className={cn(
                   "text-xs text-[hsl(var(--command-text-muted))] line-clamp-3",
@@ -219,90 +236,135 @@ export function ContentItemCard({ content, index, onEdit, onDelete }: ContentIte
                 </p>
               )}
 
-              {/* Platform & Script Preview */}
-              <div className="space-y-2">
+              {/* Content Type & Engagement */}
+              <div className="flex items-center gap-3">
                 <div 
-                  className={cn(
-                    "flex items-center gap-2 px-2 py-1 rounded-lg glass-morphism",
-                    platformStyle.bg,
-                    platformStyle.border
-                  )}
+                  className="w-8 h-8 rounded-full flex items-center justify-center text-sm backdrop-blur-md border"
                   style={{
-                    boxShadow: platformStyle.glow
+                    backgroundColor: `${typeStyle.color}15`,
+                    borderColor: `${typeStyle.color}30`,
+                    boxShadow: `0 0 12px ${typeStyle.color}40`
                   }}
                 >
-                  <platformStyle.icon className={cn("h-4 w-4", platformStyle.color)} />
-                  <span className={cn("text-xs font-medium", platformStyle.color)}>
-                    {content.platform}
+                  <span>{typeStyle.emoji}</span>
+                </div>
+                <div className="flex flex-col flex-1">
+                  <span 
+                    className="text-xs font-medium"
+                    style={{ color: typeStyle.color }}
+                  >
+                    {(contentType).charAt(0).toUpperCase() + (contentType).slice(1)}
+                  </span>
+                  <span className="text-[10px] text-[hsl(var(--command-text-dim))]">
+                    Content Type
                   </span>
                 </div>
-
-                {content.scriptText && (
-                  <div className="glass-morphism p-2 rounded-lg">
-                    <p className="text-xs text-[hsl(var(--command-text-dim))] line-clamp-2 font-mono">
-                      {content.scriptText}
-                    </p>
+                {/* Engagement stats for published content */}
+                {isPublished && (content.views || content.engagement) && (
+                  <div className="flex items-center gap-2 text-xs">
+                    <div className="flex items-center gap-1">
+                      <Eye className="h-3 w-3 text-[hsl(var(--command-accent))]" />
+                      <span>{content.views?.toLocaleString() || 0}</span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <TrendingUp className="h-3 w-3 text-[hsl(var(--command-success))]" />
+                      <span>{content.engagement || 0}</span>
+                    </div>
                   </div>
                 )}
               </div>
               
               {/* Agent Assignment */}
-              <div className="flex items-center gap-2">
-                <div 
-                  className={cn(
-                    "flex items-center gap-2 px-2 py-1 rounded-lg glass-morphism",
-                    agentColor.bg,
-                    agentColor.border
-                  )}
-                  style={{
-                    boxShadow: agentColor.glow
-                  }}
-                >
-                  <span className="text-base">
-                    {agentAvatars[content.assignee as keyof typeof agentAvatars]}
-                  </span>
-                  <span className={cn("text-xs font-medium", agentColor.text)}>
-                    {content.assignee}
-                  </span>
+              <div className="flex items-center gap-3">
+                <div className="flex items-center gap-2">
+                  {/* Agent Avatar Circle */}
+                  <div 
+                    className={cn(
+                      "w-8 h-8 rounded-full flex items-center justify-center text-sm",
+                      "backdrop-blur-md border",
+                      agentColor.bg,
+                      agentColor.border
+                    )}
+                    style={{
+                      boxShadow: `0 0 12px ${agentColor.glow}40`
+                    }}
+                  >
+                    <span>{agentAvatars[content.assignee as keyof typeof agentAvatars]}</span>
+                  </div>
+                  <div className="flex flex-col">
+                    <span className={cn("text-xs font-medium", agentColor.text)}>
+                      {content.assignee}
+                    </span>
+                    <span className="text-[10px] text-[hsl(var(--command-text-dim))]">
+                      Creator
+                    </span>
+                  </div>
                 </div>
                 
-                {isInProduction && (
+                {isActive && (
                   <motion.div
                     animate={{ rotate: 360 }}
                     transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-                    className="p-1"
+                    className="p-1 bg-[hsl(var(--command-accent))]/10 rounded-full"
                   >
                     <Zap className="h-3 w-3 text-[hsl(var(--command-accent))]" />
                   </motion.div>
                 )}
-
-                {content.thumbnailUrl && (
-                  <Badge variant="outline" className="text-xs bg-[hsl(var(--command-accent))]/10 text-[hsl(var(--command-accent))] border-[hsl(var(--command-accent))]/20">
-                    <ExternalLink className="h-3 w-3 mr-1" />
-                    Asset
-                  </Badge>
-                )}
               </div>
               
-              {/* Metadata */}
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-1 text-xs text-[hsl(var(--command-text-dim))]">
+              {/* Priority & Metadata */}
+              <div className="flex items-center justify-between text-xs">
+                <div className="flex items-center gap-2">
+                  {/* Priority dot indicator */}
+                  <div className="flex items-center gap-1.5">
+                    <motion.div
+                      className="w-2.5 h-2.5 rounded-full"
+                      style={{ backgroundColor: priorityStyle.color }}
+                      animate={{
+                        boxShadow: isActive 
+                          ? [`0 0 0px ${priorityStyle.color}`, `0 0 8px ${priorityStyle.color}`, `0 0 0px ${priorityStyle.color}`]
+                          : `0 0 4px ${priorityStyle.color}`
+                      }}
+                      transition={{
+                        boxShadow: {
+                          duration: 2,
+                          repeat: isActive ? Infinity : 0,
+                          ease: "easeInOut"
+                        }
+                      }}
+                    />
+                    <span className={cn("text-xs font-medium uppercase tracking-wider", priorityStyle.text)}>
+                      {content.priority}
+                    </span>
+                  </div>
+                </div>
+                
+                <div className="flex items-center gap-1 text-[hsl(var(--command-text-dim))]">
                   <Calendar className="h-3 w-3" />
                   <span>{formatDate(content.createdAt)}</span>
+                </div>
+              </div>
+
+              {/* Status & Deadline */}
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-1 text-xs text-[hsl(var(--command-text-dim))]">
+                  <Clock className="h-3 w-3" />
+                  <span>Updated {formatDate(content.updatedAt)}</span>
                 </div>
                 
                 {isPublished && (
                   <div className="flex items-center gap-1 text-[hsl(var(--command-success))]">
                     <div className="w-2 h-2 bg-[hsl(var(--command-success))] rounded-full animate-pulse" />
-                    <span className="text-xs font-medium">Live</span>
+                    <span className="text-xs font-medium">Published</span>
                   </div>
                 )}
-              </div>
-
-              {/* Updated timestamp */}
-              <div className="flex items-center gap-1 text-xs text-[hsl(var(--command-text-dim))]">
-                <Clock className="h-3 w-3" />
-                <span>Updated {formatDate(content.updatedAt)}</span>
+                
+                {hasDeadline && !isPublished && (
+                  <div className="flex items-center gap-1 text-[hsl(var(--command-warning))] text-xs">
+                    <div className="w-2 h-2 bg-[hsl(var(--command-warning))] rounded-full" />
+                    <span className="font-medium">Due {formatDate(content.deadline!)}</span>
+                  </div>
+                )}
               </div>
             </CardContent>
           </Card>

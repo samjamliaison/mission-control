@@ -407,71 +407,104 @@ export function CalendarView() {
           <motion.div variants={itemVariants}>
             {viewMode === "month" ? (
               <Card className="glass-morphism border-[hsl(var(--command-border-bright))] overflow-hidden">
-                <CardHeader className="pb-3">
-                  <div className="grid grid-cols-7 gap-4">
-                    {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => (
-                      <div key={day} className="text-center py-2">
-                        <span className="text-sm font-heading font-semibold text-[hsl(var(--command-text-muted))]">
-                          {day}
-                        </span>
+                <CardHeader className="pb-4">
+                  <div className="grid grid-cols-7 gap-2">
+                    {["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"].map((day, index) => (
+                      <div 
+                        key={day} 
+                        className="text-center p-3 backdrop-blur-md bg-gradient-to-b from-white/5 to-white/0 border border-white/5 rounded-lg"
+                      >
+                        <div className="text-xs font-medium text-[hsl(var(--command-text-muted))] uppercase tracking-wider mb-1">
+                          {day.slice(0, 3)}
+                        </div>
+                        <div className="text-sm font-bold text-[hsl(var(--command-text))]">
+                          {day.charAt(0)}
+                        </div>
                       </div>
                     ))}
                   </div>
                 </CardHeader>
-                <CardContent className="p-0">
-                  <div className="grid grid-cols-7">
+                <CardContent className="p-2">
+                  <div className="grid grid-cols-7 gap-1">
                     {calendarGrid.map((day, index) => (
                       <motion.div
                         key={index}
                         className={cn(
-                          "min-h-[120px] p-2 border-t border-[hsl(var(--command-border))] relative group",
-                          !day.isCurrentMonth && "opacity-50",
-                          day.isToday && "bg-[hsl(var(--command-accent))]/5 ring-1 ring-[hsl(var(--command-accent))]/20"
+                          "min-h-[120px] p-3 backdrop-blur-md bg-gradient-to-br from-white/3 to-white/0",
+                          "border border-white/5 rounded-xl relative group cursor-pointer",
+                          "hover:from-white/8 hover:to-white/0 hover:border-white/10",
+                          "transition-all duration-200",
+                          !day.isCurrentMonth && "opacity-40",
+                          day.isToday && "ring-2 ring-[hsl(var(--command-accent))]/50 bg-gradient-to-br from-[hsl(var(--command-accent))]/10 to-transparent"
                         )}
-                        whileHover={{ backgroundColor: "hsl(var(--command-surface))" }}
+                        whileHover={{ scale: 1.02 }}
                         transition={{ duration: 0.2 }}
                       >
-                        <div className="flex items-center justify-between mb-1">
-                          <span className={cn(
-                            "text-sm font-medium",
-                            day.isToday && "text-[hsl(var(--command-accent))] font-bold"
+                        <div className="flex items-center justify-between mb-2">
+                          <div className={cn(
+                            "flex items-center justify-center w-7 h-7 rounded-full text-sm font-semibold transition-colors",
+                            day.isToday 
+                              ? "bg-[hsl(var(--command-accent))] text-white shadow-lg" 
+                              : "text-[hsl(var(--command-text))] hover:bg-white/10"
                           )}>
                             {day.date.getDate()}
-                          </span>
+                          </div>
                           {day.events.length > 0 && (
-                            <Badge variant="outline" className="h-5 text-xs">
+                            <div 
+                              className="text-xs px-2 py-0.5 rounded-full backdrop-blur-md"
+                              style={{
+                                backgroundColor: `hsl(var(--command-accent))15`,
+                                color: 'hsl(var(--command-accent))',
+                                border: '1px solid hsl(var(--command-accent))30'
+                              }}
+                            >
                               {day.events.length}
-                            </Badge>
+                            </div>
                           )}
                         </div>
                         
-                        <div className="space-y-1">
+                        <div className="space-y-1.5">
                           {day.events.slice(0, 3).map((event) => {
                             const statusStyle = statusConfig[event.status]
                             return (
                               <motion.div
                                 key={event._id}
                                 className={cn(
-                                  "text-xs p-1 rounded cursor-pointer glass-morphism",
+                                  "text-xs p-2 rounded-lg cursor-pointer backdrop-blur-md border",
+                                  "hover:shadow-lg transition-all duration-200",
                                   statusStyle.bg,
                                   statusStyle.border
                                 )}
-                                style={{ boxShadow: statusStyle.glow }}
-                                whileHover={{ scale: 1.02 }}
+                                style={{ 
+                                  boxShadow: `0 0 8px ${statusStyle.glow}20`,
+                                  backgroundColor: `${statusStyle.glow}15`
+                                }}
+                                whileHover={{ scale: 1.02, y: -1 }}
                                 onClick={() => setSelectedEvent(event)}
                               >
-                                <div className="flex items-center gap-1">
-                                  <span className="text-xs">
+                                <div className="flex items-center gap-1.5">
+                                  <span className="text-sm">
                                     {agentAvatars[event.agent as keyof typeof agentAvatars]}
                                   </span>
-                                  <span className="truncate font-medium">{event.title}</span>
+                                  <span className="truncate font-medium text-[hsl(var(--command-text))]">
+                                    {event.title}
+                                  </span>
+                                </div>
+                                <div className="flex items-center gap-1 mt-1">
+                                  <div 
+                                    className="w-1.5 h-1.5 rounded-full"
+                                    style={{ backgroundColor: statusStyle.glow }}
+                                  />
+                                  <span className="text-[10px] text-[hsl(var(--command-text-dim))] uppercase tracking-wider">
+                                    {event.status}
+                                  </span>
                                 </div>
                               </motion.div>
                             )
                           })}
                           {day.events.length > 3 && (
-                            <div className="text-xs text-[hsl(var(--command-text-muted))] pl-1">
-                              +{day.events.length - 3} more
+                            <div className="text-xs text-[hsl(var(--command-text-muted))] font-medium pl-2 pt-1">
+                              +{day.events.length - 3} more events
                             </div>
                           )}
                         </div>

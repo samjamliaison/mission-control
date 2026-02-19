@@ -28,11 +28,13 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <body className={`${geist.variable} ${plusJakarta.variable} antialiased`}>
-        <div className="min-h-screen bg-[#09090b]">
+        <div className="min-h-screen bg-[#09090b] flex">
           <Navigation />
-          <div className="pt-20">
-            {children}
-          </div>
+          <main className="flex-1 min-h-screen">
+            <div className="p-6 lg:p-8">
+              {children}
+            </div>
+          </main>
         </div>
       </body>
     </html>

@@ -15,7 +15,7 @@ import {
 import { Plus, Filter, Video, Activity, Users, Target, Film } from "lucide-react"
 import { ContentColumn } from "./content-column"
 import { AddContentDialog } from "./add-content-dialog"
-import { ContentItem } from "./content-item-card"
+import { ContentItem } from "@/types/content"
 
 // Mock data for content pipeline
 const mockContent: ContentItem[] = [
@@ -353,35 +353,35 @@ export function ContentPipeline() {
               <div className="grid grid-cols-1 xl:grid-cols-5 gap-6 overflow-x-auto pb-4">
                 <ContentColumn
                   title="Ideation"
-                  status="idea"
+                  stage="idea"
                   content={contentByStatus.idea}
                   onEditContent={handleEditContent}
                   onDeleteContent={handleDeleteContent}
                 />
                 <ContentColumn
                   title="Scripting"
-                  status="script"
+                  stage="script"
                   content={contentByStatus.script}
                   onEditContent={handleEditContent}
                   onDeleteContent={handleDeleteContent}
                 />
                 <ContentColumn
                   title="Design"
-                  status="thumbnail"
+                  stage="thumbnail"
                   content={contentByStatus.thumbnail}
                   onEditContent={handleEditContent}
                   onDeleteContent={handleDeleteContent}
                 />
                 <ContentColumn
                   title="Production"
-                  status="filming"
+                  stage="filming"
                   content={contentByStatus.filming}
                   onEditContent={handleEditContent}
                   onDeleteContent={handleDeleteContent}
                 />
                 <ContentColumn
                   title="Published"
-                  status="published"
+                  stage="published"
                   content={contentByStatus.published}
                   onEditContent={handleEditContent}
                   onDeleteContent={handleDeleteContent}

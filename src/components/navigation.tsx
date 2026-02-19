@@ -1,9 +1,10 @@
 "use client"
 
+import { useState } from "react"
 import { usePathname } from "next/navigation"
 import Link from "next/link"
-import { motion } from "framer-motion"
-import { Command, CheckSquare, Film, Calendar, Brain, Users, Monitor } from "lucide-react"
+import { motion, AnimatePresence } from "framer-motion"
+import { Command, CheckSquare, Film, Calendar, Brain, Users, Building, ChevronLeft, ChevronRight } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 const navigationItems = [
@@ -11,134 +12,208 @@ const navigationItems = [
     name: "Tasks",
     href: "/",
     icon: CheckSquare,
+    emoji: "✅",
     description: "Mission Control"
   },
   {
     name: "Pipeline",
     href: "/pipeline",
     icon: Film,
+    emoji: "🎬",
     description: "Content Creation"
   },
   {
     name: "Calendar",
     href: "/calendar",
     icon: Calendar,
+    emoji: "📅",
     description: "Schedule View"
   },
   {
     name: "Memory",
     href: "/memory",
     icon: Brain,
+    emoji: "🧠",
     description: "Knowledge Base"
   },
   {
     name: "Team",
     href: "/team",
     icon: Users,
+    emoji: "👥",
     description: "Agent Status"
   },
   {
     name: "Office",
     href: "/office",
-    icon: Monitor,
+    icon: Building,
+    emoji: "🏢",
     description: "Virtual HQ"
   }
 ]
 
 export function Navigation() {
+  const [isCollapsed, setIsCollapsed] = useState(false)
   const pathname = usePathname()
 
   return (
-    <div className="fixed top-0 left-0 right-0 z-50 p-4">
-      <div className="max-w-7xl mx-auto">
+    <motion.aside
+      className="relative h-screen z-50"
+      initial={{ x: -20, opacity: 0 }}
+      animate={{ 
+        x: 0, 
+        opacity: 1,
+        width: isCollapsed ? "80px" : "280px"
+      }}
+      transition={{ duration: 0.3, ease: "easeInOut" }}
+    >
+      <div className="h-full p-4">
         <motion.nav 
-          className="glass-morphism rounded-2xl p-4 border border-[hsl(var(--command-border-bright))]"
-          initial={{ y: -20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.5 }}
+          className="h-full glass-morphism-premium rounded-2xl p-4 border border-[hsl(var(--command-border-bright))] flex flex-col"
+          layout
         >
-          <div className="flex items-center justify-between">
-            {/* Logo */}
-            <motion.div 
-              className="flex items-center gap-3"
+          {/* Header */}
+          <div className="flex items-center justify-between mb-8">
+            <AnimatePresence mode="wait">
+              {!isCollapsed && (
+                <motion.div 
+                  className="flex items-center gap-3"
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -20 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <div className="p-2 rounded-lg glass-morphism">
+                    <Command className="h-5 w-5 text-[hsl(var(--command-accent))]" />
+                  </div>
+                  <div>
+                    <h1 className="font-display font-bold text-lg text-premium">
+                      Mission Control
+                    </h1>
+                    <p className="text-xs text-[hsl(var(--command-text-muted))]">OpenClaw Command Center</p>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+            
+            {/* Collapse Button */}
+            <motion.button
+              onClick={() => setIsCollapsed(!isCollapsed)}
+              className="p-2 rounded-lg hover:glass-morphism transition-all duration-200 text-[hsl(var(--command-text-muted))] hover:text-[hsl(var(--command-accent))]"
               whileHover={{ scale: 1.05 }}
-              transition={{ duration: 0.2 }}
+              whileTap={{ scale: 0.95 }}
             >
-              <div className="p-2 rounded-lg glass-morphism">
-                <Command className="h-5 w-5 text-[hsl(var(--command-accent))]" />
-              </div>
-              <div>
-                <h1 className="font-display font-bold text-lg text-premium">
-                  Mission Control
-                </h1>
-                <p className="text-xs text-[hsl(var(--command-text-muted))]">OpenClaw Command Center</p>
-              </div>
-            </motion.div>
+              {isCollapsed ? (
+                <ChevronRight className="h-4 w-4" />
+              ) : (
+                <ChevronLeft className="h-4 w-4" />
+              )}
+            </motion.button>
+          </div>
 
-            {/* Navigation Links */}
-            <div className="flex items-center gap-2">
-              {navigationItems.map((item) => {
-                const isActive = pathname === item.href
-                const IconComponent = item.icon
-                
-                return (
-                  <motion.div
-                    key={item.name}
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
+          {/* Navigation Links */}
+          <div className="flex-1 space-y-2">
+            {navigationItems.map((item, index) => {
+              const isActive = pathname === item.href
+              const IconComponent = item.icon
+              
+              return (
+                <motion.div
+                  key={item.name}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.1 }}
+                >
+                  <Link
+                    href={item.href}
+                    className={cn(
+                      "relative w-full p-3 rounded-xl transition-all duration-300 group flex items-center",
+                      isCollapsed ? "justify-center" : "gap-3",
+                      isActive 
+                        ? "glass-morphism text-[hsl(var(--command-accent))] shadow-lg" 
+                        : "text-[hsl(var(--command-text-muted))] hover:text-[hsl(var(--command-text))] hover:glass-morphism"
+                    )}
                   >
-                    <Link
-                      href={item.href}
-                      className={cn(
-                        "relative px-4 py-2 rounded-xl transition-all duration-300 group",
-                        "flex items-center gap-2 text-sm font-medium",
-                        isActive 
-                          ? "glass-morphism text-[hsl(var(--command-accent))] shadow-lg" 
-                          : "text-[hsl(var(--command-text-muted))] hover:text-[hsl(var(--command-text))] hover:bg-[hsl(var(--command-surface))]/50"
-                      )}
-                    >
-                      {/* Active indicator */}
-                      {isActive && (
-                        <motion.div
-                          className="absolute inset-0 rounded-xl bg-gradient-to-r from-[hsl(var(--command-accent))]/10 to-transparent border border-[hsl(var(--command-accent))]/20"
-                          layoutId="activeTab"
-                          transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                        />
-                      )}
-                      
-                      <div className="relative flex items-center gap-2">
+                    {/* Active indicator */}
+                    {isActive && (
+                      <motion.div
+                        className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-8 bg-gradient-to-b from-[hsl(var(--command-accent))] to-[hsl(199 89% 38%)] rounded-full"
+                        layoutId="activeIndicator"
+                        transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                      />
+                    )}
+                    
+                    <div className="flex items-center gap-3 relative">
+                      {/* Icon with emoji overlay */}
+                      <div className="relative">
                         <IconComponent className={cn(
-                          "h-4 w-4 transition-colors",
+                          "h-5 w-5 transition-colors",
                           isActive ? "text-[hsl(var(--command-accent))]" : "text-current"
                         )} />
-                        <span className="hidden lg:inline">{item.name}</span>
-                        
-                        {/* Hover tooltip for mobile */}
-                        <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none lg:hidden">
-                          <div className="glass-morphism px-2 py-1 rounded text-xs whitespace-nowrap">
-                            {item.description}
+                        <span className="absolute -top-1 -right-1 text-xs opacity-60">
+                          {item.emoji}
+                        </span>
+                      </div>
+                      
+                      <AnimatePresence mode="wait">
+                        {!isCollapsed && (
+                          <motion.div
+                            initial={{ opacity: 0, width: 0 }}
+                            animate={{ opacity: 1, width: "auto" }}
+                            exit={{ opacity: 0, width: 0 }}
+                            transition={{ duration: 0.2 }}
+                            className="overflow-hidden"
+                          >
+                            <span className="font-medium text-sm whitespace-nowrap">
+                              {item.name}
+                            </span>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                      
+                      {/* Tooltip for collapsed state */}
+                      {isCollapsed && (
+                        <div className="absolute left-full ml-3 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-50">
+                          <div className="glass-morphism px-3 py-2 rounded-lg shadow-lg border border-[hsl(var(--command-border-bright))]">
+                            <div className="text-sm font-medium text-[hsl(var(--command-text))]">{item.name}</div>
+                            <div className="text-xs text-[hsl(var(--command-text-muted))]">{item.description}</div>
                           </div>
                         </div>
-                      </div>
-                    </Link>
-                  </motion.div>
-                )
-              })}
-            </div>
-
-            {/* Status Indicator */}
-            <motion.div 
-              className="flex items-center gap-2"
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              transition={{ delay: 0.3, type: "spring", stiffness: 200 }}
-            >
-              <div className="w-2 h-2 bg-[hsl(var(--command-success))] rounded-full animate-pulse" />
-              <span className="text-xs text-[hsl(var(--command-text-muted))] font-medium">Online</span>
-            </motion.div>
+                      )}
+                    </div>
+                  </Link>
+                </motion.div>
+              )
+            })}
           </div>
+
+          {/* Status Footer */}
+          <motion.div 
+            className={cn(
+              "flex items-center gap-3 mt-8 p-3 rounded-xl glass-morphism",
+              isCollapsed && "justify-center"
+            )}
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            transition={{ delay: 0.5, type: "spring", stiffness: 200 }}
+          >
+            <div className="w-2 h-2 bg-[hsl(var(--command-success))] rounded-full animate-pulse status-pulse" />
+            <AnimatePresence mode="wait">
+              {!isCollapsed && (
+                <motion.span
+                  initial={{ opacity: 0, width: 0 }}
+                  animate={{ opacity: 1, width: "auto" }}
+                  exit={{ opacity: 0, width: 0 }}
+                  transition={{ duration: 0.2 }}
+                  className="text-xs text-[hsl(var(--command-text-muted))] font-medium whitespace-nowrap overflow-hidden"
+                >
+                  System Online
+                </motion.span>
+              )}
+            </AnimatePresence>
+          </motion.div>
         </motion.nav>
       </div>
-    </div>
+    </motion.aside>
   )
 }
