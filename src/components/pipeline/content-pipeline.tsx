@@ -12,7 +12,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { Plus, Filter, Video, Activity, Users, Target, Film } from "lucide-react"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import { Plus, Filter, Video, Activity, Users, Target, Film, Download, FileText } from "lucide-react"
 import { ContentColumn } from "./content-column"
 import { AddContentDialog } from "./add-content-dialog"
 import { ContentDetailPanel } from "./content-detail-panel"
@@ -22,6 +28,7 @@ import { StatsCard } from "@/components/ui/stats-card"
 import { EmptyState } from "@/components/ui/empty-state"
 import { loadContent, saveContent } from "@/lib/data-persistence"
 import { useToastActions } from "@/components/ui/toast"
+import { exportPipelineAsJSON, downloadFile, generateFilename } from "@/lib/export-utils"
 
 // Note: Content is now loaded from localStorage via loadContent()
 
@@ -210,6 +217,12 @@ export function ContentPipeline() {
     setDialogOpen(true)
   }
 
+  const handleExportPipeline = () => {
+    const jsonContent = exportPipelineAsJSON(content)
+    downloadFile(jsonContent, generateFilename('mission-control-pipeline', 'json'), 'application/json')
+    toast.success('Export Complete', `Pipeline exported as JSON (${content.length} items)`)
+  }
+
   const totalContent = content.length
   const publishedContent = content.filter(item => item.status === "published").length
   const inProductionContent = content.filter(item => item.status === "filming" || item.status === "thumbnail").length
@@ -319,15 +332,38 @@ export function ContentPipeline() {
                 </div>
               </div>
 
-              <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-                <Button 
-                  onClick={handleAddNewContent} 
-                  className="btn-premium font-semibold px-6"
-                >
-                  <Plus className="h-4 w-4 mr-2" />
-                  New Content
-                </Button>
-              </motion.div>
+              <div className="flex items-center gap-3">
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+                      <Button 
+                        variant="outline"
+                        className="glass-morphism border-[hsl(var(--command-accent))]/30 text-[hsl(var(--command-accent))] hover:bg-[hsl(var(--command-accent))]/10 font-semibold px-4"
+                        title="Export pipeline data"
+                      >
+                        <Download className="h-4 w-4 mr-2" />
+                        Export
+                      </Button>
+                    </motion.div>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="glass-morphism border-[hsl(var(--command-border-bright))]">
+                    <DropdownMenuItem onClick={handleExportPipeline} className="cursor-pointer focus:bg-[hsl(var(--command-accent))]/10">
+                      <FileText className="h-4 w-4 mr-2" />
+                      Export as JSON
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+
+                <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+                  <Button 
+                    onClick={handleAddNewContent} 
+                    className="btn-premium font-semibold px-6"
+                  >
+                    <Plus className="h-4 w-4 mr-2" />
+                    New Content
+                  </Button>
+                </motion.div>
+              </div>
             </div>
           </motion.div>
 

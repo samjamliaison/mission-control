@@ -12,7 +12,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { Plus, Filter, Command, Activity, Users, Target, CheckSquare, FileText, Sparkles, Square, CheckSquare as CheckedSquare, ArrowUpDown } from "lucide-react"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import { Plus, Filter, Command, Activity, Users, Target, CheckSquare, FileText, Sparkles, Square, CheckSquare as CheckedSquare, ArrowUpDown, Download } from "lucide-react"
 import { TaskColumn } from "./task-column"
 import { AddTaskDialog } from "./add-task-dialog"
 import { TaskTemplatePicker } from "./task-template-picker"
@@ -26,6 +33,7 @@ import { EmptyState } from "@/components/ui/empty-state"
 import { loadTasks, saveTasks } from "@/lib/data-persistence"
 import { useToastActions } from "@/components/ui/toast"
 import { logTaskAction, logNavigationAction } from "@/lib/activity-logger"
+import { exportTasksAsCSV, exportTasksAsJSON, downloadFile, generateFilename } from "@/lib/export-utils"
 
 // Note: Tasks are now loaded from localStorage via loadTasks()
 
@@ -404,6 +412,18 @@ export function TasksBoard() {
     }))
   }
 
+  const handleExportTasksCSV = () => {
+    const csvContent = exportTasksAsCSV(tasks)
+    downloadFile(csvContent, generateFilename('mission-control-tasks', 'csv'), 'text/csv')
+    toast.success('Export Complete', `Tasks exported as CSV (${tasks.length} items)`)
+  }
+
+  const handleExportTasksJSON = () => {
+    const jsonContent = exportTasksAsJSON(tasks)
+    downloadFile(jsonContent, generateFilename('mission-control-tasks', 'json'), 'application/json')
+    toast.success('Export Complete', `Tasks exported as JSON (${tasks.length} items)`)
+  }
+
   const totalTasks = tasks.length
   const completedTasks = tasks.filter(task => task.status === "done").length
   const inProgressTasks = tasks.filter(task => task.status === "in-progress").length
@@ -552,6 +572,31 @@ export function TasksBoard() {
                     Select
                   </Button>
                 </motion.div>
+
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+                      <Button 
+                        variant="outline"
+                        className="glass-morphism border-[hsl(var(--command-accent))]/30 text-[hsl(var(--command-accent))] hover:bg-[hsl(var(--command-accent))]/10 font-semibold px-4 min-h-[44px]"
+                        title="Export tasks data"
+                      >
+                        <Download className="h-4 w-4 mr-2" />
+                        Export
+                      </Button>
+                    </motion.div>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="glass-morphism border-[hsl(var(--command-border-bright))]">
+                    <DropdownMenuItem onClick={handleExportTasksCSV} className="cursor-pointer focus:bg-[hsl(var(--command-accent))]/10">
+                      <FileText className="h-4 w-4 mr-2" />
+                      Export as CSV
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={handleExportTasksJSON} className="cursor-pointer focus:bg-[hsl(var(--command-accent))]/10">
+                      <FileText className="h-4 w-4 mr-2" />
+                      Export as JSON
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
 
                 <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
                   <Button 
