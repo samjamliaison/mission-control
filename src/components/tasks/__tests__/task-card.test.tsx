@@ -47,7 +47,7 @@ describe('TaskCard', () => {
     expect(screen.getByText('Test Task')).toBeInTheDocument()
     expect(screen.getByText('This is a test task')).toBeInTheDocument()
     expect(screen.getByText('Hamza')).toBeInTheDocument()
-    expect(screen.getByText('high')).toBeInTheDocument()
+    expect(screen.getByText('High')).toBeInTheDocument()
   })
 
   it('calls onEdit when edit button is clicked', () => {
@@ -96,7 +96,7 @@ describe('TaskCard', () => {
       />
     )
 
-    const priorityBadge = screen.getByText('high')
+    const priorityBadge = screen.getByText('High')
     expect(priorityBadge).toBeInTheDocument()
   })
 

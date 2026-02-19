@@ -218,7 +218,7 @@ export function ContentPipeline() {
   if (!mounted) return null
 
   return (
-    <div className="min-h-[calc(100vh-5rem)] relative">
+    <div className="min-h-[calc(100vh-5rem)] relative" data-testid="content-pipeline">
       {/* Command Center Background Effects */}
       <div className="fixed inset-0 bg-gradient-to-br from-[hsl(var(--command-background))] via-[hsl(220_13%_3%)] to-[hsl(var(--command-background))] pointer-events-none" />
       

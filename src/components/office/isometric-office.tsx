@@ -108,7 +108,7 @@ export function IsometricOffice() {
   const averageTime = Math.round(agents.reduce((sum, a) => sum + a.timeOnTask, 0) / totalAgents)
 
   return (
-    <div className="min-h-[calc(100vh-4rem)] relative overflow-hidden bg-gradient-to-br from-slate-900 via-gray-900 to-slate-800">
+    <div className="min-h-[calc(100vh-4rem)] relative overflow-hidden bg-gradient-to-br from-slate-900 via-gray-900 to-slate-800" data-testid="office-view">
       {/* Floating Particles */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         {Array.from({ length: 20 }).map((_, i) => (

@@ -1,6 +1,25 @@
 import { describe, it, expect, vi } from 'vitest'
 import { render } from '@testing-library/react'
 
+// Mock the UI components
+vi.mock('@/components/ui/page-transition', () => ({
+  PageTransition: ({ children }: any) => children
+}))
+
+vi.mock('@/components/ui/loading-skeleton', () => ({
+  PageSkeleton: () => <div data-testid="loading">Loading...</div>
+}))
+
+// Mock next/dynamic
+vi.mock('next/dynamic', () => {
+  return {
+    default: (loader: any) => {
+      const Component = loader().then((mod: any) => mod.default)
+      return Component
+    }
+  }
+})
+
 // Mock all the main components
 vi.mock('@/components/tasks/tasks-board', () => ({
   TasksBoard: () => <div data-testid="tasks-board">Tasks Board</div>
@@ -10,16 +29,20 @@ vi.mock('@/components/pipeline/content-pipeline', () => ({
   ContentPipeline: () => <div data-testid="content-pipeline">Content Pipeline</div>
 }))
 
-vi.mock('@/components/memory/memory-viewer', () => ({
-  MemoryViewer: () => <div data-testid="memory-viewer">Memory Viewer</div>
+vi.mock('@/components/memory/enhanced-memory-viewer', () => ({
+  EnhancedMemoryViewer: () => <div data-testid="memory-viewer">Memory Viewer</div>
 }))
 
 vi.mock('@/components/team/team-dashboard', () => ({
   TeamDashboard: () => <div data-testid="team-dashboard">Team Dashboard</div>
 }))
 
-vi.mock('@/components/office/office-view', () => ({
-  OfficeView: () => <div data-testid="office-view">Office View</div>
+vi.mock('@/components/office/isometric-office', () => ({
+  IsometricOffice: () => <div data-testid="office-view">Office View</div>
+}))
+
+vi.mock('@/components/calendar/calendar-view', () => ({
+  CalendarView: () => <div data-testid="calendar-view">Calendar</div>
 }))
 
 // Import pages after mocking
@@ -42,8 +65,8 @@ describe('All Pages', () => {
   })
 
   it('should render calendar page', () => {
-    const { getByText } = render(<CalendarPage />)
-    expect(getByText('Calendar')).toBeInTheDocument()
+    const { getByTestId } = render(<CalendarPage />)
+    expect(getByTestId('calendar-view')).toBeInTheDocument()
   })
 
   it('should render memory page with memory viewer', () => {
