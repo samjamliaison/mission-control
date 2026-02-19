@@ -8,4 +8,5 @@ export interface MemoryEntry {
   tags: string[]
   author: string
   wordCount: number
+  pinned?: boolean
 }
