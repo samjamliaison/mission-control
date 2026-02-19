@@ -18,70 +18,10 @@ import { AddTaskDialog } from "./add-task-dialog"
 import { Task } from "./task-card"
 import { PageHeader } from "@/components/ui/page-header"
 import { StatsCard } from "@/components/ui/stats-card"
+import { EmptyState } from "@/components/ui/empty-state"
 
-// Mock data with agent assignments
-const mockTasks: Task[] = [
-  {
-    _id: "1",
-    title: "Set up project structure",
-    description: "Initialize the NextJS project with all required dependencies and establish the foundation for the command center interface",
-    assignee: "Hamza",
-    status: "done",
-    priority: "high",
-    createdAt: Date.now() - 86400000,
-    updatedAt: Date.now() - 86400000,
-  },
-  {
-    _id: "2",
-    title: "Design database schema",
-    description: "Create Convex schema for tasks and user management with real-time synchronization capabilities",
-    assignee: "Jarvis",
-    status: "in-progress",
-    priority: "high",
-    createdAt: Date.now() - 43200000,
-    updatedAt: Date.now() - 3600000,
-  },
-  {
-    _id: "3",
-    title: "Implement drag and drop",
-    description: "Add beautiful drag and drop functionality using react-beautiful-dnd with smooth animations",
-    assignee: "Monica",
-    status: "done",
-    priority: "medium",
-    createdAt: Date.now() - 21600000,
-    updatedAt: Date.now() - 21600000,
-  },
-  {
-    _id: "4",
-    title: "Add real-time updates",
-    description: "Implement Convex real-time subscriptions for live task updates across all connected clients",
-    assignee: "Luna",
-    status: "in-progress",
-    priority: "high",
-    createdAt: Date.now() - 10800000,
-    updatedAt: Date.now() - 10800000,
-  },
-  {
-    _id: "5",
-    title: "Mobile responsiveness",
-    description: "Ensure the command center works flawlessly on mobile devices with touch-optimized interactions",
-    assignee: "Manus",
-    status: "todo",
-    priority: "medium",
-    createdAt: Date.now() - 7200000,
-    updatedAt: Date.now() - 7200000,
-  },
-  {
-    _id: "6",
-    title: "Performance optimization",
-    description: "Optimize rendering performance and implement virtualization for large task datasets",
-    assignee: "Jarvis",
-    status: "todo",
-    priority: "low",
-    createdAt: Date.now() - 3600000,
-    updatedAt: Date.now() - 3600000,
-  }
-]
+// Mock data with agent assignments - empty initially to show empty state
+const mockTasks: Task[] = []
 
 const assigneeOptions = ["All", "Hamza", "Manus", "Monica", "Jarvis", "Luna"]
 
@@ -343,33 +283,43 @@ export function TasksBoard() {
             </div>
           </motion.div>
 
-          {/* Task Board */}
+          {/* Task Board or Empty State */}
           <motion.div variants={itemVariants}>
-            <DragDropContext onDragEnd={handleDragEnd}>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 overflow-x-auto pb-4">
-                <TaskColumn
-                  title="Awaiting Deployment"
-                  status="todo"
-                  tasks={tasksByStatus.todo}
-                  onEditTask={handleEditTask}
-                  onDeleteTask={handleDeleteTask}
-                />
-                <TaskColumn
-                  title="Active Operations"
-                  status="in-progress"
-                  tasks={tasksByStatus["in-progress"]}
-                  onEditTask={handleEditTask}
-                  onDeleteTask={handleDeleteTask}
-                />
-                <TaskColumn
-                  title="Mission Complete"
-                  status="done"
-                  tasks={tasksByStatus.done}
-                  onEditTask={handleEditTask}
-                  onDeleteTask={handleDeleteTask}
-                />
-              </div>
-            </DragDropContext>
+            {tasks.length === 0 ? (
+              <EmptyState
+                icon="🚀"
+                title="Mission Control Awaiting Orders"
+                description="No active tasks detected. Initialize your first mission to begin coordinating operations across all agents and systems. The command center is ready for deployment."
+                actionLabel="Deploy First Task"
+                onAction={handleAddNewTask}
+              />
+            ) : (
+              <DragDropContext onDragEnd={handleDragEnd}>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 overflow-x-auto pb-4">
+                  <TaskColumn
+                    title="Awaiting Deployment"
+                    status="todo"
+                    tasks={tasksByStatus.todo}
+                    onEditTask={handleEditTask}
+                    onDeleteTask={handleDeleteTask}
+                  />
+                  <TaskColumn
+                    title="Active Operations"
+                    status="in-progress"
+                    tasks={tasksByStatus["in-progress"]}
+                    onEditTask={handleEditTask}
+                    onDeleteTask={handleDeleteTask}
+                  />
+                  <TaskColumn
+                    title="Mission Complete"
+                    status="done"
+                    tasks={tasksByStatus.done}
+                    onEditTask={handleEditTask}
+                    onDeleteTask={handleDeleteTask}
+                  />
+                </div>
+              </DragDropContext>
+            )}
           </motion.div>
         </div>
       </motion.div>

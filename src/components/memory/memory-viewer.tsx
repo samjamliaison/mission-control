@@ -32,213 +32,11 @@ import {
 } from "lucide-react"
 import { MemoryEntry } from "./memory-entry"
 import { MemoryCard } from "./memory-card"
+import { EmptyState } from "@/components/ui/empty-state"
 import { cn } from "@/lib/utils"
 
-// Mock memory data
-const mockMemories: MemoryEntry[] = [
-  {
-    _id: "1",
-    title: "Mission Control UI Design Decisions",
-    content: `# Mission Control UI Design Decisions
-
-## Font Choices
-- **Body**: Geist - Clean, readable, modern sans-serif
-- **Headings**: Plus Jakarta Sans - Friendly but professional
-- **Display**: Clash Display - Bold, commanding presence
-
-## Color Palette
-- **Background**: #09090b (deep dark)
-- **Accents**: #06b6d4 (cyan-400), #0ea5e9 (blue-500)
-- **Glass morphism with backdrop-blur for premium feel
-
-## Key Insights
-The Bloomberg Terminal aesthetic works perfectly for a command center. Users respond positively to the "luxury dark" theme that feels both professional and futuristic.
-
-## Lessons Learned
-- Avoid generic shadcn defaults
-- Glass morphism > flat cards
-- Micro-animations make huge difference in perceived quality`,
-    category: "lessons",
-    createdAt: Date.now() - 86400000 * 2,
-    updatedAt: Date.now() - 86400000 * 2,
-    tags: ["design", "ui", "lessons", "mission-control"],
-    author: "Claude",
-    wordCount: 145
-  },
-  {
-    _id: "2",
-    title: "Daily Notes - Feb 19, 2024",
-    content: `# Daily Notes - February 19, 2024
-
-## Tasks Completed
-- ✅ Redesigned Tasks Board with premium command center UI
-- ✅ Built Content Pipeline with 5-stage kanban workflow  
-- ✅ Implemented Calendar view with monthly/weekly modes
-- ✅ Started Memory viewer component
-
-## Key Decisions
-- Switched to Geist + Plus Jakarta Sans fonts
-- Updated color scheme to deep dark (#09090b) with cyan accents
-- Added glassmorphism effects throughout
-- Implemented smooth Framer Motion animations
-
-## Agent Interactions
-- **Monica**: Working on content pipeline ideation stage
-- **Jarvis**: Focused on research sprint planning
-- **Luna**: Managing multiple platform content creation
-- **Manus**: Handling system health monitoring
-- **Hamza**: Overseeing mission critical reviews
-
-## Tomorrow's Priorities
-- Complete Memory viewer
-- Build Team status dashboard
-- Implement Office visualization
-- Add comprehensive testing suite`,
-    category: "daily",
-    createdAt: Date.now() - 3600000,
-    updatedAt: Date.now() - 3600000,
-    tags: ["daily", "progress", "agents", "development"],
-    author: "Claude", 
-    wordCount: 186
-  },
-  {
-    _id: "3",
-    title: "OpenClaw Agent Coordination Patterns",
-    content: `# OpenClaw Agent Coordination Patterns
-
-## Core Principles
-The multi-agent system works best when each agent has:
-1. **Clear domain expertise** - Distinct skills and responsibilities
-2. **Overlapping capabilities** - Can cover for each other when needed  
-3. **Consistent communication protocols** - Standard formats for handoffs
-
-## Agent Personalities & Strengths
-
-### Hamza 👤 (Mission Commander)
-- Strategic oversight and decision making
-- Final authority on priority changes
-- Excellent at stakeholder communication
-
-### Manus 🤘 (Systems Engineer) 
-- Infrastructure and automation
-- Monitoring and performance optimization
-- Technical problem solving
-
-### Monica ✈️ (Creative Lead)
-- Content strategy and creation
-- Brand voice consistency  
-- Multi-platform coordination
-
-### Jarvis 🔍 (Intelligence Analytics)
-- Research and data analysis
-- Market intelligence gathering
-- Technical documentation
-
-### Luna 🌙 (Multi-Platform Specialist)
-- Cross-platform content adaptation
-- Workflow optimization
-- Quality assurance
-
-## Coordination Mechanisms
-- **Daily sync**: Status updates and priority alignment
-- **Handoff protocols**: Clear deliverable specifications
-- **Escalation paths**: When to involve Hamza for decisions
-- **Resource sharing**: Collaborative access to tools and data`,
-    category: "knowledge", 
-    createdAt: Date.now() - 86400000 * 7,
-    updatedAt: Date.now() - 86400000 * 3,
-    tags: ["agents", "coordination", "workflow", "teamwork"],
-    author: "Claude",
-    wordCount: 234
-  },
-  {
-    _id: "4",
-    title: "React + Next.js Best Practices",
-    content: `# React + Next.js Best Practices
-
-## Component Architecture
-- Use \`"use client"\` directive for interactive components
-- Separate data fetching from UI components
-- Implement proper loading and error states
-
-## Performance Optimizations
-- Dynamic imports for large components
-- Image optimization with Next.js Image component
-- Proper memoization with useMemo and useCallback
-
-## Type Safety
-- Strict TypeScript configuration
-- Interface definitions for all props
-- Proper error handling with try/catch
-
-## State Management
-- useState for local state
-- useContext for shared state
-- Consider Zustand for complex global state
-
-## Animation Best Practices
-- Framer Motion for complex animations
-- CSS transforms over position changes
-- Respect user's motion preferences
-
-## Common Pitfalls to Avoid
-- Don't use useEffect for data fetching in components
-- Avoid prop drilling - use context when needed
-- Don't forget to cleanup event listeners
-- Always handle loading and error states`,
-    category: "knowledge",
-    createdAt: Date.now() - 86400000 * 5,
-    updatedAt: Date.now() - 86400000 * 1,
-    tags: ["react", "nextjs", "typescript", "development", "best-practices"],
-    author: "Claude",
-    wordCount: 178
-  },
-  {
-    _id: "5", 
-    title: "Content Creation Workflow Insights",
-    content: `# Content Creation Workflow Insights
-
-## Pipeline Stages Analysis
-Based on implementing the content pipeline, the 5-stage workflow proves optimal:
-
-1. **Ideation** - Raw concept generation
-2. **Scripting** - Structured content development  
-3. **Design** - Visual asset creation
-4. **Production** - Final content assembly
-5. **Published** - Live content deployment
-
-## Platform-Specific Considerations
-
-### YouTube
-- Thumbnails critical for click-through rates
-- Script should include hooks every 15-30 seconds
-- SEO optimization for title and description
-
-### Blog Posts  
-- Header hierarchy important for readability
-- Code snippets need syntax highlighting
-- Internal linking strategy for SEO
-
-### X/Twitter
-- Thread structure with numbered tweets
-- Visual breaks with images/GIFs
-- Engagement hooks and CTAs
-
-## Automation Opportunities
-- Template generation for each platform
-- Automated cross-posting with format adaptation
-- Performance tracking and optimization suggestions
-
-## Quality Control
-Each stage needs specific review criteria and handoff requirements to maintain consistency across all content.`,
-    category: "lessons",
-    createdAt: Date.now() - 86400000 * 1,
-    updatedAt: Date.now() - 86400000 * 1,
-    tags: ["content", "workflow", "platforms", "optimization"],
-    author: "Claude", 
-    wordCount: 198
-  }
-]
+// Mock memory data - empty initially to show empty state
+const mockMemories: MemoryEntry[] = []
 
 const categoryOptions = ["All", "daily", "knowledge", "lessons"]
 const categoryConfig = {
@@ -436,9 +234,20 @@ export function MemoryViewer() {
             </div>
           </motion.div>
 
-          {/* Memory Grid */}
+          {/* Memory Grid or Empty State */}
           <motion.div variants={itemVariants}>
-            {filteredMemories.length > 0 ? (
+            {memories.length === 0 ? (
+              <EmptyState
+                icon="🧠"
+                title="Memory Vault Initializing"
+                description="Your knowledge repository is empty. Begin capturing insights, daily notes, and lessons learned. Every great mission starts with documenting the journey."
+                actionLabel="Create First Memory"
+                onAction={() => {
+                  // TODO: Add memory creation functionality
+                  console.log('Add memory functionality to be implemented')
+                }}
+              />
+            ) : filteredMemories.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
                 <AnimatePresence>
                   {filteredMemories.map((memory) => (

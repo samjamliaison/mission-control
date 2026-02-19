@@ -18,70 +18,10 @@ import { AddContentDialog } from "./add-content-dialog"
 import { ContentItem } from "@/types/content"
 import { PageHeader } from "@/components/ui/page-header"
 import { StatsCard } from "@/components/ui/stats-card"
+import { EmptyState } from "@/components/ui/empty-state"
 
-// Mock data for content pipeline
-const mockContent: ContentItem[] = [
-  {
-    _id: "1",
-    title: "OpenClaw Agent Orchestra Tutorial",
-    description: "Complete guide on orchestrating multiple AI agents for complex workflows",
-    platform: "YouTube",
-    scriptText: "Welcome to the future of AI automation...",
-    thumbnailUrl: "",
-    status: "idea",
-    assignee: "Monica",
-    createdAt: Date.now() - 86400000,
-    updatedAt: Date.now() - 86400000,
-  },
-  {
-    _id: "2", 
-    title: "Mission Control Deep Dive",
-    description: "Behind the scenes of building the command center interface",
-    platform: "Blog",
-    scriptText: "The Mission Control dashboard represents a new paradigm...",
-    thumbnailUrl: "",
-    status: "script",
-    assignee: "Jarvis",
-    createdAt: Date.now() - 43200000,
-    updatedAt: Date.now() - 3600000,
-  },
-  {
-    _id: "3",
-    title: "AI Agent Team Dynamics",
-    description: "How our agent personalities complement each other in production",
-    platform: "X",
-    scriptText: "Thread: 1/12 - Let's talk about how AI agents work together...",
-    thumbnailUrl: "https://example.com/thumbnail1.jpg",
-    status: "thumbnail",
-    assignee: "Luna",
-    createdAt: Date.now() - 21600000,
-    updatedAt: Date.now() - 21600000,
-  },
-  {
-    _id: "4",
-    title: "Building the Future of Work",
-    description: "10-minute documentary on autonomous task management",
-    platform: "YouTube",
-    scriptText: "In a world where AI is reshaping how we work...",
-    thumbnailUrl: "https://example.com/thumbnail2.jpg", 
-    status: "filming",
-    assignee: "Hamza",
-    createdAt: Date.now() - 10800000,
-    updatedAt: Date.now() - 10800000,
-  },
-  {
-    _id: "5",
-    title: "Week in AI: OpenClaw Highlights",
-    description: "Weekly recap of major developments and achievements",
-    platform: "X",
-    scriptText: "This week in AI automation: Major breakthroughs in agent coordination...",
-    thumbnailUrl: "https://example.com/thumbnail3.jpg",
-    status: "published", 
-    assignee: "Manus",
-    createdAt: Date.now() - 7200000,
-    updatedAt: Date.now() - 7200000,
-  }
-]
+// Mock data for content pipeline - empty initially to show empty state
+const mockContent: ContentItem[] = []
 
 const platformOptions = ["All", "YouTube", "Blog", "X"]
 
@@ -360,47 +300,57 @@ export function ContentPipeline() {
             </div>
           </motion.div>
 
-          {/* Content Pipeline */}
+          {/* Content Pipeline or Empty State */}
           <motion.div variants={itemVariants}>
-            <DragDropContext onDragEnd={handleDragEnd}>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 overflow-x-auto pb-4">
-                <ContentColumn
-                  title="Ideation"
-                  stage="idea"
-                  content={contentByStatus.idea}
-                  onEditContent={handleEditContent}
-                  onDeleteContent={handleDeleteContent}
-                />
-                <ContentColumn
-                  title="Scripting"
-                  stage="script"
-                  content={contentByStatus.script}
-                  onEditContent={handleEditContent}
-                  onDeleteContent={handleDeleteContent}
-                />
-                <ContentColumn
-                  title="Design"
-                  stage="thumbnail"
-                  content={contentByStatus.thumbnail}
-                  onEditContent={handleEditContent}
-                  onDeleteContent={handleDeleteContent}
-                />
-                <ContentColumn
-                  title="Production"
-                  stage="filming"
-                  content={contentByStatus.filming}
-                  onEditContent={handleEditContent}
-                  onDeleteContent={handleDeleteContent}
-                />
-                <ContentColumn
-                  title="Published"
-                  stage="published"
-                  content={contentByStatus.published}
-                  onEditContent={handleEditContent}
-                  onDeleteContent={handleDeleteContent}
-                />
-              </div>
-            </DragDropContext>
+            {content.length === 0 ? (
+              <EmptyState
+                icon="🎬"
+                title="Content Pipeline Ready for Launch"
+                description="Your creative command center is empty. Begin building your content strategy from ideation to publication across all platforms. Time to create something extraordinary."
+                actionLabel="Create First Content"
+                onAction={handleAddNewContent}
+              />
+            ) : (
+              <DragDropContext onDragEnd={handleDragEnd}>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 overflow-x-auto pb-4">
+                  <ContentColumn
+                    title="Ideation"
+                    stage="idea"
+                    content={contentByStatus.idea}
+                    onEditContent={handleEditContent}
+                    onDeleteContent={handleDeleteContent}
+                  />
+                  <ContentColumn
+                    title="Scripting"
+                    stage="script"
+                    content={contentByStatus.script}
+                    onEditContent={handleEditContent}
+                    onDeleteContent={handleDeleteContent}
+                  />
+                  <ContentColumn
+                    title="Design"
+                    stage="thumbnail"
+                    content={contentByStatus.thumbnail}
+                    onEditContent={handleEditContent}
+                    onDeleteContent={handleDeleteContent}
+                  />
+                  <ContentColumn
+                    title="Production"
+                    stage="filming"
+                    content={contentByStatus.filming}
+                    onEditContent={handleEditContent}
+                    onDeleteContent={handleDeleteContent}
+                  />
+                  <ContentColumn
+                    title="Published"
+                    stage="published"
+                    content={contentByStatus.published}
+                    onEditContent={handleEditContent}
+                    onDeleteContent={handleDeleteContent}
+                  />
+                </div>
+              </DragDropContext>
+            )}
           </motion.div>
         </div>
       </motion.div>

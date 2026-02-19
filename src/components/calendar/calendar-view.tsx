@@ -23,6 +23,7 @@ import {
   X
 } from "lucide-react"
 import { CalendarEvent } from "./calendar-event"
+import { EmptyState } from "@/components/ui/empty-state"
 
 interface CalendarEventData {
   _id: string
@@ -43,86 +44,8 @@ interface CalendarEventData {
 import { EventDetails } from "./event-details"
 import { cn } from "@/lib/utils"
 
-// Mock calendar events
-const mockEvents: CalendarEventData[] = [
-  {
-    _id: "1",
-    title: "Daily Status Sync",
-    description: "Check all agent status and update mission boards",
-    type: "cron",
-    agent: "Manus",
-    scheduledTime: new Date(2024, 1, 19, 9, 0, 0).getTime(),
-    status: "completed",
-    duration: 15,
-    recurrence: "daily"
-  },
-  {
-    _id: "2", 
-    title: "Content Review Meeting",
-    description: "Review pipeline progress and upcoming publications",
-    type: "task",
-    agent: "Monica",
-    scheduledTime: new Date(2024, 1, 19, 14, 30, 0).getTime(),
-    status: "pending",
-    duration: 60,
-    recurrence: null
-  },
-  {
-    _id: "3",
-    title: "System Health Check",
-    description: "Automated monitoring and performance analysis",
-    type: "cron", 
-    agent: "Jarvis",
-    scheduledTime: new Date(2024, 1, 20, 8, 0, 0).getTime(),
-    status: "pending",
-    duration: 30,
-    recurrence: "weekly"
-  },
-  {
-    _id: "4",
-    title: "Research Sprint Planning",
-    description: "Plan next quarter research objectives and resource allocation",
-    type: "task",
-    agent: "Luna",
-    scheduledTime: new Date(2024, 1, 21, 10, 0, 0).getTime(),
-    status: "pending", 
-    duration: 120,
-    recurrence: null
-  },
-  {
-    _id: "5",
-    title: "Weekly Team Sync",
-    description: "Cross-agent coordination and priority alignment",
-    type: "task",
-    agent: "Hamza",
-    scheduledTime: new Date(2024, 1, 22, 16, 0, 0).getTime(),
-    status: "pending",
-    duration: 90,
-    recurrence: "weekly"
-  },
-  {
-    _id: "6",
-    title: "Content Publishing",
-    description: "Automated content deployment across all platforms",
-    type: "cron",
-    agent: "Monica", 
-    scheduledTime: new Date(2024, 1, 23, 12, 0, 0).getTime(),
-    status: "failed",
-    duration: 10,
-    recurrence: "daily"
-  },
-  {
-    _id: "7",
-    title: "Mission Critical Review",
-    description: "Quarterly assessment of all operational parameters",
-    type: "task",
-    agent: "Hamza",
-    scheduledTime: new Date(2024, 1, 25, 15, 0, 0).getTime(),
-    status: "completed",
-    duration: 180,
-    recurrence: null
-  }
-]
+// Mock calendar events - empty initially to show empty state
+const mockEvents: CalendarEventData[] = []
 
 const agentAvatars = {
   "Hamza": "👤",
@@ -413,8 +336,20 @@ export function CalendarView() {
             </div>
           </motion.div>
 
-          {/* Calendar View */}
+          {/* Calendar View or Empty State */}
           <motion.div variants={itemVariants}>
+            {events.length === 0 ? (
+              <EmptyState
+                icon="📅"
+                title="Mission Calendar Ready"
+                description="Your strategic timeline is empty. Begin scheduling operations, deadlines, and automated processes. Command center awaiting your temporal coordination directives."
+                actionLabel="Schedule First Event"
+                onAction={() => {
+                  // TODO: Add event creation functionality
+                  console.log('Add event functionality to be implemented')
+                }}
+              />
+            ) : (
             {viewMode === "month" ? (
               <Card className="glass-morphism border-[hsl(var(--command-border-bright))] overflow-hidden">
                 <CardHeader className="pb-4">
@@ -705,6 +640,7 @@ export function CalendarView() {
               </Card>
             </motion.div>
           )}
+            )}
         </div>
       </motion.div>
 
