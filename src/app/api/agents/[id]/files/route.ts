@@ -112,6 +112,7 @@ async function getAgentWorkspace(agentId: string) {
   return agentDir;
 }
 
+// TODO: Add rate limiting - consider 100 requests/minute per IP for file access
 export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }

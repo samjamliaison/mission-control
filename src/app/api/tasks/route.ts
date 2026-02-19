@@ -1,3 +1,4 @@
+// TODO: Add rate limiting - consider 200 requests/minute per IP for task operations
 import { NextRequest, NextResponse } from 'next/server';
 import fs from 'fs/promises';
 import path from 'path';
