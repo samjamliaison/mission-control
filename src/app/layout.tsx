@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
 import { Geist, Plus_Jakarta_Sans } from "next/font/google"
+import { Navigation } from "@/components/navigation"
 import "./globals.css"
 
 const geist = Geist({
@@ -28,7 +29,10 @@ export default function RootLayout({
     <html lang="en" className="dark">
       <body className={`${geist.variable} ${plusJakarta.variable} antialiased`}>
         <div className="min-h-screen bg-[#09090b]">
-          {children}
+          <Navigation />
+          <div className="pt-20">
+            {children}
+          </div>
         </div>
       </body>
     </html>

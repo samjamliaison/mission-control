@@ -12,76 +12,76 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { Plus, Filter, Command, Activity, Users, Target } from "lucide-react"
-import { TaskColumn } from "./task-column"
-import { AddTaskDialog } from "./add-task-dialog"
-import { Task } from "./task-card"
+import { Plus, Filter, Video, Activity, Users, Target, Film } from "lucide-react"
+import { ContentColumn } from "./content-column"
+import { AddContentDialog } from "./add-content-dialog"
+import { ContentItem } from "./content-item-card"
 
-// Mock data with agent assignments
-const mockTasks: Task[] = [
+// Mock data for content pipeline
+const mockContent: ContentItem[] = [
   {
     _id: "1",
-    title: "Set up project structure",
-    description: "Initialize the NextJS project with all required dependencies and establish the foundation for the command center interface",
-    assignee: "Hamza",
-    status: "done",
-    priority: "high",
+    title: "OpenClaw Agent Orchestra Tutorial",
+    description: "Complete guide on orchestrating multiple AI agents for complex workflows",
+    platform: "YouTube",
+    scriptText: "Welcome to the future of AI automation...",
+    thumbnailUrl: "",
+    status: "idea",
+    assignee: "Monica",
     createdAt: Date.now() - 86400000,
     updatedAt: Date.now() - 86400000,
   },
   {
-    _id: "2",
-    title: "Design database schema",
-    description: "Create Convex schema for tasks and user management with real-time synchronization capabilities",
+    _id: "2", 
+    title: "Mission Control Deep Dive",
+    description: "Behind the scenes of building the command center interface",
+    platform: "Blog",
+    scriptText: "The Mission Control dashboard represents a new paradigm...",
+    thumbnailUrl: "",
+    status: "script",
     assignee: "Jarvis",
-    status: "in-progress",
-    priority: "high",
     createdAt: Date.now() - 43200000,
     updatedAt: Date.now() - 3600000,
   },
   {
     _id: "3",
-    title: "Implement drag and drop",
-    description: "Add beautiful drag and drop functionality using react-beautiful-dnd with smooth animations",
-    assignee: "Monica",
-    status: "done",
-    priority: "medium",
+    title: "AI Agent Team Dynamics",
+    description: "How our agent personalities complement each other in production",
+    platform: "X",
+    scriptText: "Thread: 1/12 - Let's talk about how AI agents work together...",
+    thumbnailUrl: "https://example.com/thumbnail1.jpg",
+    status: "thumbnail",
+    assignee: "Luna",
     createdAt: Date.now() - 21600000,
     updatedAt: Date.now() - 21600000,
   },
   {
     _id: "4",
-    title: "Add real-time updates",
-    description: "Implement Convex real-time subscriptions for live task updates across all connected clients",
-    assignee: "Luna",
-    status: "in-progress",
-    priority: "high",
+    title: "Building the Future of Work",
+    description: "10-minute documentary on autonomous task management",
+    platform: "YouTube",
+    scriptText: "In a world where AI is reshaping how we work...",
+    thumbnailUrl: "https://example.com/thumbnail2.jpg", 
+    status: "filming",
+    assignee: "Hamza",
     createdAt: Date.now() - 10800000,
     updatedAt: Date.now() - 10800000,
   },
   {
     _id: "5",
-    title: "Mobile responsiveness",
-    description: "Ensure the command center works flawlessly on mobile devices with touch-optimized interactions",
+    title: "Week in AI: OpenClaw Highlights",
+    description: "Weekly recap of major developments and achievements",
+    platform: "X",
+    scriptText: "This week in AI automation: Major breakthroughs in agent coordination...",
+    thumbnailUrl: "https://example.com/thumbnail3.jpg",
+    status: "published", 
     assignee: "Manus",
-    status: "todo",
-    priority: "medium",
     createdAt: Date.now() - 7200000,
     updatedAt: Date.now() - 7200000,
-  },
-  {
-    _id: "6",
-    title: "Performance optimization",
-    description: "Optimize rendering performance and implement virtualization for large task datasets",
-    assignee: "Jarvis",
-    status: "todo",
-    priority: "low",
-    createdAt: Date.now() - 3600000,
-    updatedAt: Date.now() - 3600000,
   }
 ]
 
-const assigneeOptions = ["All", "Hamza", "Manus", "Monica", "Jarvis", "Luna"]
+const platformOptions = ["All", "YouTube", "Blog", "X"]
 
 const agentAvatars = {
   "Hamza": "👤",
@@ -113,31 +113,33 @@ const itemVariants = {
   }
 }
 
-export function TasksBoard() {
-  const [tasks, setTasks] = useState<Task[]>(mockTasks)
-  const [selectedAssignee, setSelectedAssignee] = useState("All")
+export function ContentPipeline() {
+  const [content, setContent] = useState<ContentItem[]>(mockContent)
+  const [selectedPlatform, setSelectedPlatform] = useState("All")
   const [dialogOpen, setDialogOpen] = useState(false)
-  const [editingTask, setEditingTask] = useState<Task | null>(null)
+  const [editingContent, setEditingContent] = useState<ContentItem | null>(null)
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
     setMounted(true)
   }, [])
 
-  // Filter tasks by assignee
-  const filteredTasks = useMemo(() => {
-    if (selectedAssignee === "All") return tasks
-    return tasks.filter(task => task.assignee === selectedAssignee)
-  }, [tasks, selectedAssignee])
+  // Filter content by platform
+  const filteredContent = useMemo(() => {
+    if (selectedPlatform === "All") return content
+    return content.filter(item => item.platform === selectedPlatform)
+  }, [content, selectedPlatform])
 
-  // Group tasks by status
-  const tasksByStatus = useMemo(() => {
+  // Group content by status
+  const contentByStatus = useMemo(() => {
     return {
-      todo: filteredTasks.filter(task => task.status === "todo"),
-      "in-progress": filteredTasks.filter(task => task.status === "in-progress"),
-      done: filteredTasks.filter(task => task.status === "done"),
+      idea: filteredContent.filter(item => item.status === "idea"),
+      script: filteredContent.filter(item => item.status === "script"),
+      thumbnail: filteredContent.filter(item => item.status === "thumbnail"),
+      filming: filteredContent.filter(item => item.status === "filming"),
+      published: filteredContent.filter(item => item.status === "published"),
     }
-  }, [filteredTasks])
+  }, [filteredContent])
 
   const handleDragEnd = (result: DropResult) => {
     const { destination, source, draggableId } = result
@@ -147,60 +149,62 @@ export function TasksBoard() {
       return
     }
 
-    const newStatus = destination.droppableId as "todo" | "in-progress" | "done"
+    const newStatus = destination.droppableId as "idea" | "script" | "thumbnail" | "filming" | "published"
     
-    setTasks(prevTasks => 
-      prevTasks.map(task => 
-        task._id === draggableId 
-          ? { ...task, status: newStatus, updatedAt: Date.now() }
-          : task
+    setContent(prevContent => 
+      prevContent.map(item => 
+        item._id === draggableId 
+          ? { ...item, status: newStatus, updatedAt: Date.now() }
+          : item
       )
     )
   }
 
-  const handleAddTask = (taskData: Partial<Task>) => {
-    if (editingTask) {
-      setTasks(prevTasks =>
-        prevTasks.map(task =>
-          task._id === editingTask._id
-            ? { ...task, ...taskData, updatedAt: Date.now() }
-            : task
+  const handleAddContent = (contentData: Partial<ContentItem>) => {
+    if (editingContent) {
+      setContent(prevContent =>
+        prevContent.map(item =>
+          item._id === editingContent._id
+            ? { ...item, ...contentData, updatedAt: Date.now() }
+            : item
         )
       )
     } else {
-      const newTask: Task = {
-        _id: `task-${Date.now()}`,
-        title: taskData.title!,
-        description: taskData.description || "",
-        assignee: taskData.assignee!,
-        status: "todo",
-        priority: taskData.priority!,
+      const newContent: ContentItem = {
+        _id: `content-${Date.now()}`,
+        title: contentData.title!,
+        description: contentData.description || "",
+        platform: contentData.platform!,
+        scriptText: contentData.scriptText || "",
+        thumbnailUrl: contentData.thumbnailUrl || "",
+        assignee: contentData.assignee!,
+        status: "idea",
         createdAt: Date.now(),
         updatedAt: Date.now(),
       }
-      setTasks(prevTasks => [newTask, ...prevTasks])
+      setContent(prevContent => [newContent, ...prevContent])
     }
-    setEditingTask(null)
+    setEditingContent(null)
   }
 
-  const handleEditTask = (task: Task) => {
-    setEditingTask(task)
+  const handleEditContent = (item: ContentItem) => {
+    setEditingContent(item)
     setDialogOpen(true)
   }
 
-  const handleDeleteTask = (taskId: string) => {
-    setTasks(prevTasks => prevTasks.filter(task => task._id !== taskId))
+  const handleDeleteContent = (itemId: string) => {
+    setContent(prevContent => prevContent.filter(item => item._id !== itemId))
   }
 
-  const handleAddNewTask = () => {
-    setEditingTask(null)
+  const handleAddNewContent = () => {
+    setEditingContent(null)
     setDialogOpen(true)
   }
 
-  const totalTasks = tasks.length
-  const completedTasks = tasks.filter(task => task.status === "done").length
-  const inProgressTasks = tasks.filter(task => task.status === "in-progress").length
-  const completionRate = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0
+  const totalContent = content.length
+  const publishedContent = content.filter(item => item.status === "published").length
+  const inProductionContent = content.filter(item => item.status === "filming" || item.status === "thumbnail").length
+  const completionRate = totalContent > 0 ? Math.round((publishedContent / totalContent) * 100) : 0
 
   if (!mounted) return null
 
@@ -222,14 +226,14 @@ export function TasksBoard() {
               <div className="space-y-2">
                 <div className="flex items-center gap-3">
                   <div className="p-2 rounded-lg glass-morphism glow-border">
-                    <Command className="h-6 w-6 text-[hsl(var(--command-accent))]" />
+                    <Film className="h-6 w-6 text-[hsl(var(--command-accent))]" />
                   </div>
                   <h1 className="text-4xl font-display font-bold bg-gradient-to-r from-[hsl(var(--command-text))] to-[hsl(var(--command-accent))] bg-clip-text text-transparent">
-                    Mission Control
+                    Content Pipeline
                   </h1>
                 </div>
                 <p className="text-[hsl(var(--command-text-muted))] text-lg max-w-2xl">
-                  Advanced task orchestration system for OpenClaw operations. Real-time coordination across all agents and systems.
+                  Strategic content creation workflow. From ideation to publication across all platforms and channels.
                 </p>
               </div>
               
@@ -242,15 +246,15 @@ export function TasksBoard() {
                 >
                   <div className="flex items-center gap-2">
                     <Target className="h-4 w-4 text-[hsl(var(--command-success))]" />
-                    <span className="text-sm font-medium">Mission Progress</span>
+                    <span className="text-sm font-medium">Publication Rate</span>
                   </div>
                   <div className="flex items-center gap-4">
                     <div className="text-2xl font-display font-bold text-[hsl(var(--command-success))]">
                       {completionRate}%
                     </div>
                     <div className="text-xs text-[hsl(var(--command-text-muted))] space-y-1">
-                      <div>{completedTasks}/{totalTasks} Complete</div>
-                      <div>{inProgressTasks} Active</div>
+                      <div>{publishedContent}/{totalContent} Published</div>
+                      <div>{inProductionContent} In Production</div>
                     </div>
                   </div>
                 </motion.div>
@@ -263,20 +267,18 @@ export function TasksBoard() {
                 <div className="flex items-center gap-3">
                   <div className="flex items-center gap-2 glass-morphism p-2 rounded-lg">
                     <Filter className="h-4 w-4 text-[hsl(var(--command-accent))]" />
-                    <Select value={selectedAssignee} onValueChange={setSelectedAssignee}>
+                    <Select value={selectedPlatform} onValueChange={setSelectedPlatform}>
                       <SelectTrigger className="w-44 border-0 bg-transparent focus:ring-1 focus:ring-[hsl(var(--command-accent))] font-medium">
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent className="glass-morphism border-[hsl(var(--command-border-bright))]">
-                        {assigneeOptions.map((assignee) => (
-                          <SelectItem key={assignee} value={assignee} className="focus:bg-[hsl(var(--command-accent))]/10">
+                        {platformOptions.map((platform) => (
+                          <SelectItem key={platform} value={platform} className="focus:bg-[hsl(var(--command-accent))]/10">
                             <div className="flex items-center gap-2">
-                              {assignee !== "All" && (
-                                <span className="text-base">
-                                  {agentAvatars[assignee as keyof typeof agentAvatars]}
-                                </span>
-                              )}
-                              <span>{assignee}</span>
+                              {platform === "YouTube" && <Video className="h-4 w-4" />}
+                              {platform === "X" && <span className="font-bold">𝕏</span>}
+                              {platform === "Blog" && <span className="text-base">📝</span>}
+                              <span>{platform}</span>
                             </div>
                           </SelectItem>
                         ))}
@@ -284,7 +286,7 @@ export function TasksBoard() {
                     </Select>
                   </div>
                   
-                  {selectedAssignee !== "All" && (
+                  {selectedPlatform !== "All" && (
                     <motion.div
                       initial={{ opacity: 0, scale: 0.8 }}
                       animate={{ opacity: 1, scale: 1 }}
@@ -293,20 +295,20 @@ export function TasksBoard() {
                       <div className="flex items-center gap-2 text-xs">
                         <Activity className="h-3 w-3 text-[hsl(var(--command-accent))]" />
                         <span className="text-[hsl(var(--command-text-muted))]">
-                          {filteredTasks.length} tasks
+                          {filteredContent.length} items
                         </span>
                       </div>
                     </motion.div>
                   )}
                 </div>
 
-                {/* Agent Status Indicators */}
+                {/* Content Creator Status */}
                 <div className="flex items-center gap-2">
                   <Users className="h-4 w-4 text-[hsl(var(--command-text-muted))]" />
                   <div className="flex items-center gap-1">
                     {Object.entries(agentAvatars).map(([agent, avatar]) => {
-                      const agentTasks = tasks.filter(t => t.assignee === agent)
-                      const activeTasks = agentTasks.filter(t => t.status !== "done").length
+                      const agentContent = content.filter(c => c.assignee === agent)
+                      const activeContent = agentContent.filter(c => c.status !== "published").length
                       return (
                         <motion.div
                           key={agent}
@@ -316,14 +318,14 @@ export function TasksBoard() {
                           <div className="glass-morphism p-1.5 rounded-lg cursor-pointer">
                             <span className="text-sm">{avatar}</span>
                           </div>
-                          {activeTasks > 0 && (
+                          {activeContent > 0 && (
                             <div className="absolute -top-1 -right-1 w-3 h-3 bg-[hsl(var(--command-accent))] rounded-full flex items-center justify-center text-[10px] font-bold text-black">
-                              {activeTasks}
+                              {activeContent}
                             </div>
                           )}
                           <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none">
                             <div className="glass-morphism px-2 py-1 rounded text-xs whitespace-nowrap">
-                              {agent}: {activeTasks} active
+                              {agent}: {activeContent} active
                             </div>
                           </div>
                         </motion.div>
@@ -335,40 +337,54 @@ export function TasksBoard() {
 
               <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
                 <Button 
-                  onClick={handleAddNewTask} 
+                  onClick={handleAddNewContent} 
                   className="bg-gradient-to-r from-[hsl(var(--command-accent))] to-[hsl(199_89%_38%)] hover:from-[hsl(199_89%_58%)] hover:to-[hsl(var(--command-accent))] border-0 shadow-lg shadow-[hsl(var(--command-accent))]/20 font-semibold px-6"
                 >
                   <Plus className="h-4 w-4 mr-2" />
-                  Deploy Task
+                  New Content
                 </Button>
               </motion.div>
             </div>
           </motion.div>
 
-          {/* Task Board */}
+          {/* Content Pipeline */}
           <motion.div variants={itemVariants}>
             <DragDropContext onDragEnd={handleDragEnd}>
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 overflow-x-auto pb-4">
-                <TaskColumn
-                  title="Awaiting Deployment"
-                  status="todo"
-                  tasks={tasksByStatus.todo}
-                  onEditTask={handleEditTask}
-                  onDeleteTask={handleDeleteTask}
+              <div className="grid grid-cols-1 xl:grid-cols-5 gap-6 overflow-x-auto pb-4">
+                <ContentColumn
+                  title="Ideation"
+                  status="idea"
+                  content={contentByStatus.idea}
+                  onEditContent={handleEditContent}
+                  onDeleteContent={handleDeleteContent}
                 />
-                <TaskColumn
-                  title="Active Operations"
-                  status="in-progress"
-                  tasks={tasksByStatus["in-progress"]}
-                  onEditTask={handleEditTask}
-                  onDeleteTask={handleDeleteTask}
+                <ContentColumn
+                  title="Scripting"
+                  status="script"
+                  content={contentByStatus.script}
+                  onEditContent={handleEditContent}
+                  onDeleteContent={handleDeleteContent}
                 />
-                <TaskColumn
-                  title="Mission Complete"
-                  status="done"
-                  tasks={tasksByStatus.done}
-                  onEditTask={handleEditTask}
-                  onDeleteTask={handleDeleteTask}
+                <ContentColumn
+                  title="Design"
+                  status="thumbnail"
+                  content={contentByStatus.thumbnail}
+                  onEditContent={handleEditContent}
+                  onDeleteContent={handleDeleteContent}
+                />
+                <ContentColumn
+                  title="Production"
+                  status="filming"
+                  content={contentByStatus.filming}
+                  onEditContent={handleEditContent}
+                  onDeleteContent={handleDeleteContent}
+                />
+                <ContentColumn
+                  title="Published"
+                  status="published"
+                  content={contentByStatus.published}
+                  onEditContent={handleEditContent}
+                  onDeleteContent={handleDeleteContent}
                 />
               </div>
             </DragDropContext>
@@ -376,12 +392,12 @@ export function TasksBoard() {
         </div>
       </motion.div>
 
-      {/* Add/Edit Task Dialog */}
-      <AddTaskDialog
+      {/* Add/Edit Content Dialog */}
+      <AddContentDialog
         open={dialogOpen}
         onOpenChange={setDialogOpen}
-        onSave={handleAddTask}
-        editingTask={editingTask}
+        onSave={handleAddContent}
+        editingContent={editingContent}
       />
     </div>
   )
