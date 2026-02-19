@@ -121,8 +121,11 @@ export function TaskCard({ task, index, onEdit, onDelete }: TaskCardProps) {
       {(provided, snapshot) => (
         <motion.div
           ref={provided.innerRef}
-          {...provided.draggableProps}
-          {...provided.dragHandleProps}
+          {...{
+            ...provided.draggableProps,
+            ...provided.dragHandleProps,
+            onDragStart: undefined
+          }}
           variants={cardVariants}
           initial="hidden"
           animate="visible"

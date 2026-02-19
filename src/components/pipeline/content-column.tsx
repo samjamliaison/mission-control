@@ -8,6 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Lightbulb, Clapperboard, Eye, Rocket, Circle } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { StaggeredList } from "@/components/ui/staggered-list"
 
 interface ContentColumnProps {
   title: string
@@ -228,24 +229,27 @@ export function ContentColumn({ title, stage, content, config, onEditContent, on
                   </motion.div>
                 )}
                 
-                {content.map((item, index) => (
-                  <motion.div
-                    key={item._id}
-                    variants={contentVariants}
-                    layout
-                    layoutId={item._id}
-                    transition={{
-                      layout: { duration: 0.3, ease: "easeInOut" }
-                    }}
-                  >
-                    <ContentItemCard
-                      content={item}
-                      index={index}
-                      onEdit={onEditContent}
-                      onDelete={onDeleteContent}
-                    />
-                  </motion.div>
-                ))}
+                {content.length > 0 && (
+                  <StaggeredList staggerDelay={0.05}>
+                    {content.map((item, index) => (
+                      <motion.div
+                        key={item._id}
+                        layout
+                        layoutId={item._id}
+                        transition={{
+                          layout: { duration: 0.3, ease: "easeInOut" }
+                        }}
+                      >
+                        <ContentItemCard
+                          content={item}
+                          index={index}
+                          onEdit={onEditContent}
+                          onDelete={onDeleteContent}
+                        />
+                      </motion.div>
+                    ))}
+                  </StaggeredList>
+                )}
                 
                 {provided.placeholder}
                 

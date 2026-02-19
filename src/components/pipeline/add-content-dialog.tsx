@@ -22,7 +22,7 @@ import {
 import { Badge } from "@/components/ui/badge"
 import { Film, User, Video, FileText, Users, X, Lightbulb, ExternalLink } from "lucide-react"
 import { cn } from "@/lib/utils"
-import { ContentItem } from "./content-item-card"
+import { ContentItem } from "@/types/content"
 
 interface AddContentDialogProps {
   open: boolean

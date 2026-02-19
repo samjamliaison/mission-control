@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion"
 import { LucideIcon } from "lucide-react"
+import { AnimatedCounter } from "./animated-counter"
 
 interface StatsCardProps {
   icon: LucideIcon
@@ -34,11 +35,21 @@ export function StatsCard({
         </div>
         <div className="flex items-center gap-6">
           <div className="text-heading-1 font-semibold text-[#22c55e]">
-            {value}
+            {typeof value === 'number' ? (
+              <AnimatedCounter value={value} className="text-heading-1 font-semibold text-[#22c55e]" />
+            ) : (
+              value
+            )}
           </div>
           {subLabel && subValue && (
             <div className="text-body-small text-secondary space-y-1">
-              <div>{subValue} {subLabel}</div>
+              <div>
+                {typeof subValue === 'number' ? (
+                  <AnimatedCounter value={subValue} className="text-body-small text-secondary" suffix={` ${subLabel}`} />
+                ) : (
+                  `${subValue} ${subLabel}`
+                )}
+              </div>
             </div>
           )}
         </div>

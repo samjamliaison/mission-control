@@ -106,8 +106,8 @@ export function ContentItemCard({ content, index, onEdit, onDelete }: ContentIte
   }
 
   const agentColor = agentColors[content.assignee as keyof typeof agentColors] || agentColors["Hamza"]
-  const platformToType: Record<string, string> = { "YouTube": "video", "Blog": "article", "X": "social", "Podcast": "podcast" }
-  const contentType = content.type || platformToType[content.platform] || "article"
+  const platformToType: Record<string, keyof typeof typeConfig> = { "YouTube": "video", "Blog": "article", "X": "social", "Podcast": "podcast" }
+  const contentType = (content.type as keyof typeof typeConfig) || platformToType[content.platform] || "article"
   const typeStyle = typeConfig[contentType] || typeConfig["article"]
   const priorityStyle = priorityConfig[content.priority || "medium"] || priorityConfig["medium"]
   const isPublished = content.stage === "published"
@@ -121,7 +121,7 @@ export function ContentItemCard({ content, index, onEdit, onDelete }: ContentIte
       y: 0,
       transition: {
         duration: 0.3,
-        ease: "easeOut"
+        ease: [0.4, 0.0, 0.2, 1] as any
       }
     }
   }
@@ -131,8 +131,11 @@ export function ContentItemCard({ content, index, onEdit, onDelete }: ContentIte
       {(provided, snapshot) => (
         <motion.div
           ref={provided.innerRef}
-          {...provided.draggableProps}
-          {...provided.dragHandleProps}
+          {...{
+            ...provided.draggableProps,
+            ...provided.dragHandleProps,
+            onDragStart: undefined
+          }}
           variants={cardVariants}
           initial="hidden"
           animate="visible"

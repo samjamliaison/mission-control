@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { PageHeader } from "@/components/ui/page-header"
 import { StatsCard } from "@/components/ui/stats-card"
+import { StaggeredList } from "@/components/ui/staggered-list"
 import { 
   Users,
   Activity,
@@ -213,7 +214,7 @@ const itemVariants = {
     opacity: 1,
     transition: {
       duration: 0.5,
-      ease: "easeOut"
+      ease: [0.4, 0.0, 0.2, 1] as any
     }
   }
 }
@@ -328,7 +329,11 @@ export function TeamDashboard() {
 
           {/* Agent Grid */}
           <motion.div variants={itemVariants}>
-            <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+            <StaggeredList 
+              className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6"
+              staggerDelay={0.08}
+              direction="up"
+            >
               {agents.map((agent) => (
                 <AgentCard
                   key={agent._id}
@@ -336,7 +341,7 @@ export function TeamDashboard() {
                   onClick={() => setSelectedAgent(agent)}
                 />
               ))}
-            </div>
+            </StaggeredList>
           </motion.div>
 
           {/* Team Activity Feed */}

@@ -1,9 +1,10 @@
 import { CalendarView } from "@/components/calendar/calendar-view"
+import { PageTransition } from "@/components/ui/page-transition"
 
 export default function CalendarPage() {
   return (
-    <main>
+    <PageTransition>
       <CalendarView />
-    </main>
+    </PageTransition>
   )
 }

@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Clock, Zap, CheckCircle, Circle } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { StaggeredList } from "@/components/ui/staggered-list"
 
 interface TaskColumnProps {
   title: string
@@ -162,24 +163,27 @@ export function TaskColumn({ title, status, tasks, onEditTask, onDeleteTask }: T
                   </motion.div>
                 )}
                 
-                {tasks.map((task, index) => (
-                  <motion.div
-                    key={task._id}
-                    variants={taskVariants}
-                    layout
-                    layoutId={task._id}
-                    transition={{
-                      layout: { duration: 0.3, ease: "easeInOut" }
-                    }}
-                  >
-                    <TaskCard
-                      task={task}
-                      index={index}
-                      onEdit={onEditTask}
-                      onDelete={onDeleteTask}
-                    />
-                  </motion.div>
-                ))}
+                {tasks.length > 0 && (
+                  <StaggeredList staggerDelay={0.05}>
+                    {tasks.map((task, index) => (
+                      <motion.div
+                        key={task._id}
+                        layout
+                        layoutId={task._id}
+                        transition={{
+                          layout: { duration: 0.3, ease: "easeInOut" }
+                        }}
+                      >
+                        <TaskCard
+                          task={task}
+                          index={index}
+                          onEdit={onEditTask}
+                          onDelete={onDeleteTask}
+                        />
+                      </motion.div>
+                    ))}
+                  </StaggeredList>
+                )}
                 
                 {provided.placeholder}
                 

@@ -19,14 +19,32 @@ import {
   XCircle,
   Activity,
   Target,
-  Zap
+  Zap,
+  X
 } from "lucide-react"
 import { CalendarEvent } from "./calendar-event"
+
+interface CalendarEventData {
+  _id: string
+  title: string
+  description: string
+  scheduledTime: number
+  type: "meeting" | "deadline" | "event" | "reminder" | "cron" | "task"
+  agent?: string
+  status?: "scheduled" | "completed" | "cancelled" | "pending" | "failed"
+  duration?: number
+  recurrence?: "daily" | "weekly" | "monthly" | "none" | null
+  attendees?: string[]
+  location?: string
+  priority?: "low" | "medium" | "high"
+  createdAt?: number
+  updatedAt?: number
+}
 import { EventDetails } from "./event-details"
 import { cn } from "@/lib/utils"
 
 // Mock calendar events
-const mockEvents: CalendarEvent[] = [
+const mockEvents: CalendarEventData[] = [
   {
     _id: "1",
     title: "Daily Status Sync",
@@ -135,6 +153,20 @@ const statusConfig = {
     border: "border-[hsl(var(--command-danger))]/20",
     icon: XCircle,
     glow: "0 0 10px hsl(var(--command-danger) / 0.3)"
+  },
+  "scheduled": {
+    color: "text-blue-400",
+    bg: "bg-blue-500/10",
+    border: "border-blue-500/20",
+    icon: Clock,
+    glow: "0 0 10px hsl(210 100% 50% / 0.3)"
+  },
+  "cancelled": {
+    color: "text-gray-400",
+    bg: "bg-gray-500/10",
+    border: "border-gray-500/20",
+    icon: XCircle,
+    glow: "0 0 10px hsl(0 0% 50% / 0.3)"
   }
 }
 
@@ -155,7 +187,7 @@ const itemVariants = {
     opacity: 1,
     transition: {
       duration: 0.5,
-      ease: "easeOut"
+      ease: [0.4, 0.0, 0.2, 1] as any
     }
   }
 }
@@ -165,9 +197,9 @@ type ViewMode = "month" | "week"
 export function CalendarView() {
   const [currentDate, setCurrentDate] = useState(new Date(2024, 1, 19)) // Feb 19, 2024
   const [viewMode, setViewMode] = useState<ViewMode>("month")
-  const [selectedEvent, setSelectedEvent] = useState<CalendarEvent | null>(null)
+  const [selectedEvent, setSelectedEvent] = useState<CalendarEventData | null>(null)
   const [selectedDate, setSelectedDate] = useState<Date | null>(null)
-  const [events] = useState<CalendarEvent[]>(mockEvents)
+  const [events] = useState<CalendarEventData[]>(mockEvents)
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
@@ -445,7 +477,7 @@ export function CalendarView() {
                         
                         <div className="space-y-1.5">
                           {day.events.slice(0, 3).map((event) => {
-                            const statusStyle = statusConfig[event.status]
+                            const statusStyle = statusConfig[event.status || "pending"]
                             return (
                               <motion.div
                                 key={event._id}
@@ -502,7 +534,7 @@ export function CalendarView() {
                       .sort((a, b) => a.scheduledTime - b.scheduledTime)
                       .map((event) => {
                         const eventDate = new Date(event.scheduledTime)
-                        const statusStyle = statusConfig[event.status]
+                        const statusStyle = statusConfig[event.status || "pending"]
                         const StatusIcon = statusStyle.icon
                         
                         return (
@@ -621,7 +653,7 @@ export function CalendarView() {
                       <div className="space-y-3">
                         {dayEvents.map((event) => {
                           const eventDate = new Date(event.scheduledTime)
-                          const statusStyle = statusConfig[event.status]
+                          const statusStyle = statusConfig[event.status || "pending"]
                           const StatusIcon = statusStyle.icon
                           
                           return (

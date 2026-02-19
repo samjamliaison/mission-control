@@ -15,19 +15,22 @@ const statusConfig = {
     color: "#10b981", // green-500
     bg: "bg-green-500/20",
     pulse: true,
-    glow: "0 0 20px rgba(16, 185, 129, 0.4)"
+    glow: "0 0 20px rgba(16, 185, 129, 0.4)",
+    label: "Online"
   },
   "active": { 
     color: "#06b6d4", // cyan-400
     bg: "bg-cyan-500/20",
     pulse: true,
-    glow: "0 0 20px rgba(6, 182, 212, 0.4)"
+    glow: "0 0 20px rgba(6, 182, 212, 0.4)",
+    label: "Active"
   },
   "idle": {
     color: "#f59e0b", // amber-500
     bg: "bg-amber-500/20", 
     pulse: false,
-    glow: "0 0 20px rgba(245, 158, 11, 0.2)"
+    glow: "0 0 20px rgba(245, 158, 11, 0.2)",
+    label: "Idle"
   }
 }
 

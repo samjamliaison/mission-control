@@ -25,8 +25,25 @@ import {
 import { CalendarEvent } from "./calendar-event"
 import { cn } from "@/lib/utils"
 
+interface CalendarEventData {
+  _id: string
+  title: string
+  description: string
+  scheduledTime: number
+  type: "meeting" | "deadline" | "event" | "reminder" | "cron" | "task"
+  agent?: string
+  status?: "scheduled" | "completed" | "cancelled" | "pending" | "failed"
+  duration?: number
+  recurrence?: "daily" | "weekly" | "monthly" | "none" | null
+  attendees?: string[]
+  location?: string
+  priority?: "low" | "medium" | "high"
+  createdAt?: number
+  updatedAt?: number
+}
+
 interface EventDetailsProps {
-  event: CalendarEvent
+  event: CalendarEventData
   onClose: () => void
 }
 
@@ -95,6 +112,22 @@ const statusConfig = {
     icon: XCircle,
     label: "Failed", 
     description: "Execution encountered errors"
+  },
+  "scheduled": {
+    color: "text-blue-400",
+    bg: "bg-blue-500/10",
+    border: "border-blue-500/20",
+    icon: Clock,
+    label: "Scheduled",
+    description: "Upcoming event"
+  },
+  "cancelled": {
+    color: "text-gray-400",
+    bg: "bg-gray-500/10",
+    border: "border-gray-500/20",
+    icon: XCircle,
+    label: "Cancelled",
+    description: "Event has been cancelled"
   }
 }
 
@@ -110,14 +143,38 @@ const typeConfig = {
     label: "Automated Job",
     color: "text-purple-400",
     bg: "bg-purple-500/10"
+  },
+  "meeting": {
+    icon: User,
+    label: "Meeting",
+    color: "text-green-400",
+    bg: "bg-green-500/10"
+  },
+  "deadline": {
+    icon: AlertCircle,
+    label: "Deadline",
+    color: "text-red-400",
+    bg: "bg-red-500/10"
+  },
+  "event": {
+    icon: Calendar,
+    label: "Event",
+    color: "text-blue-400",
+    bg: "bg-blue-500/10"
+  },
+  "reminder": {
+    icon: Clock,
+    label: "Reminder",
+    color: "text-yellow-400",
+    bg: "bg-yellow-500/10"
   }
 }
 
 export function EventDetails({ event, onClose }: EventDetailsProps) {
   const eventDate = new Date(event.scheduledTime)
   const agentStyle = agentColors[event.agent as keyof typeof agentColors] || agentColors["Hamza"]
-  const statusStyle = statusConfig[event.status]
-  const typeStyle = typeConfig[event.type]
+  const statusStyle = statusConfig[event.status || "pending"]
+  const typeStyle = typeConfig[event.type] || typeConfig["task"]
   const StatusIcon = statusStyle.icon
   const TypeIcon = typeStyle.icon
 
