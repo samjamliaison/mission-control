@@ -844,6 +844,7 @@ export function TasksBoard() {
         onOpenChange={setDialogOpen}
         onSave={handleAddTask}
         editingTask={editingTask}
+        allTasks={tasks}
       />
 
       {/* Template Picker */}

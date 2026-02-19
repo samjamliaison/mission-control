@@ -6,7 +6,7 @@ import Link from "next/link"
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { Edit, Trash2, User, Calendar, Clock, Zap, ExternalLink, Timer } from "lucide-react"
+import { Edit, Trash2, User, Calendar, Clock, Zap, ExternalLink, Timer, Ban } from "lucide-react"
 import { Checkbox } from "@/components/ui/checkbox"
 import { StarButton } from "@/components/ui/star-button"
 import { TimeTracker } from "./time-tracker"
@@ -23,6 +23,7 @@ export interface Task {
   createdAt: number
   updatedAt: number
   dueDate?: number
+  blockedBy?: string[]
 }
 
 interface TaskCardProps {
@@ -129,6 +130,7 @@ export function TaskCard({ task, index, onEdit, onDelete, isSelected = false, on
   const priorityStyle = priorityConfig[task.priority]
   const isCompleted = task.status === "done"
   const isActive = task.status === "in-progress"
+  const isBlocked = task.blockedBy && task.blockedBy.length > 0
 
   const cardVariants = {
     hidden: { opacity: 0, y: 20 },
@@ -369,6 +371,14 @@ export function TaskCard({ task, index, onEdit, onDelete, isSelected = false, on
                       {task.priority.charAt(0).toUpperCase() + task.priority.slice(1)}
                     </span>
                   </div>
+                  
+                  {/* Blocked indicator */}
+                  {isBlocked && (
+                    <div className="flex items-center gap-1 px-2 py-1 bg-orange-500/10 border border-orange-500/20 rounded text-orange-400">
+                      <Ban className="h-3 w-3" />
+                      <span className="text-xs font-semibold">Blocked</span>
+                    </div>
+                  )}
                 </div>
 
                 <div className="flex items-center justify-between task-meta">

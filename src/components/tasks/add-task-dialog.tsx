@@ -20,7 +20,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Badge } from "@/components/ui/badge"
-import { Rocket, User, Flag, X, Zap, AlertTriangle, CheckCircle, FileText, Sparkles, Calendar } from "lucide-react"
+import { Rocket, User, Flag, X, Zap, AlertTriangle, CheckCircle, FileText, Sparkles, Calendar, Ban } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { logTaskAction } from "@/lib/activity-logger"
 import { Task } from "./task-card"
@@ -32,6 +32,7 @@ interface AddTaskDialogProps {
   onOpenChange: (open: boolean) => void
   onSave: (task: Partial<Task>) => void
   editingTask?: Task | null
+  allTasks?: Task[]
 }
 
 const assigneeOptions = ["Hamza", "Manus", "Monica", "Jarvis", "Luna"]
@@ -57,12 +58,13 @@ const agentDescriptions = {
   "Luna": "Navigation Specialist"
 }
 
-export function AddTaskDialog({ open, onOpenChange, onSave, editingTask }: AddTaskDialogProps) {
+export function AddTaskDialog({ open, onOpenChange, onSave, editingTask, allTasks = [] }: AddTaskDialogProps) {
   const [title, setTitle] = useState("")
   const [description, setDescription] = useState("")
   const [assignee, setAssignee] = useState("")
   const [priority, setPriority] = useState<"low" | "medium" | "high">("medium")
   const [dueDate, setDueDate] = useState("")
+  const [blockedBy, setBlockedBy] = useState<string[]>([])
   const [showTemplatePicker, setShowTemplatePicker] = useState(false)
   const [selectedTemplate, setSelectedTemplate] = useState<TaskTemplate | null>(null)
   const [templateUsed, setTemplateUsed] = useState(false)
@@ -88,6 +90,7 @@ export function AddTaskDialog({ open, onOpenChange, onSave, editingTask }: AddTa
         setAssignee(editingTask.assignee)
         setPriority(editingTask.priority)
         setDueDate(editingTask.dueDate ? new Date(editingTask.dueDate).toISOString().split('T')[0] : "")
+        setBlockedBy(editingTask.blockedBy || [])
         setSelectedTemplate(null)
         setTemplateUsed(false)
       } else {
@@ -96,6 +99,7 @@ export function AddTaskDialog({ open, onOpenChange, onSave, editingTask }: AddTa
         setAssignee("")
         setPriority("medium")
         setDueDate("")
+        setBlockedBy([])
         setSelectedTemplate(null)
         setTemplateUsed(false)
       }
@@ -112,6 +116,7 @@ export function AddTaskDialog({ open, onOpenChange, onSave, editingTask }: AddTa
       assignee,
       priority,
       ...(dueDate && { dueDate: new Date(dueDate).getTime() }),
+      blockedBy: blockedBy.length > 0 ? blockedBy : undefined,
     }
 
     // Log the activity
@@ -398,6 +403,67 @@ export function AddTaskDialog({ open, onOpenChange, onSave, editingTask }: AddTa
               />
             </motion.div>
           </div>
+
+          {/* Blocked By Dependencies */}
+          <motion.div
+            className="space-y-2"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.65 }}
+          >
+            <label className="text-sm font-heading font-semibold flex items-center gap-2">
+              <Ban className="h-4 w-4 text-orange-400" />
+              Dependencies (Blocked By)
+            </label>
+            <div className="space-y-2">
+              <Select
+                value=""
+                onValueChange={(taskId) => {
+                  if (taskId && !blockedBy.includes(taskId)) {
+                    setBlockedBy(prev => [...prev, taskId])
+                  }
+                }}
+              >
+                <SelectTrigger className="glass-morphism border-[hsl(var(--command-border))] focus:ring-1 focus:ring-[hsl(var(--command-accent))]">
+                  <SelectValue placeholder="Select blocking tasks..." />
+                </SelectTrigger>
+                <SelectContent className="glass-morphism border-[hsl(var(--command-border-bright))]">
+                  {allTasks
+                    .filter(t => t._id !== editingTask?._id && !blockedBy.includes(t._id))
+                    .map((task) => (
+                      <SelectItem key={task._id} value={task._id} className="focus:bg-[hsl(var(--command-accent))]/10">
+                        <div className="flex items-center gap-2 py-1">
+                          <span className="font-medium">{task.title}</span>
+                          <Badge variant="outline" className="text-xs">
+                            {task.status}
+                          </Badge>
+                        </div>
+                      </SelectItem>
+                    ))}
+                </SelectContent>
+              </Select>
+              
+              {blockedBy.length > 0 && (
+                <div className="flex flex-wrap gap-2">
+                  {blockedBy.map(taskId => {
+                    const task = allTasks.find(t => t._id === taskId)
+                    return task ? (
+                      <Badge
+                        key={taskId}
+                        variant="outline"
+                        className="bg-orange-500/10 text-orange-400 border-orange-500/20 cursor-pointer"
+                        onClick={() => setBlockedBy(prev => prev.filter(id => id !== taskId))}
+                      >
+                        <Ban className="h-3 w-3 mr-1" />
+                        {task.title}
+                        <X className="h-3 w-3 ml-1" />
+                      </Badge>
+                    ) : null
+                  })}
+                </div>
+              )}
+            </div>
+          </motion.div>
 
           {/* Preview Badge */}
           {assignee && (
