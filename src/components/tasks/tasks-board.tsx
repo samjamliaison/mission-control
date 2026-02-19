@@ -17,6 +17,7 @@ import { TaskColumn } from "./task-column"
 import { AddTaskDialog } from "./add-task-dialog"
 import { TaskTemplatePicker } from "./task-template-picker"
 import { BulkActionBar } from "./bulk-action-bar"
+import { SectionErrorBoundary } from "@/components/ui/error-boundary"
 import { Task } from "./task-card"
 import { TaskTemplate, createTaskFromTemplate } from "@/lib/task-templates"
 import { PageHeader } from "@/components/ui/page-header"
@@ -505,18 +506,19 @@ export function TasksBoard() {
           </motion.div>
 
           {/* Task Board or Empty State */}
-          <motion.div variants={itemVariants}>
-            {tasks.length === 0 ? (
-              <EmptyState
-                icon="🚀"
-                title="Mission Control Awaiting Orders"
-                description="No active tasks detected. Initialize your first mission to begin coordinating operations across all agents and systems. The command center is ready for deployment."
-                actionLabel="Deploy First Task"
-                onAction={handleAddNewTask}
-              />
-            ) : (
-              <DragDropContext onDragEnd={handleDragEnd}>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 overflow-x-auto pb-4">
+          <SectionErrorBoundary sectionName="Task Board">
+            <motion.div variants={itemVariants}>
+              {tasks.length === 0 ? (
+                <EmptyState
+                  icon="🚀"
+                  title="Mission Control Awaiting Orders"
+                  description="No active tasks detected. Initialize your first mission to begin coordinating operations across all agents and systems. The command center is ready for deployment."
+                  actionLabel="Deploy First Task"
+                  onAction={handleAddNewTask}
+                />
+              ) : (
+                <DragDropContext onDragEnd={handleDragEnd}>
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 overflow-x-auto pb-4">
                   <TaskColumn
                     title="Awaiting Deployment"
                     status="todo"
@@ -551,6 +553,7 @@ export function TasksBoard() {
               </DragDropContext>
             )}
           </motion.div>
+          </SectionErrorBoundary>
         </div>
       </motion.div>
 

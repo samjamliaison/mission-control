@@ -40,6 +40,7 @@ import { MemoryEntry } from "@/components/memory/memory-entry"
 import { CalendarEventData } from "@/lib/data-persistence"
 import { cn } from "@/lib/utils"
 import { MiniSparkline, generateTrendData } from "@/components/ui/mini-sparkline"
+import { SectionErrorBoundary } from "@/components/ui/error-boundary"
 
 // OpenClaw API Types
 interface AgentStatus {
@@ -382,8 +383,9 @@ export function DashboardView() {
           </PageHeader>
 
           {/* Overview Stats */}
-          <motion.div variants={itemVariants}>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <SectionErrorBoundary sectionName="Overview Stats">
+            <motion.div variants={itemVariants}>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               <Card className="stats-glass stats-mesh-bg border-[hsl(var(--command-border-bright))]">
                 <CardContent className="p-6">
                   <div className="flex items-center justify-between">
@@ -487,11 +489,13 @@ export function DashboardView() {
                   </div>
                 </CardContent>
               </Card>
-            </div>
-          </motion.div>
+              </div>
+            </motion.div>
+          </SectionErrorBoundary>
 
           {/* Live OpenClaw Status */}
-          <motion.div variants={itemVariants}>
+          <SectionErrorBoundary sectionName="Live System Status">
+            <motion.div variants={itemVariants}>
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-lg font-medium text-contrast-high flex items-center gap-2">
                 <motion.div
@@ -591,11 +595,13 @@ export function DashboardView() {
               </motion.div>
             </div>
           </motion.div>
+          </SectionErrorBoundary>
 
           {/* Main Content Grid */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {/* Recent Activity */}
-            <motion.div variants={itemVariants} className="lg:col-span-2">
+            <SectionErrorBoundary sectionName="Recent Activity">
+              <motion.div variants={itemVariants} className="lg:col-span-2">
               <Card className="glass-morphism border-[hsl(var(--command-border-bright))]">
                 <CardHeader>
                   <CardTitle className="flex items-center justify-between">
@@ -783,10 +789,12 @@ export function DashboardView() {
                 </CardContent>
               </Card>
             </motion.div>
+            </SectionErrorBoundary>
           </div>
 
           {/* Live System Activity */}
-          <motion.div variants={itemVariants}>
+          <SectionErrorBoundary sectionName="Live System Activity">
+            <motion.div variants={itemVariants}>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               {/* Active Sessions */}
               <motion.div
@@ -975,6 +983,7 @@ export function DashboardView() {
               </Card>
             </div>
           </motion.div>
+          </SectionErrorBoundary>
         </div>
       </motion.div>
     </div>
