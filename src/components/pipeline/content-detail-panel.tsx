@@ -313,7 +313,7 @@ export function ContentDetailPanel({ open, onOpenChange, content, onEdit }: Cont
                         </div>
                         
                         <div className="flex-1">
-                          <DialogTitle className="text-2xl font-display font-bold leading-tight">
+                          <DialogTitle className="text-lg md:text-2xl font-semibold tracking-tight leading-tight">
                             {content.title}
                           </DialogTitle>
                           
