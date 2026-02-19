@@ -450,8 +450,16 @@ export function DashboardView() {
           <motion.div variants={itemVariants}>
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-lg font-medium text-contrast-high flex items-center gap-2">
-                <Zap className="h-5 w-5 text-[hsl(var(--command-accent))]" />
+                <motion.div
+                  animate={liveDataLoading ? { rotate: 360 } : {}}
+                  transition={{ duration: 2, repeat: liveDataLoading ? Infinity : 0, ease: "linear" }}
+                >
+                  <Zap className="h-5 w-5 text-[hsl(var(--command-accent))]" />
+                </motion.div>
                 Live System Status
+                <Badge variant="outline" className="bg-[hsl(var(--command-accent))]/10 text-[hsl(var(--command-accent))] text-xs ml-2">
+                  Auto-refresh: 10s
+                </Badge>
               </h2>
               <LiveUpdateIndicator 
                 lastUpdated={lastUpdated} 
