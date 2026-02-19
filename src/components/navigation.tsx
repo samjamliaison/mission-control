@@ -4,7 +4,7 @@ import { useState, useEffect } from "react"
 import { usePathname } from "next/navigation"
 import Link from "next/link"
 import { motion, AnimatePresence } from "framer-motion"
-import { Command, CheckSquare, Film, Calendar, Brain, Users, Building, ChevronLeft, ChevronRight, Settings, Activity, Keyboard } from "lucide-react"
+import { Command, CheckSquare, Film, Calendar, Brain, Users, Building, ChevronLeft, ChevronRight, Settings, Activity, Keyboard, Bell } from "lucide-react"
 import { CommandHint } from "@/components/command-palette/command-hint"
 import { cn } from "@/lib/utils"
 
@@ -52,6 +52,14 @@ const navigationItems = [
     description: "Audit Trail"
   },
   {
+    name: "Notifications",
+    href: "/notifications",
+    icon: Bell,
+    emoji: "🔔",
+    description: "Alerts & Updates",
+    showBadge: true
+  },
+  {
     name: "Team",
     href: "/team",
     icon: Users,
@@ -69,6 +77,7 @@ const navigationItems = [
 
 export function Navigation() {
   const [isCollapsed, setIsCollapsed] = useState(false)
+  const [unreadCount, setUnreadCount] = useState(0)
   const pathname = usePathname()
 
   // Auto-collapse on mobile
@@ -81,6 +90,34 @@ export function Navigation() {
     checkMobile()
     window.addEventListener('resize', checkMobile)
     return () => window.removeEventListener('resize', checkMobile)
+  }, [])
+
+  // Check for unread notifications
+  useEffect(() => {
+    const updateUnreadCount = () => {
+      try {
+        const stored = localStorage.getItem('mission-control-notifications')
+        if (stored) {
+          const notifications = JSON.parse(stored)
+          const unread = notifications.filter((n: any) => !n.read).length
+          setUnreadCount(unread)
+        }
+      } catch (error) {
+        console.error('Failed to parse notifications for badge:', error)
+      }
+    }
+
+    // Initial count
+    updateUnreadCount()
+
+    // Listen for localStorage changes
+    const interval = setInterval(updateUnreadCount, 5000) // Check every 5 seconds
+    window.addEventListener('storage', updateUnreadCount)
+    
+    return () => {
+      clearInterval(interval)
+      window.removeEventListener('storage', updateUnreadCount)
+    }
   }, [])
 
   return (
@@ -179,6 +216,18 @@ export function Navigation() {
                           "h-5 w-5 transition-colors",
                           isActive ? "text-[#06b6d4]" : "text-current"
                         )} />
+                        {/* Notification Badge */}
+                        {item.showBadge && unreadCount > 0 && (
+                          <motion.div
+                            initial={{ scale: 0 }}
+                            animate={{ scale: 1 }}
+                            className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full flex items-center justify-center"
+                          >
+                            <span className="text-xs font-bold text-white leading-none">
+                              {unreadCount > 9 ? '9+' : unreadCount}
+                            </span>
+                          </motion.div>
+                        )}
                       </div>
                       
                       <AnimatePresence mode="wait">
