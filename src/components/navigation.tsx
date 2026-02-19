@@ -9,11 +9,18 @@ import { cn } from "@/lib/utils"
 
 const navigationItems = [
   {
-    name: "Tasks",
+    name: "Dashboard",
     href: "/",
+    icon: Command,
+    emoji: "⚡",
+    description: "Mission Control"
+  },
+  {
+    name: "Tasks",
+    href: "/tasks",
     icon: CheckSquare,
     emoji: "✅",
-    description: "Mission Control"
+    description: "Task Management"
   },
   {
     name: "Pipeline",
