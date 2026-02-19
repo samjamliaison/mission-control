@@ -1,11 +1,17 @@
 import type { Metadata } from "next"
-import { Instrument_Sans } from "next/font/google"
+import { Geist, Plus_Jakarta_Sans } from "next/font/google"
 import "./globals.css"
 
-const instrumentSans = Instrument_Sans({
+const geist = Geist({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
-  variable: "--font-instrument",
+  variable: "--font-geist",
+})
+
+const plusJakarta = Plus_Jakarta_Sans({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800"],
+  variable: "--font-plus-jakarta",
 })
 
 export const metadata: Metadata = {
@@ -20,8 +26,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="dark">
-      <body className={`${instrumentSans.variable} antialiased`}>
-        <div className="min-h-screen bg-gradient-to-br from-[hsl(var(--command-background))] to-[hsl(220_13%_3%)]">
+      <body className={`${geist.variable} ${plusJakarta.variable} antialiased`}>
+        <div className="min-h-screen bg-[#09090b]">
           {children}
         </div>
       </body>

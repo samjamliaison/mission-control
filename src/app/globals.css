@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Satoshi:wght@400;500;600;700;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Clash+Display:wght@400;500;600;700&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -12,29 +12,29 @@
     --card-foreground: 210 40% 98%;
     --popover: 224 15% 8%;
     --popover-foreground: 210 40% 98%;
-    --primary: 199 89% 48%;
+    --primary: 196 94% 67%;
     --primary-foreground: 210 40% 98%;
     --secondary: 215 25% 12%;
     --secondary-foreground: 210 40% 98%;
     --muted: 215 20% 10%;
     --muted-foreground: 215 20.2% 65.1%;
-    --accent: 199 89% 48%;
+    --accent: 196 94% 67%;
     --accent-foreground: 210 40% 98%;
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
     --border: 215 25% 16%;
     --input: 215 25% 12%;
-    --ring: 199 89% 48%;
+    --ring: 196 94% 67%;
     --radius: 0.75rem;
     
-    /* Command Center Specific Variables */
-    --command-background: 220 13% 4%;
+    /* Command Center Specific Variables - Exact colors from spec */
+    --command-background: 220 8% 4%; /* #09090b */
     --command-surface: 224 15% 6%;
     --command-surface-elevated: 224 15% 8%;
     --command-border: 215 25% 16%;
     --command-border-bright: 215 30% 22%;
-    --command-accent: 199 89% 48%;
-    --command-accent-muted: 199 89% 48%;
+    --command-accent: 196 94% 67%; /* #06b6d4 cyan-400 */
+    --command-accent-secondary: 199 89% 64%; /* #0ea5e9 blue-500 */
     --command-success: 142 69% 58%;
     --command-warning: 38 92% 50%;
     --command-danger: 0 84% 60%;
@@ -55,9 +55,9 @@
   }
   
   body {
-    background: linear-gradient(135deg, hsl(var(--command-background)) 0%, hsl(220 13% 3%) 100%);
+    background: linear-gradient(135deg, hsl(var(--command-background)) 0%, hsl(220 8% 3%) 100%);
     color: hsl(var(--command-text));
-    font-family: 'Instrument Sans', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+    font-family: var(--font-geist), -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
     font-weight: 400;
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
@@ -122,13 +122,13 @@
   
   /* Typography */
   .font-display {
-    font-family: 'Satoshi', 'Instrument Sans', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+    font-family: 'Clash Display', var(--font-plus-jakarta), -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
     font-weight: 700;
     letter-spacing: -0.025em;
   }
   
   .font-heading {
-    font-family: 'Satoshi', 'Instrument Sans', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+    font-family: var(--font-plus-jakarta), var(--font-geist), -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
     font-weight: 600;
     letter-spacing: -0.015em;
   }
