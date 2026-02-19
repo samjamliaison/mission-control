@@ -176,7 +176,7 @@ export default function NotificationsPage() {
     <div className="container mx-auto px-6 py-8 max-w-4xl">
       <PageHeader 
         title="Notifications"
-        description="System alerts, agent completions, and activity updates"
+        subtitle="System alerts, agent completions, and activity updates"
         icon={Bell}
       />
 
@@ -247,6 +247,8 @@ export default function NotificationsPage() {
                   ? "All notifications have been read."
                   : "No error notifications found."
               }
+              actionLabel="Go to Dashboard"
+              onAction={() => window.location.href = '/'}
             />
           ) : (
             filteredNotifications.map((notification, index) => {

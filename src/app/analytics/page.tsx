@@ -71,9 +71,9 @@ export default function AnalyticsPage() {
   const maxTasksByAgent = Math.max(...data.tasksByAgent.map(d => d.count))
 
   // Create conic gradient for donut chart
-  const createDonutGradient = (data: typeof data.agentWorkload) => {
+  const createDonutGradient = (workloadData: { agent: string; percentage: number; color: string }[]) => {
     let cumulative = 0
-    const stops = data.map(item => {
+    const stops = workloadData.map(item => {
       const start = cumulative
       cumulative += item.percentage
       return `${item.color} ${start}% ${cumulative}%`
@@ -86,7 +86,7 @@ export default function AnalyticsPage() {
     <div className="container mx-auto px-6 py-8 max-w-7xl">
       <PageHeader 
         title="Analytics"
-        description="Performance insights and data visualization"
+        subtitle="Performance insights and data visualization"
         icon={BarChart3}
       />
 

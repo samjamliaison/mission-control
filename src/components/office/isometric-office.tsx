@@ -116,8 +116,8 @@ export function IsometricOffice() {
             key={i}
             className="absolute w-1 h-1 bg-cyan-400/20 rounded-full"
             animate={{
-              x: [Math.random() * window.innerWidth, Math.random() * window.innerWidth],
-              y: [Math.random() * window.innerHeight, Math.random() * window.innerHeight],
+              x: [Math.random() * 1200, Math.random() * 1200],
+              y: [Math.random() * 800, Math.random() * 800],
               opacity: [0.2, 0.8, 0.2]
             }}
             transition={{
@@ -136,7 +136,7 @@ export function IsometricOffice() {
       <div className="container mx-auto px-6 py-8 relative z-10">
         <PageHeader 
           title="Digital Office"
-          description="Isometric view of our AI agent workspace - where the magic happens"
+          subtitle="Isometric view of our AI agent workspace - where the magic happens"
           icon={Building2}
         />
 
