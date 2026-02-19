@@ -98,7 +98,6 @@ export function StarredView() {
         <div className="max-w-7xl mx-auto space-y-8">
           <PageHeader
             icon={Star}
-            iconClassName="text-yellow-400 fill-yellow-400"
             title="Starred Items"
             subtitle={`${starredItems.length} items marked as favorites. Quick access to your most important content.`}
           />

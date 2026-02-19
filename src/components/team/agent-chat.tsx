@@ -13,7 +13,25 @@ import {
   Zap,
   Clock
 } from "lucide-react"
-import { Agent } from "./agent"
+// Use RealAgent interface instead of Agent
+interface RealAgent {
+  id: string
+  name: string
+  avatar: string
+  role: string
+  status: 'online' | 'active' | 'idle' | 'offline'
+  workspace: string
+  soul?: string
+  currentActivity?: string
+  activeTasks: number
+  completedTasks: number
+  skills: string[]
+  expertise: string[]
+  lastSeen: number
+  joinedAt: number
+  efficiency: number
+  description: string
+}
 import { cn } from "@/lib/utils"
 
 interface Message {
@@ -24,7 +42,7 @@ interface Message {
 }
 
 interface AgentChatProps {
-  agent: Agent | null
+  agent: RealAgent | null
   isOpen: boolean
   onClose: () => void
 }

@@ -1,330 +1,242 @@
 # Mission Control 🚀
 
-> Advanced task management dashboard for OpenClaw operations
-
-[![Build Status](https://img.shields.io/badge/build-passing-brightgreen)](https://github.com/samjamliaison/mission-control)
+[![Version](https://img.shields.io/badge/version-1.0.0-brightgreen)](https://github.com/samjamliaison/mission-control)
 [![Next.js](https://img.shields.io/badge/Next.js-16.1.6-black)](https://nextjs.org/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue)](https://www.typescriptlang.org/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![OpenClaw](https://img.shields.io/badge/OpenClaw-Compatible-blue)](https://openclaw.com/)
 
-Mission Control is a premium, glass-morphism styled command center for managing tasks, content pipelines, team operations, and memory systems. Built with modern web technologies and designed for high-performance mission-critical operations.
+**Advanced Command Center Dashboard for OpenClaw Operations**
 
-## ✨ Features
+Mission Control is a comprehensive task management and operational dashboard designed specifically for OpenClaw environments. Built with Next.js and featuring real-time agent integration, advanced visualization, and enterprise-grade functionality.
 
-### 🎯 **Task Management**
-- **Kanban Board**: Drag-and-drop task organization with visual status tracking
-- **Agent Assignment**: Assign tasks to team members (Hamza, Manus, Monica, Jarvis, Luna)
-- **Priority Levels**: Low, Medium, High priority with visual indicators
-- **Real-time Updates**: Instant synchronization with local storage persistence
+## 🌟 Features Overview
 
-### 🎬 **Content Pipeline**
-- **Multi-Platform Support**: YouTube, Blog, X/Twitter content management
-- **Status Tracking**: Idea → Script → Production → Review → Published
-- **Rich Metadata**: Thumbnails, scripts, assignees, and platform-specific details
-- **Visual Progress**: Glass-morphism cards with status-based styling
+### **Core Dashboard**
+- **Real-time System Monitoring** - Live OpenClaw agent status, session tracking, and cron job management
+- **Advanced Analytics** - Performance insights, team efficiency metrics, and activity feeds
+- **Command Center Interface** - Military-inspired UI with glass morphism design
+- **Responsive Design** - Works seamlessly across desktop, tablet, and mobile devices
 
-### 👥 **Team Dashboard**
-- **Agent Profiles**: Individual team member management and status tracking
-- **Efficiency Metrics**: Real-time performance monitoring
-- **Role-Based Views**: Mission Commander, Chief of Staff, Creative Director roles
-- **Interactive Agent Cards**: Detailed profiles with avatars and specializations
+### **Task Management**
+- **Dynamic Kanban Board** - Customizable columns with drag-and-drop functionality
+- **Column Customization** - Rename, add/remove columns, custom colors, persistent settings
+- **Time Tracking** - Start/stop timers on tasks, elapsed time display, session persistence
+- **Bulk Operations** - Multi-select tasks, bulk status changes, assignee updates
+- **Smart Filtering** - Filter by assignee, status, priority, and due dates
+- **Task Templates** - Pre-configured templates for common task types
+- **Keyboard Shortcuts** - Quick actions and navigation with hotkeys
+- **Print Support** - Clean print layouts for offline task management
 
-### 🧠 **Memory System**
-- **Knowledge Base**: Persistent memory storage for important information
-- **Search & Filter**: Quickly find relevant memories and insights
-- **Categorization**: Organized memory entries with timestamps
-- **Export/Import**: Backup and restore memory data
+### **Team Management** 
+- **Live Agent Status** - Real-time monitoring of all OpenClaw agents
+- **Agent Chat Simulation** - Interactive chat interfaces with personality-based conversations
+- **Team Performance** - Efficiency metrics, task completion rates, and workload distribution
+- **Agent Profiles** - Detailed views with skills, expertise, and recent activity
+- **Workspace Integration** - Direct connection to OpenClaw API for live data
 
-### 🏢 **Office View**
-- **3D Workspace**: Interactive office environment visualization
-- **Agent Workstations**: Individual workspace monitoring
-- **System Status**: Real-time operational status displays
-- **Ambient Animations**: Smooth, professional interface movements
+### **Content Pipeline**
+- **Content Creation Workflow** - From ideation to publication tracking
+- **Multi-platform Support** - YouTube, Blog, X (Twitter), and custom platforms
+- **Status Tracking** - Draft, review, scheduled, published states
+- **Collaborative Features** - Team assignments and review processes
+- **Export Capabilities** - JSON export for backup and analysis
+- **Print Support** - Professional layouts for content planning
 
-### ⚙️ **Settings & Data Management**
-- **Data Export/Import**: Full backup and restore capabilities
-- **Storage Analytics**: Visual storage usage and statistics
-- **Local Persistence**: Client-side data storage with localStorage
-- **Privacy First**: All data stays on your device
+### **Calendar & Scheduling**
+- **Event Management** - Create, edit, and track scheduled events
+- **Agent Assignments** - Assign events to specific OpenClaw agents
+- **Visual Calendar** - Monthly grid view with event details
+- **Time-based Filtering** - View events by date ranges and agent assignments
+- **Print Support** - Calendar layouts for offline planning
 
-## 🖼️ Screenshots
+### **Memory System**
+- **Knowledge Base** - Store and organize important information
+- **Agent Memories** - Track insights and learnings from agent interactions
+- **Search & Filter** - Quick access to stored knowledge
+- **Tagging System** - Organize memories with custom tags
+- **Export Features** - Backup and share knowledge bases
 
-*Screenshots coming soon - the interface features a stunning dark glass-morphism design with cyan accents, animated gradients, and premium visual effects.*
+### **Advanced Features**
+- **Starred/Favorites System** - Quick access to important items across all sections
+- **Command Palette** - Global search and quick actions (Cmd/Ctrl+K)
+- **Undo System** - Revert recent actions with confidence
+- **Dark Mode** - Professional dark interface optimized for extended use
+- **Activity Logging** - Comprehensive audit trail of all system actions
+- **Export Tools** - CSV and JSON export for all data types
+- **Offline Capabilities** - Print support for all major sections
 
-## 🛠️ Tech Stack
+### **Data Persistence**
+- **LocalStorage Integration** - Client-side data persistence for offline work
+- **Real-time Sync** - Live updates from OpenClaw APIs when connected
+- **Data Export** - Backup capabilities for all stored information
+- **Session Management** - Maintains state across browser sessions
 
-### **Frontend**
-- **[Next.js 16.1.6](https://nextjs.org/)** - React framework with App Router
-- **[TypeScript 5.0](https://www.typescriptlang.org/)** - Type-safe development
-- **[Tailwind CSS 4](https://tailwindcss.com/)** - Utility-first styling
-- **[Framer Motion](https://www.framer.com/motion/)** - Advanced animations
+### **User Experience**
+- **Glass Morphism UI** - Modern, translucent design elements
+- **Smooth Animations** - Framer Motion powered transitions and interactions
+- **Loading States** - Skeleton loaders and progress indicators
+- **Error Boundaries** - Graceful error handling and recovery
+- **Accessibility** - Keyboard navigation and screen reader support
 
-### **UI/UX**
-- **[Lucide React](https://lucide.dev/)** - Beautiful icon system
-- **[Radix UI](https://www.radix-ui.com/)** - Accessible component primitives
-- **[Hello Pangea DnD](https://github.com/hello-pangea/dnd)** - Drag and drop interactions
-- **Custom Glass Morphism** - Premium visual effects
-
-### **Development**
-- **[Vitest](https://vitest.dev/)** - Fast unit testing
-- **[Playwright](https://playwright.dev/)** - End-to-end testing
-- **[ESLint](https://eslint.org/)** - Code linting
-- **Performance Optimizations** - Lazy loading, code splitting
-
-## 🚀 Getting Started
+## 🚀 Quick Start
 
 ### Prerequisites
-
-- **Node.js 18+** (recommended: use [nvm](https://github.com/nvm-sh/nvm))
-- **npm** or **yarn** or **pnpm**
+- Node.js 18+ 
+- OpenClaw environment (for live agent integration)
 
 ### Installation
 
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/samjamliaison/mission-control.git
-   cd mission-control
-   ```
-
-2. **Install dependencies**
-   ```bash
-   npm install
-   # or
-   yarn install
-   # or
-   pnpm install
-   ```
-
-3. **Start the development server**
-   ```bash
-   npm run dev
-   # or
-   yarn dev
-   # or
-   pnpm dev
-   ```
-
-4. **Open your browser**
-   
-   Navigate to [http://localhost:3000](http://localhost:3000) to see the application.
-
-### Production Build
-
 ```bash
+# Clone the repository
+git clone https://github.com/samjamliaison/mission-control.git
+cd mission-control
+
+# Install dependencies
+npm install
+
+# Start development server
+npm run dev
+
 # Build for production
 npm run build
-
-# Start production server
-npm start
-
-# Or export static files
-npm run build && npm run export
+npm run start
 ```
 
-## 📁 Project Structure
+### Configuration
 
-```
-src/
-├── app/                    # Next.js 13+ App Router
-│   ├── (routes)/          # Page routes
-│   ├── api/               # API routes
-│   ├── globals.css        # Global styles & design system
-│   └── layout.tsx         # Root layout
-├── components/            # React components
-│   ├── ui/                # Reusable UI components
-│   ├── tasks/             # Task management
-│   ├── pipeline/          # Content pipeline
-│   ├── team/              # Team dashboard
-│   ├── memory/            # Memory system
-│   └── settings/          # Settings & data management
-├── contexts/              # React contexts (Toast, etc.)
-├── hooks/                 # Custom React hooks
-├── lib/                   # Utility functions
-└── types/                 # TypeScript type definitions
-```
+1. **Environment Setup**
+   ```bash
+   cp .env.example .env.local
+   ```
+
+2. **OpenClaw Integration**
+   - Ensure OpenClaw APIs are accessible
+   - Configure agent endpoints in environment variables
+
+3. **Development**
+   ```bash
+   # Development server with hot reload
+   npm run dev
+
+   # Run tests
+   npm test
+
+   # Lint and format
+   npm run lint
+   npm run format
+   ```
+
+## 📋 Usage
+
+### Task Management
+1. **Create Tasks** - Use the "Deploy Task" button or press `N`
+2. **Organize** - Drag tasks between customizable columns
+3. **Track Time** - Click the timer icon on any task card
+4. **Bulk Actions** - Enable selection mode for multi-task operations
+5. **Print** - Use the print button for offline task lists
+
+### Team Monitoring  
+1. **View Agents** - Real-time status of all OpenClaw agents
+2. **Chat Simulation** - Click any agent to open chat interface
+3. **Performance** - Monitor efficiency and task completion rates
+
+### Content Pipeline
+1. **Create Content** - Add new content items with platform targeting
+2. **Track Progress** - Move through draft, review, and published states
+3. **Collaborate** - Assign content to team members
+
+### Calendar
+1. **Schedule Events** - Click any date to create new events
+2. **Assign Agents** - Delegate events to specific team members
+3. **View Planning** - Monthly overview of all scheduled activities
+
+## 🔧 Technical Stack
+
+- **Framework**: Next.js 16.1.6 with Turbopack
+- **UI Framework**: React 19 with TypeScript
+- **Styling**: Tailwind CSS with custom design system
+- **Animations**: Framer Motion
+- **Drag & Drop**: @hello-pangea/dnd
+- **State Management**: React Hooks + LocalStorage
+- **Build Tool**: Next.js with TypeScript
+- **Deployment**: Vercel-ready with Docker support
 
 ## 🎨 Design System
 
-Mission Control uses a custom **Command Center Theme** with:
+Mission Control features a custom design system inspired by command centers and military operations:
 
-- **Dark Terminal Luxury** aesthetic
-- **Glass Morphism** effects with subtle transparency
-- **Gradient Mesh Blobs** for organic visual depth
-- **WCAG AA Compliant** contrast ratios (4.5:1+)
-- **Subtle Noise Textures** for premium feel
-- **Smooth Animations** with Framer Motion
+- **Color Palette**: Dark theme with cyan accents and glass morphism
+- **Typography**: Geist and Plus Jakarta Sans for professional readability
+- **Components**: Reusable UI components with consistent styling
+- **Animations**: Smooth transitions and micro-interactions
+- **Responsive**: Mobile-first design with desktop optimizations
 
-### Color Palette
+## 📖 API Integration
 
-```css
-/* Primary Colors */
---command-accent: #06b6d4 (cyan)
---command-success: #22c55e (green)
---command-warning: #f59e0b (amber)
---command-danger: #ef4444 (red)
+### OpenClaw Endpoints
+- `/api/agents` - Live agent status and management
+- `/api/sessions` - Active session monitoring
+- `/api/cron` - Scheduled task management
+- `/api/tasks` - Task CRUD operations
+- `/api/calendar` - Event management
+- `/api/memory` - Knowledge base operations
 
-/* Surface Colors */
---command-background: #09090b
---command-surface: rgba(255,255,255,0.03)
---command-border: rgba(255,255,255,0.06)
-```
+### Data Flow
+1. **Real-time Updates** - Live polling of OpenClaw APIs
+2. **Local Persistence** - Client-side storage for offline capability
+3. **Sync Strategy** - Merge remote and local changes intelligently
 
-## 🧪 Testing
+## 🔒 Security & Privacy
 
-### Unit Tests
-```bash
-npm run test          # Run unit tests
-npm run test:ui       # Run with UI
-npm run test:coverage # Generate coverage report
-```
+- **Client-side Data** - Sensitive information stays in browser
+- **API Authentication** - Secure communication with OpenClaw services
+- **Data Validation** - Input sanitization and type checking
+- **Error Handling** - Graceful degradation for security failures
 
-### End-to-End Tests
-```bash
-npm run test:e2e      # Run E2E tests
-npm run test:e2e:ui   # Run with Playwright UI
-```
+## 📱 Mobile Experience
 
-### All Tests
-```bash
-npm run test:all      # Run both unit and E2E tests
-```
-
-## 📦 Scripts
-
-| Script | Description |
-|--------|-------------|
-| `dev` | Start development server |
-| `build` | Build for production |
-| `start` | Start production server |
-| `lint` | Run ESLint |
-| `test` | Run unit tests |
-| `test:e2e` | Run E2E tests |
-
-## 🐳 Production Deployment
-
-Mission Control is **production-ready** with multiple deployment options:
-
-### ✅ Build Status
-- **Zero TypeScript errors**
-- **All 21 pages compile successfully** 
-- **Docker optimized with multi-stage build**
-- **Health checks configured**
-- **Standalone output enabled**
-
-### Option 1: Docker (Recommended)
-
-```bash
-# Build production image
-docker build -t mission-control .
-
-# Run container
-docker run -p 3000:3000 mission-control
-
-# The app will be available at http://localhost:3000
-```
-
-### Option 2: Docker Compose
-
-```bash
-# Standard deployment
-docker-compose up -d
-
-# With nginx reverse proxy
-docker-compose --profile with-nginx up -d
-```
-
-### Option 3: Node.js Server
-
-```bash
-# Build for production
-npm run build
-
-# Start production server
-npm run start
-
-# Test the build
-curl -I http://localhost:3000
-```
-
-### Option 4: Platform Deployment
-
-**Vercel (Recommended):**
-1. Push to GitHub
-2. Connect repository to Vercel
-3. Deploy automatically
-
-**Netlify:**
-1. Build command: `npm run build`
-2. Publish directory: `.next`
-
-### Docker Configuration
-
-The included Dockerfile provides:
-- **Multi-stage build** for minimal image size
-- **Node.js 20 Alpine** base image  
-- **Non-root user** for security
-- **Health checks** for container monitoring
-- **Optimized layer caching**
-
-### Environment Variables
-
-```env
-# Production
-NODE_ENV=production
-NEXT_TELEMETRY_DISABLED=1
-PORT=3000
-HOSTNAME=0.0.0.0
-
-# Optional
-NEXT_PUBLIC_APP_URL=https://your-domain.com
-```
+Mission Control is fully responsive with mobile-optimized features:
+- **Touch Interactions** - Optimized for mobile gestures
+- **Compact Layouts** - Efficient use of screen space
+- **Offline Capability** - Full functionality without internet
+- **Performance** - Optimized loading and smooth animations
 
 ## 🤝 Contributing
 
-We welcome contributions! Please follow these steps:
+We welcome contributions to Mission Control! Please see our [Contributing Guidelines](CONTRIBUTING.md) for details.
 
-1. **Fork the repository**
-2. **Create your feature branch**
-   ```bash
-   git checkout -b feature/amazing-feature
-   ```
-3. **Commit your changes**
-   ```bash
-   git commit -m 'Add some amazing feature'
-   ```
-4. **Push to the branch**
-   ```bash
-   git push origin feature/amazing-feature
-   ```
-5. **Open a Pull Request**
+### Development Setup
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Add tests if applicable
+5. Submit a pull request
 
-### Development Guidelines
-
-- **Code Style**: Follow the existing patterns and use TypeScript
-- **Testing**: Add tests for new features
-- **Performance**: Maintain lazy loading and optimization practices
-- **Accessibility**: Ensure WCAG AA compliance
-- **Design**: Follow the glass-morphism design system
+### Code Standards
+- TypeScript for type safety
+- ESLint and Prettier for code formatting
+- Component-based architecture
+- Responsive design principles
 
 ## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 🙋‍♂️ Support
+## 🙏 Acknowledgments
 
-If you have any questions or need help:
+- **OpenClaw Team** - For the powerful agent framework
+- **Next.js Team** - For the excellent React framework
+- **Tailwind CSS** - For the utility-first CSS framework
+- **Framer Motion** - For beautiful animations
 
-- **Open an Issue**: [GitHub Issues](https://github.com/samjamliaison/mission-control/issues)
-- **Documentation**: Check the code comments and component documentation
-- **Community**: Join discussions in the repository
+## 📞 Support
 
-## 🏆 Acknowledgments
-
-- **OpenClaw Team** for the mission requirements and vision
-- **Next.js Team** for the incredible framework
-- **Vercel** for the deployment platform
-- **Open Source Community** for the amazing tools and libraries
+For support and questions:
+- **Issues**: [GitHub Issues](https://github.com/samjamliaison/mission-control/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/samjamliaison/mission-control/discussions)
+- **Documentation**: [Wiki](https://github.com/samjamliaison/mission-control/wiki)
 
 ---
 
-**Built with ❤️ for mission-critical operations** • [GitHub](https://github.com/samjamliaison/mission-control) • [Live Demo](https://mission-control.vercel.app)
+**Mission Control v1.0.0** - Built with ❤️ for the OpenClaw community
+
+*"Command your operations with precision and style"*

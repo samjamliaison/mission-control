@@ -21,6 +21,7 @@ interface TaskColumnProps {
   color?: string
 }
 
+// Legacy status config - now using dynamic columns
 const statusConfig = {
   "todo": {
     title: "Awaiting Deployment",
@@ -145,11 +146,11 @@ export function TaskColumn({ title, status, tasks, onEditTask, onDeleteTask, sel
                 )}
                 style={{
                   background: snapshot.isDraggingOver
-                    ? `radial-gradient(circle at center, ${config.accent}12 0%, ${config.accent}04 50%, transparent 70%)`
+                    ? `radial-gradient(circle at center, ${color}12 0%, ${color}04 50%, transparent 70%)`
                     : undefined,
-                  borderColor: snapshot.isDraggingOver ? config.accent : undefined,
+                  borderColor: snapshot.isDraggingOver ? color : undefined,
                   boxShadow: snapshot.isDraggingOver
-                    ? `0 0 0 2px ${config.accent}30, 0 0 20px ${config.accent}20, inset 0 0 20px ${config.accent}08`
+                    ? `0 0 0 2px ${color}30, 0 0 20px ${color}20, inset 0 0 20px ${color}08`
                     : undefined
                 }}
                 animate={{
@@ -177,9 +178,9 @@ export function TaskColumn({ title, status, tasks, onEditTask, onDeleteTask, sel
                     <motion.div
                       className="glass-morphism p-6 rounded-2xl border-2 border-dashed"
                       style={{
-                        borderColor: config.accent,
-                        background: `${config.accent}15`,
-                        boxShadow: `0 0 32px ${config.accent}30`
+                        borderColor: color,
+                        background: `${color}15`,
+                        boxShadow: `0 0 32px ${color}30`
                       }}
                       animate={{
                         scale: [1, 1.05, 1],
@@ -203,12 +204,13 @@ export function TaskColumn({ title, status, tasks, onEditTask, onDeleteTask, sel
                         className="relative"
                       >
                         <IconComponent
-                          className={cn("h-12 w-12", config.color)}
+                          className="h-12 w-12"
+                          style={{ color }}
                           strokeWidth={1.5}
                         />
                         <motion.div
                           className="absolute inset-0 rounded-full border-2 border-dashed"
-                          style={{ borderColor: config.accent }}
+                          style={{ borderColor: color }}
                           animate={{
                             rotate: -360,
                             scale: [1, 1.2, 1],
@@ -220,7 +222,8 @@ export function TaskColumn({ title, status, tasks, onEditTask, onDeleteTask, sel
                         />
                       </motion.div>
                       <motion.p
-                        className={cn("text-sm font-semibold mt-2 text-center", config.color)}
+                        className="text-sm font-semibold mt-2 text-center"
+                        style={{ color }}
                         animate={{ opacity: [0.7, 1, 0.7] }}
                         transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
                       >
@@ -298,7 +301,7 @@ export function TaskColumn({ title, status, tasks, onEditTask, onDeleteTask, sel
                     <div className="text-center py-8">
                       <div className="space-y-3">
                         <div className="w-12 h-12 mx-auto glass-morphism rounded-full flex items-center justify-center">
-                          <IconComponent className={cn("h-5 w-5", config.color)} />
+                          <IconComponent className="h-5 w-5" style={{ color }} />
                         </div>
                         <p className="text-muted text-body">
                           {status === "todo" && "Ready for new missions"}

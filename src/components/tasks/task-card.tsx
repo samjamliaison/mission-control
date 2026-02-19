@@ -18,7 +18,7 @@ export interface Task {
   title: string
   description: string
   assignee: string
-  status: "todo" | "in-progress" | "done"
+  status: string
   priority: "low" | "medium" | "high"
   createdAt: number
   updatedAt: number
