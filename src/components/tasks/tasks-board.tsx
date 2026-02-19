@@ -32,14 +32,72 @@ import { TaskTemplate, createTaskFromTemplate } from "@/lib/task-templates"
 import { PageHeader } from "@/components/ui/page-header"
 import { StatsCard } from "@/components/ui/stats-card"
 import { EmptyState } from "@/components/ui/empty-state"
-import { loadTasks, saveTasks } from "@/lib/data-persistence"
+// import { loadTasks, saveTasks } from "@/lib/data-persistence" - Replaced with API calls
 import { useToastActions } from "@/components/ui/toast"
 import { logTaskAction, logNavigationAction } from "@/lib/activity-logger"
 import { exportTasksAsCSV, exportTasksAsJSON, downloadFile, generateFilename } from "@/lib/export-utils"
 import { useUndoSystem } from "@/lib/undo-system"
 import { useKanbanColumns } from "@/hooks/use-kanban-columns"
 
-// Note: Tasks are now loaded from localStorage via loadTasks()
+// API functions for task management
+async function fetchTasks(): Promise<Task[]> {
+  try {
+    const response = await fetch('/api/tasks')
+    if (!response.ok) throw new Error('Failed to fetch tasks')
+    const data = await response.json()
+    return data.tasks || []
+  } catch (error) {
+    console.error('Error fetching tasks:', error)
+    // Fallback to localStorage
+    const stored = localStorage.getItem('mission-control-tasks')
+    return stored ? JSON.parse(stored) : []
+  }
+}
+
+async function createTask(taskData: Partial<Task>): Promise<Task | null> {
+  try {
+    const response = await fetch('/api/tasks', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(taskData)
+    })
+    if (!response.ok) throw new Error('Failed to create task')
+    const data = await response.json()
+    return data.task
+  } catch (error) {
+    console.error('Error creating task:', error)
+    return null
+  }
+}
+
+async function updateTask(taskId: string, taskData: Partial<Task>): Promise<Task | null> {
+  try {
+    const response = await fetch('/api/tasks', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ ...taskData, id: taskId })
+    })
+    if (!response.ok) throw new Error('Failed to update task')
+    const data = await response.json()
+    return data.task
+  } catch (error) {
+    console.error('Error updating task:', error)
+    return null
+  }
+}
+
+async function deleteTask(taskId: string): Promise<boolean> {
+  try {
+    const response = await fetch(`/api/tasks?id=${taskId}`, {
+      method: 'DELETE'
+    })
+    if (!response.ok) throw new Error('Failed to delete task')
+    return true
+  } catch (error) {
+    console.error('Error deleting task:', error)
+    return false
+  }
+}
 
 const assigneeOptions = ["All", "Hamza", "Manus", "Monica", "Jarvis", "Luna"]
 
@@ -88,11 +146,12 @@ export function TasksBoard() {
   const { canUndo, popLastAction, addTaskCreate, addTaskDelete, addTaskUpdate, addTaskStatusChange } = useUndoSystem()
   const { columns } = useKanbanColumns()
 
-  // Load data from localStorage on mount
+  // Load data from API on mount
   useEffect(() => {
     setMounted(true)
-    const loadedTasks = loadTasks()
-    setTasks(loadedTasks)
+    fetchTasks().then(loadedTasks => {
+      setTasks(loadedTasks)
+    })
 
     // Load sort preferences
     const savedSort = localStorage.getItem('mission-control-sort')
@@ -106,12 +165,7 @@ export function TasksBoard() {
     logNavigationAction('Task Board')
   }, [])
 
-  // Save tasks whenever they change
-  useEffect(() => {
-    if (mounted) {
-      saveTasks(tasks)
-    }
-  }, [tasks, mounted])
+  // Tasks are now saved via API calls (removed localStorage auto-save)
 
   // Keyboard shortcuts: N to add new task, T for template picker, Ctrl+Z for undo
   useEffect(() => {
@@ -265,44 +319,58 @@ export function TasksBoard() {
       }
     }
 
-    setTasks(prevTasks =>
-      prevTasks.map(task =>
-        task._id === draggableId
-          ? { ...task, status: newStatus, updatedAt: Date.now() }
-          : task
-      )
-    )
+    // Update task via API
+    updateTask(draggableId, { status: newStatus }).then(updatedTask => {
+      if (updatedTask) {
+        setTasks(prevTasks =>
+          prevTasks.map(task =>
+            task._id === draggableId
+              ? { ...task, status: newStatus, updatedAt: Date.now() }
+              : task
+          )
+        )
+      }
+    })
   }
 
-  const handleAddTask = (taskData: Partial<Task>) => {
+  const handleAddTask = async (taskData: Partial<Task>) => {
     if (editingTask) {
-      const updatedTask = { ...editingTask, ...taskData, updatedAt: Date.now() }
-      addTaskUpdate(editingTask, updatedTask)
-
-      setTasks(prevTasks =>
-        prevTasks.map(task =>
-          task._id === editingTask._id
-            ? updatedTask
-            : task
+      const updatedTaskData = { ...taskData, updatedAt: Date.now() }
+      const updatedTask = await updateTask(editingTask._id, updatedTaskData)
+      
+      if (updatedTask) {
+        const fullUpdatedTask = { ...editingTask, ...updatedTaskData }
+        addTaskUpdate(editingTask, fullUpdatedTask)
+        
+        setTasks(prevTasks =>
+          prevTasks.map(task =>
+            task._id === editingTask._id
+              ? fullUpdatedTask
+              : task
+          )
         )
-      )
-      toast.success('Task Updated', `"${taskData.title}" has been successfully updated.`)
+        toast.success('Task Updated', `"${taskData.title}" has been successfully updated.`)
+      } else {
+        toast.error('Update Failed', 'Could not update task. Please try again.')
+      }
     } else {
-      const newTask: Task = {
-        _id: `task-${Date.now()}`,
+      const newTaskData = {
         title: taskData.title!,
         description: taskData.description || "",
         assignee: taskData.assignee!,
         status: "todo",
         priority: taskData.priority!,
-        createdAt: Date.now(),
-        updatedAt: Date.now(),
         ...(taskData.dueDate && { dueDate: taskData.dueDate }),
       }
 
-      addTaskCreate(newTask)
-      setTasks(prevTasks => [newTask, ...prevTasks])
-      toast.success('Task Created', `"${taskData.title}" assigned to ${taskData.assignee}.`)
+      const newTask = await createTask(newTaskData)
+      if (newTask) {
+        addTaskCreate(newTask)
+        setTasks(prevTasks => [newTask, ...prevTasks])
+        toast.success('Task Created', `"${taskData.title}" assigned to ${taskData.assignee}.`)
+      } else {
+        toast.error('Creation Failed', 'Could not create task. Please try again.')
+      }
     }
     setEditingTask(null)
   }
@@ -312,25 +380,31 @@ export function TasksBoard() {
     setDialogOpen(true)
   }
 
-  const handleDeleteTask = (taskId: string) => {
+  const handleDeleteTask = async (taskId: string) => {
     const taskToDelete = tasks.find(task => task._id === taskId)
     if (taskToDelete) {
-      addTaskDelete(taskToDelete)
-      setTasks(prevTasks => prevTasks.filter(task => task._id !== taskId))
+      const success = await deleteTask(taskId)
+      
+      if (success) {
+        addTaskDelete(taskToDelete)
+        setTasks(prevTasks => prevTasks.filter(task => task._id !== taskId))
 
-      // Log the deletion activity
-      logTaskAction(
-        'deleted',
-        taskToDelete.title,
-        taskToDelete.assignee,
-        taskId,
-        {
-          status: taskToDelete.status,
-          priority: taskToDelete.priority,
-          wasCompleted: taskToDelete.status === 'done'
-        }
-      )
-      toast.success('Task Deleted', `"${taskToDelete.title}" has been removed.`)
+        // Log the deletion activity
+        logTaskAction(
+          'deleted',
+          taskToDelete.title,
+          taskToDelete.assignee,
+          taskId,
+          {
+            status: taskToDelete.status,
+            priority: taskToDelete.priority,
+            wasCompleted: taskToDelete.status === 'done'
+          }
+        )
+        toast.success('Task Deleted', `"${taskToDelete.title}" has been removed.`)
+      } else {
+        toast.error('Delete Failed', 'Could not delete task. Please try again.')
+      }
     }
   }
 

@@ -36,11 +36,12 @@ interface Task {
   created: string;
   assignee?: string;
   tags: string[];
-  source: 'memory' | 'cron' | 'agent';
+  source: 'memory' | 'cron' | 'agent' | 'user';
 }
 
 const OPENCLAW_WORKSPACE = '/root/.openclaw/workspace';
 const OPENCLAW_CONFIG = '/root/.openclaw/openclaw.json';
+const TASKS_DATA_FILE = '/root/.openclaw/workspace/mission-control/data/tasks.json';
 
 async function readOpenClawConfig(): Promise<OpenClawConfig | null> {
   try {
@@ -49,6 +50,24 @@ async function readOpenClawConfig(): Promise<OpenClawConfig | null> {
   } catch (error) {
     console.error('Failed to read OpenClaw config:', error);
     return null;
+  }
+}
+
+async function readTasksFromFile(): Promise<Task[]> {
+  try {
+    const data = await fs.readFile(TASKS_DATA_FILE, 'utf-8');
+    return JSON.parse(data);
+  } catch (error) {
+    // If file doesn't exist, return empty array
+    return [];
+  }
+}
+
+async function writeTasksToFile(tasks: Task[]): Promise<void> {
+  try {
+    await fs.writeFile(TASKS_DATA_FILE, JSON.stringify(tasks, null, 2), 'utf-8');
+  } catch (error) {
+    throw new Error(`Failed to write tasks: ${error}`);
   }
 }
 
@@ -222,15 +241,16 @@ async function readAgentWorkspaces(): Promise<Task[]> {
 
 export async function GET(request: NextRequest) {
   try {
-    // Read all task sources
-    const [memoryTasks, cronTasks, agentTasks] = await Promise.all([
+    // Read all task sources including file-based user tasks
+    const [memoryTasks, cronTasks, agentTasks, fileTasks] = await Promise.all([
       readMemoryFiles(),
       readCronJobs(),
-      readAgentWorkspaces()
+      readAgentWorkspaces(),
+      readTasksFromFile()
     ]);
 
-    // Combine all tasks
-    const allTasks = [...memoryTasks, ...cronTasks, ...agentTasks];
+    // Combine all tasks (user tasks first, then system tasks)
+    const allTasks = [...fileTasks, ...memoryTasks, ...cronTasks, ...agentTasks];
 
     // Add some metadata
     const response = {
@@ -238,6 +258,7 @@ export async function GET(request: NextRequest) {
       meta: {
         total: allTasks.length,
         bySource: {
+          user: fileTasks.length,
           memory: memoryTasks.length,
           cron: cronTasks.length,
           agent: agentTasks.length
@@ -256,6 +277,152 @@ export async function GET(request: NextRequest) {
     console.error('API Error:', error);
     return NextResponse.json(
       { error: 'Failed to fetch tasks', details: error instanceof Error ? error.message : 'Unknown error' },
+      { status: 500 }
+    );
+  }
+}
+
+export async function POST(request: NextRequest) {
+  try {
+    const body = await request.json();
+    
+    // Validate required fields
+    if (!body.title || !body.status || !body.priority) {
+      return NextResponse.json(
+        { error: 'Missing required fields: title, status, priority' },
+        { status: 400 }
+      );
+    }
+
+    // Read existing tasks
+    const tasks = await readTasksFromFile();
+
+    // Create new task
+    const newTask: Task = {
+      id: `user-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+      title: body.title,
+      description: body.description || '',
+      status: body.status,
+      priority: body.priority,
+      created: new Date().toISOString(),
+      assignee: body.assignee || '',
+      tags: body.tags || [],
+      source: 'user'
+    };
+
+    // Add to tasks array
+    tasks.unshift(newTask); // Add to beginning
+
+    // Write back to file
+    await writeTasksToFile(tasks);
+
+    return NextResponse.json({
+      task: newTask,
+      message: 'Task created successfully'
+    }, { status: 201 });
+
+  } catch (error) {
+    console.error('POST Error:', error);
+    return NextResponse.json(
+      { error: 'Failed to create task', details: error instanceof Error ? error.message : 'Unknown error' },
+      { status: 500 }
+    );
+  }
+}
+
+export async function PUT(request: NextRequest) {
+  try {
+    const body = await request.json();
+    const { id } = body;
+    
+    if (!id) {
+      return NextResponse.json(
+        { error: 'Task ID is required' },
+        { status: 400 }
+      );
+    }
+
+    // Read existing tasks
+    const tasks = await readTasksFromFile();
+
+    // Find task index
+    const taskIndex = tasks.findIndex(task => task.id === id);
+    if (taskIndex === -1) {
+      return NextResponse.json(
+        { error: 'Task not found' },
+        { status: 404 }
+      );
+    }
+
+    // Update task (preserve created date and id)
+    const updatedTask: Task = {
+      ...tasks[taskIndex],
+      title: body.title || tasks[taskIndex].title,
+      description: body.description !== undefined ? body.description : tasks[taskIndex].description,
+      status: body.status || tasks[taskIndex].status,
+      priority: body.priority || tasks[taskIndex].priority,
+      assignee: body.assignee !== undefined ? body.assignee : tasks[taskIndex].assignee,
+      tags: body.tags || tasks[taskIndex].tags
+    };
+
+    tasks[taskIndex] = updatedTask;
+
+    // Write back to file
+    await writeTasksToFile(tasks);
+
+    return NextResponse.json({
+      task: updatedTask,
+      message: 'Task updated successfully'
+    });
+
+  } catch (error) {
+    console.error('PUT Error:', error);
+    return NextResponse.json(
+      { error: 'Failed to update task', details: error instanceof Error ? error.message : 'Unknown error' },
+      { status: 500 }
+    );
+  }
+}
+
+export async function DELETE(request: NextRequest) {
+  try {
+    const { searchParams } = new URL(request.url);
+    const id = searchParams.get('id');
+    
+    if (!id) {
+      return NextResponse.json(
+        { error: 'Task ID is required' },
+        { status: 400 }
+      );
+    }
+
+    // Read existing tasks
+    const tasks = await readTasksFromFile();
+
+    // Find task
+    const taskIndex = tasks.findIndex(task => task.id === id);
+    if (taskIndex === -1) {
+      return NextResponse.json(
+        { error: 'Task not found' },
+        { status: 404 }
+      );
+    }
+
+    // Remove task
+    const deletedTask = tasks.splice(taskIndex, 1)[0];
+
+    // Write back to file
+    await writeTasksToFile(tasks);
+
+    return NextResponse.json({
+      task: deletedTask,
+      message: 'Task deleted successfully'
+    });
+
+  } catch (error) {
+    console.error('DELETE Error:', error);
+    return NextResponse.json(
+      { error: 'Failed to delete task', details: error instanceof Error ? error.message : 'Unknown error' },
       { status: 500 }
     );
   }
