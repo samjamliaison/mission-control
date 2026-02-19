@@ -184,8 +184,8 @@ export function TaskCard({ task, index, onEdit, onDelete }: TaskCardProps) {
             <CardHeader className="pb-3 pt-5 px-5 relative">
               <div className="flex items-start justify-between gap-3">
                 <h3 className={cn(
-                  "font-heading font-semibold text-sm leading-tight flex-1",
-                  isCompleted && "line-through text-[hsl(var(--command-text-muted))]"
+                  "font-semibold text-body-large flex-1",
+                  isCompleted && "line-through text-muted"
                 )}>
                   {task.title}
                 </h3>
@@ -219,7 +219,7 @@ export function TaskCard({ task, index, onEdit, onDelete }: TaskCardProps) {
             <CardContent className="pt-0 pb-5 px-5 space-y-4">
               {task.description && (
                 <p className={cn(
-                  "text-xs text-[hsl(var(--command-text-muted))] line-clamp-3",
+                  "text-body-small text-secondary line-clamp-3",
                   isCompleted && "line-through opacity-60"
                 )}>
                   {task.description}
@@ -244,10 +244,10 @@ export function TaskCard({ task, index, onEdit, onDelete }: TaskCardProps) {
                     <span>{agentAvatars[task.assignee as keyof typeof agentAvatars]}</span>
                   </div>
                   <div className="flex flex-col">
-                    <span className={cn("text-xs font-medium", agentColor.text)}>
+                    <span className={cn("text-body-small font-semibold", agentColor.text)}>
                       {task.assignee}
                     </span>
-                    <span className="text-[10px] text-[hsl(var(--command-text-dim))]">
+                    <span className="text-body-small text-muted">
                       Agent
                     </span>
                   </div>
@@ -285,13 +285,13 @@ export function TaskCard({ task, index, onEdit, onDelete }: TaskCardProps) {
                         }
                       }}
                     />
-                    <span className={cn("text-xs font-medium uppercase tracking-wider", priorityStyle.text)}>
-                      {task.priority}
+                    <span className={cn("text-body-small font-semibold", priorityStyle.text)}>
+                      {task.priority.charAt(0).toUpperCase() + task.priority.slice(1)}
                     </span>
                   </div>
                 </div>
                 
-                <div className="flex items-center gap-1 text-[hsl(var(--command-text-dim))]">
+                <div className="flex items-center gap-1 text-muted text-body-small">
                   <Calendar className="h-3 w-3" />
                   <span>{formatDate(task.createdAt)}</span>
                 </div>
@@ -299,7 +299,7 @@ export function TaskCard({ task, index, onEdit, onDelete }: TaskCardProps) {
 
               {/* Status Indicator */}
               <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2 text-xs text-[hsl(var(--command-text-dim))]">
+                <div className="flex items-center gap-2 text-body-small text-muted">
                   <Clock className="h-3 w-3" />
                   <span>Updated {formatDate(task.updatedAt)}</span>
                 </div>
@@ -307,7 +307,7 @@ export function TaskCard({ task, index, onEdit, onDelete }: TaskCardProps) {
                 {isCompleted && (
                   <div className="flex items-center gap-1 text-[hsl(var(--command-success))]">
                     <div className="w-2 h-2 bg-[hsl(var(--command-success))] rounded-full animate-pulse" />
-                    <span className="text-xs font-medium">Complete</span>
+                    <span className="text-body-small font-semibold">Complete</span>
                   </div>
                 )}
               </div>

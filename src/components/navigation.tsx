@@ -87,10 +87,10 @@ export function Navigation() {
                     <Command className="h-5 w-5 text-[#06b6d4]" />
                   </div>
                   <div>
-                    <h1 className="font-display font-bold text-lg text-premium">
+                    <h1 className="font-semibold text-heading-3 text-premium">
                       Mission Control
                     </h1>
-                    <p className="text-xs text-white/50">OpenClaw Command Center</p>
+                    <p className="text-body-small text-secondary">OpenClaw Command Center</p>
                   </div>
                 </motion.div>
               )}
@@ -161,7 +161,7 @@ export function Navigation() {
                             transition={{ duration: 0.2 }}
                             className="overflow-hidden"
                           >
-                            <span className="font-medium text-sm whitespace-nowrap">
+                            <span className="font-semibold text-body whitespace-nowrap">
                               {item.name}
                             </span>
                           </motion.div>
@@ -172,8 +172,8 @@ export function Navigation() {
                       {isCollapsed && (
                         <div className="absolute left-full ml-3 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-50">
                           <div className="backdrop-blur-xl bg-white/[0.03] border border-white/[0.06] px-3 py-2 rounded-lg shadow-lg">
-                            <div className="text-sm font-medium text-white/90">{item.name}</div>
-                            <div className="text-xs text-white/50">{item.description}</div>
+                            <div className="text-body font-semibold text-white/90">{item.name}</div>
+                            <div className="text-body-small text-secondary">{item.description}</div>
                           </div>
                         </div>
                       )}
@@ -209,8 +209,8 @@ export function Navigation() {
                     transition={{ duration: 0.2 }}
                     className="flex-1 overflow-hidden"
                   >
-                    <div className="text-xs font-medium text-white/70">System Online</div>
-                    <div className="text-xs text-white/40">All services active</div>
+                    <div className="text-body-small font-semibold text-white/70">System Online</div>
+                    <div className="text-body-small text-muted">All services active</div>
                   </motion.div>
                 )}
               </AnimatePresence>
@@ -233,7 +233,7 @@ export function Navigation() {
                     animate={{ opacity: 1, width: "auto" }}
                     exit={{ opacity: 0, width: 0 }}
                     transition={{ duration: 0.2 }}
-                    className="text-sm font-medium whitespace-nowrap overflow-hidden"
+                    className="text-body font-semibold whitespace-nowrap overflow-hidden"
                   >
                     Settings
                   </motion.span>

@@ -30,14 +30,14 @@ export function StatsCard({
       <div className="space-y-4">
         <div className="flex items-center gap-3">
           <Icon className="h-5 w-5 text-[#22c55e]" />
-          <span className="text-sm font-medium text-white/70">{label}</span>
+          <span className="text-body font-semibold text-white/70">{label}</span>
         </div>
         <div className="flex items-center gap-6">
-          <div className="text-3xl font-display font-bold text-[#22c55e]">
+          <div className="text-heading-1 font-semibold text-[#22c55e]">
             {value}
           </div>
           {subLabel && subValue && (
-            <div className="text-xs text-white/50 space-y-1">
+            <div className="text-body-small text-secondary space-y-1">
               <div>{subValue} {subLabel}</div>
             </div>
           )}

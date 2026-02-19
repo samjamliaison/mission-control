@@ -269,7 +269,7 @@ export function TasksBoard() {
                     >
                       <div className="flex items-center gap-2 text-xs">
                         <Activity className="h-3 w-3 text-[hsl(var(--command-accent))]" />
-                        <span className="text-[hsl(var(--command-text-muted))]">
+                        <span className="text-secondary">
                           {filteredTasks.length} tasks
                         </span>
                       </div>
@@ -313,7 +313,7 @@ export function TasksBoard() {
               <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
                 <Button 
                   onClick={handleAddNewTask} 
-                  className="btn-premium font-semibold px-6"
+                  className="btn-premium text-body font-semibold px-6"
                 >
                   <Plus className="h-4 w-4 mr-2" />
                   Deploy Task

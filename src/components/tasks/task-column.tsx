@@ -93,7 +93,7 @@ export function TaskColumn({ title, status, tasks, onEditTask, onDeleteTask }: T
               <div className="p-2 glass-morphism rounded-lg">
                 <IconComponent className={cn("h-4 w-4", config.color)} />
               </div>
-              <CardTitle className={cn("text-sm font-heading font-semibold status-indicator", `status-${status}`)}>
+              <CardTitle className={cn("text-body-large font-semibold status-indicator", `status-${status}`)}>
                 {config.title}
               </CardTitle>
             </div>
@@ -194,7 +194,7 @@ export function TaskColumn({ title, status, tasks, onEditTask, onDeleteTask }: T
                       <div className="w-12 h-12 mx-auto glass-morphism rounded-full flex items-center justify-center">
                         <IconComponent className={cn("h-5 w-5", config.color)} />
                       </div>
-                      <p className="text-[hsl(var(--command-text-dim))] text-sm">
+                      <p className="text-muted text-body">
                         {status === "todo" && "Ready for new missions"}
                         {status === "in-progress" && "No active operations"}
                         {status === "done" && "No completed missions"}

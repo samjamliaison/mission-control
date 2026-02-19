@@ -36,11 +36,11 @@ export function PageHeader({ icon: Icon, title, subtitle, children, className = 
             <div className="p-3 rounded-xl backdrop-blur-xl bg-white/[0.03] border border-white/[0.06]">
               <Icon className="h-7 w-7 text-[#06b6d4]" />
             </div>
-            <h1 className="text-5xl font-display font-bold bg-gradient-to-br from-white/90 via-[#06b6d4] to-white/70 bg-clip-text text-transparent">
+            <h1 className="text-display font-semibold bg-gradient-to-br from-white/90 via-[#06b6d4] to-white/70 bg-clip-text text-transparent">
               {title}
             </h1>
           </div>
-          <p className="text-white/60 text-lg max-w-2xl leading-relaxed pl-[4.75rem]">
+          <p className="text-secondary text-body-large max-w-2xl pl-[4.75rem]">
             {subtitle}
           </p>
         </div>
