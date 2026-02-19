@@ -230,30 +230,38 @@ export function Navigation() {
               </AnimatePresence>
             </motion.div>
 
-            {/* Settings Button */}
-            <motion.button 
+            {/* Settings Link */}
+            <Link
+              href="/settings"
               className={cn(
-                "w-full flex items-center gap-3 p-3 rounded-xl transition-all duration-200 text-white/50 hover:text-white/90 hover:bg-white/[0.03] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#06b6d4] focus-visible:ring-opacity-60",
-                isCollapsed && "justify-center"
+                "w-full flex items-center gap-3 p-3 rounded-xl transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#06b6d4] focus-visible:ring-opacity-60",
+                isCollapsed && "justify-center",
+                pathname === "/settings"
+                  ? "text-[#06b6d4] bg-white/[0.05] border-white/[0.08]"
+                  : "text-white/50 hover:text-white/90 hover:bg-white/[0.03]"
               )}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
             >
-              <Settings className="h-4 w-4" />
-              <AnimatePresence mode="wait">
-                {!isCollapsed && (
-                  <motion.span
-                    initial={{ opacity: 0, width: 0 }}
-                    animate={{ opacity: 1, width: "auto" }}
-                    exit={{ opacity: 0, width: 0 }}
-                    transition={{ duration: 0.2 }}
-                    className="text-body font-semibold whitespace-nowrap overflow-hidden"
-                  >
-                    Settings
-                  </motion.span>
-                )}
-              </AnimatePresence>
-            </motion.button>
+              <motion.div
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                className="flex items-center gap-3 w-full"
+              >
+                <Settings className="h-4 w-4" />
+                <AnimatePresence mode="wait">
+                  {!isCollapsed && (
+                    <motion.span
+                      initial={{ opacity: 0, width: 0 }}
+                      animate={{ opacity: 1, width: "auto" }}
+                      exit={{ opacity: 0, width: 0 }}
+                      transition={{ duration: 0.2 }}
+                      className="text-body font-semibold whitespace-nowrap overflow-hidden"
+                    >
+                      Settings
+                    </motion.span>
+                  )}
+                </AnimatePresence>
+              </motion.div>
+            </Link>
           </div>
         </motion.nav>
       </div>
