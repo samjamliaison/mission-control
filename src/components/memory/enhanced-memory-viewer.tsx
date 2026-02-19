@@ -40,7 +40,7 @@ import { MemoryCard } from "./memory-card"
 import { MemoryCreationDialog } from "./memory-creation-dialog"
 import { EmptyState } from "@/components/ui/empty-state"
 import { useToastActions } from "@/components/ui/toast"
-import { loadMemories, saveMemories } from "@/lib/data-persistence"
+// import { loadMemories, saveMemories } from "@/lib/data-persistence" - Replaced with API calls
 import { MemoryEntry } from "./memory-entry"
 import { cn } from "@/lib/utils"
 
@@ -66,6 +66,21 @@ const categoryConfig = {
     bg: "bg-yellow-500/10",
     border: "border-yellow-500/20",
     label: "Lessons Learned"
+  }
+}
+
+// API functions for memory management
+async function fetchMemories(): Promise<MemoryEntry[]> {
+  try {
+    const response = await fetch('/api/memory')
+    if (!response.ok) throw new Error('Failed to fetch memories')
+    const data = await response.json()
+    return data.memories || []
+  } catch (error) {
+    console.error('Error fetching memories:', error)
+    // Fallback to localStorage
+    const stored = localStorage.getItem('mission-control-memories')
+    return stored ? JSON.parse(stored) : []
   }
 }
 
@@ -140,19 +155,15 @@ export function EnhancedMemoryViewer() {
   const [mounted, setMounted] = useState(false)
   const toast = useToastActions()
 
-  // Load memories on mount
+  // Load memories from API on mount
   useEffect(() => {
     setMounted(true)
-    const loadedMemories = loadMemories()
-    setMemories(loadedMemories)
+    fetchMemories().then(loadedMemories => {
+      setMemories(loadedMemories)
+    })
   }, [])
 
-  // Save memories when they change
-  useEffect(() => {
-    if (mounted) {
-      saveMemories(memories)
-    }
-  }, [memories, mounted])
+  // Memories from API are read-only (no auto-save to localStorage)
 
   // Get all unique tags
   const allTags = useMemo(() => {
