@@ -1,0 +1,353 @@
+# Page snapshot
+
+```yaml
+- generic:
+  - generic:
+    - generic:
+      - generic:
+        - navigation:
+          - generic:
+            - generic:
+              - generic:
+                - img
+              - generic:
+                - heading [level=1]: Mission Control
+                - paragraph: OpenClaw Command Center
+            - generic:
+              - generic:
+                - link:
+                  - /url: /
+                  - generic:
+                    - img
+                    - generic:
+                      - generic: Mission Control
+              - generic:
+                - link:
+                  - /url: /pipeline
+                  - generic:
+                    - img
+                    - generic:
+                      - generic: Content Creation
+              - generic:
+                - link:
+                  - /url: /calendar
+                  - generic:
+                    - img
+                    - generic:
+                      - generic: Schedule View
+              - generic:
+                - link:
+                  - /url: /memory
+                  - generic:
+                    - img
+                    - generic:
+                      - generic: Knowledge Base
+              - generic:
+                - link:
+                  - /url: /team
+                  - generic:
+                    - img
+                    - generic:
+                      - generic: Agent Status
+              - generic:
+                - link:
+                  - /url: /office
+                  - generic:
+                    - img
+                    - generic:
+                      - generic: Virtual HQ
+            - generic:
+              - generic: Online
+    - generic:
+      - main:
+        - generic:
+          - generic:
+            - generic:
+              - generic:
+                - generic:
+                  - generic:
+                    - generic:
+                      - generic:
+                        - img
+                      - heading [level=1]: Mission Control
+                    - paragraph: Advanced task orchestration system for OpenClaw operations. Real-time coordination across all agents and systems.
+                  - generic:
+                    - generic:
+                      - generic:
+                        - img
+                        - generic: Mission Progress
+                      - generic:
+                        - generic: 33%
+                        - generic:
+                          - generic: 2/6 Complete
+                          - generic: 2 Active
+                - generic:
+                  - generic:
+                    - generic:
+                      - generic:
+                        - img
+                        - combobox [expanded]:
+                          - generic:
+                            - generic:
+                              - generic: All
+                          - img
+                    - generic:
+                      - img
+                      - generic:
+                        - generic:
+                          - generic: 👤
+                          - generic:
+                            - generic: "Hamza: 0 active"
+                        - generic:
+                          - generic: 🤘
+                          - generic: "1"
+                          - generic:
+                            - generic: "Manus: 1 active"
+                        - generic:
+                          - generic: ✈️
+                          - generic:
+                            - generic: "Monica: 0 active"
+                        - generic:
+                          - generic: 🔍
+                          - generic: "2"
+                          - generic:
+                            - generic: "Jarvis: 2 active"
+                        - generic:
+                          - generic: 🌙
+                          - generic: "1"
+                          - generic:
+                            - generic: "Luna: 1 active"
+                  - generic:
+                    - button:
+                      - img
+                      - text: Deploy Task
+              - generic:
+                - generic:
+                  - generic:
+                    - generic:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - img
+                            - heading [level=3]: Awaiting Deployment
+                          - generic:
+                            - generic: "2"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - button:
+                              - generic:
+                                - generic:
+                                  - generic:
+                                    - heading [level=3]: Mobile responsiveness
+                                    - generic:
+                                      - button:
+                                        - img
+                                      - button:
+                                        - img
+                                - generic:
+                                  - paragraph: Ensure the command center works flawlessly on mobile devices with touch-optimized interactions
+                                  - generic:
+                                    - generic:
+                                      - generic: 🤘
+                                      - generic: Manus
+                                  - generic:
+                                    - generic: MEDIUM
+                                    - generic:
+                                      - img
+                                      - generic: Feb 19
+                                  - generic:
+                                    - generic:
+                                      - img
+                                      - generic: Updated Feb 19
+                          - generic:
+                            - button:
+                              - generic:
+                                - generic:
+                                  - generic:
+                                    - heading [level=3]: Performance optimization
+                                    - generic:
+                                      - button:
+                                        - img
+                                      - button:
+                                        - img
+                                - generic:
+                                  - paragraph: Optimize rendering performance and implement virtualization for large task datasets
+                                  - generic:
+                                    - generic:
+                                      - generic: 🔍
+                                      - generic: Jarvis
+                                  - generic:
+                                    - generic: LOW
+                                    - generic:
+                                      - img
+                                      - generic: Feb 19
+                                  - generic:
+                                    - generic:
+                                      - img
+                                      - generic: Updated Feb 19
+                  - generic:
+                    - generic:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - img
+                            - heading [level=3]: Active Operations
+                          - generic:
+                            - generic: "2"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - button:
+                              - generic:
+                                - generic:
+                                  - generic:
+                                    - heading [level=3]: Design database schema
+                                    - generic:
+                                      - button:
+                                        - img
+                                      - button:
+                                        - img
+                                - generic:
+                                  - paragraph: Create Convex schema for tasks and user management with real-time synchronization capabilities
+                                  - generic:
+                                    - generic:
+                                      - generic: 🔍
+                                      - generic: Jarvis
+                                    - generic:
+                                      - img
+                                  - generic:
+                                    - generic: HIGH
+                                    - generic:
+                                      - img
+                                      - generic: Feb 18
+                                  - generic:
+                                    - generic:
+                                      - img
+                                      - generic: Updated Feb 19
+                          - generic:
+                            - button:
+                              - generic:
+                                - generic:
+                                  - generic:
+                                    - heading [level=3]: Add real-time updates
+                                    - generic:
+                                      - button:
+                                        - img
+                                      - button:
+                                        - img
+                                - generic:
+                                  - paragraph: Implement Convex real-time subscriptions for live task updates across all connected clients
+                                  - generic:
+                                    - generic:
+                                      - generic: 🌙
+                                      - generic: Luna
+                                    - generic:
+                                      - img
+                                  - generic:
+                                    - generic: HIGH
+                                    - generic:
+                                      - img
+                                      - generic: Feb 19
+                                  - generic:
+                                    - generic:
+                                      - img
+                                      - generic: Updated Feb 19
+                  - generic:
+                    - generic:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - img
+                            - heading [level=3]: Mission Complete
+                          - generic:
+                            - generic: "2"
+                      - generic:
+                        - generic:
+                          - generic:
+                            - button:
+                              - generic:
+                                - generic:
+                                  - generic:
+                                    - heading [level=3]: Set up project structure
+                                    - generic:
+                                      - button:
+                                        - img
+                                      - button:
+                                        - img
+                                - generic:
+                                  - paragraph: Initialize the NextJS project with all required dependencies and establish the foundation for the command center interface
+                                  - generic:
+                                    - generic:
+                                      - generic: 👤
+                                      - generic: Hamza
+                                  - generic:
+                                    - generic: HIGH
+                                    - generic:
+                                      - img
+                                      - generic: Feb 18
+                                  - generic:
+                                    - generic:
+                                      - img
+                                      - generic: Updated Feb 18
+                                    - generic:
+                                      - generic: Complete
+                          - generic:
+                            - button:
+                              - generic:
+                                - generic:
+                                  - generic:
+                                    - heading [level=3]: Implement drag and drop
+                                    - generic:
+                                      - button:
+                                        - img
+                                      - button:
+                                        - img
+                                - generic:
+                                  - paragraph: Add beautiful drag and drop functionality using react-beautiful-dnd with smooth animations
+                                  - generic:
+                                    - generic:
+                                      - generic: ✈️
+                                      - generic: Monica
+                                  - generic:
+                                    - generic: MEDIUM
+                                    - generic:
+                                      - img
+                                      - generic: Feb 19
+                                  - generic:
+                                    - generic:
+                                      - img
+                                      - generic: Updated Feb 19
+                                    - generic:
+                                      - generic: Complete
+  - button "Open Next.js Dev Tools" [ref=e6] [cursor=pointer]:
+    - img [ref=e7]
+  - alert
+  - listbox [ref=e10]:
+    - option "All" [active] [selected] [ref=e11]:
+      - img [ref=e14]
+      - generic [ref=e18]: All
+    - option "👤 Hamza" [ref=e19]:
+      - generic [ref=e21]:
+        - generic [ref=e22]: 👤
+        - generic [ref=e23]: Hamza
+    - option "🤘 Manus" [ref=e24]:
+      - generic [ref=e26]:
+        - generic [ref=e27]: 🤘
+        - generic [ref=e28]: Manus
+    - option "✈️ Monica" [ref=e29]:
+      - generic [ref=e31]:
+        - generic [ref=e32]: ✈️
+        - generic [ref=e33]: Monica
+    - option "🔍 Jarvis" [ref=e34]:
+      - generic [ref=e36]:
+        - generic [ref=e37]: 🔍
+        - generic [ref=e38]: Jarvis
+    - option "🌙 Luna" [ref=e39]:
+      - generic [ref=e41]:
+        - generic [ref=e42]: 🌙
+        - generic [ref=e43]: Luna
+```

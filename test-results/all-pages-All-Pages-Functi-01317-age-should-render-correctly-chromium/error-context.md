@@ -1,0 +1,262 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - navigation [ref=e5]:
+      - generic [ref=e6]:
+        - generic [ref=e7]:
+          - img [ref=e9]
+          - generic [ref=e11]:
+            - heading "Mission Control" [level=1] [ref=e12]
+            - paragraph [ref=e13]: OpenClaw Command Center
+        - generic [ref=e14]:
+          - link "Mission Control" [ref=e16] [cursor=pointer]:
+            - /url: /
+            - generic [ref=e17]:
+              - img [ref=e18]
+              - generic:
+                - generic: Mission Control
+          - link "Content Creation" [ref=e22] [cursor=pointer]:
+            - /url: /pipeline
+            - generic [ref=e23]:
+              - img [ref=e24]
+              - generic:
+                - generic: Content Creation
+          - link "Schedule View" [ref=e27] [cursor=pointer]:
+            - /url: /calendar
+            - generic [ref=e28]:
+              - img [ref=e29]
+              - generic:
+                - generic: Schedule View
+          - link "Knowledge Base" [ref=e32] [cursor=pointer]:
+            - /url: /memory
+            - generic [ref=e33]:
+              - img [ref=e34]
+              - generic:
+                - generic: Knowledge Base
+          - link "Agent Status" [ref=e43] [cursor=pointer]:
+            - /url: /team
+            - generic [ref=e44]:
+              - img [ref=e45]
+              - generic:
+                - generic: Agent Status
+          - link "Virtual HQ" [ref=e51] [cursor=pointer]:
+            - /url: /office
+            - generic [ref=e53]:
+              - img [ref=e54]
+              - generic:
+                - generic: Virtual HQ
+        - generic:
+          - generic: Online
+    - main [ref=e57]:
+      - generic [ref=e60]:
+        - generic [ref=e61]:
+          - generic [ref=e62]:
+            - generic [ref=e63]:
+              - generic [ref=e64]:
+                - img [ref=e66]
+                - heading "Virtual Office" [level=1] [ref=e70]
+              - paragraph [ref=e71]: Digital headquarters visualization. Real-time view of agent workstations and current activities across the virtual office space.
+            - generic [ref=e73]:
+              - generic [ref=e74]:
+                - img [ref=e75]
+                - generic [ref=e77]: Office Activity
+              - generic [ref=e78]:
+                - generic [ref=e79]: 73%
+                - generic [ref=e80]:
+                  - generic [ref=e81]: 4/5 Active
+                  - generic [ref=e82]: 4 Busy
+          - generic [ref=e83]:
+            - generic [ref=e85]:
+              - generic [ref=e87]: Systems Online
+              - generic [ref=e88]:
+                - img [ref=e89]
+                - generic [ref=e93]: Connected
+              - generic [ref=e94]:
+                - img [ref=e95]
+                - generic [ref=e98]: 10:56:32 AM
+            - generic [ref=e99]:
+              - button "Floor Plan" [ref=e100]:
+                - img [ref=e101]
+                - text: Floor Plan
+              - button "Office Audio" [ref=e104]:
+                - img [ref=e105]
+                - text: Office Audio
+        - generic [ref=e110]:
+          - heading "OpenClaw Virtual Headquarters Operational" [level=3] [ref=e112]:
+            - generic [ref=e113]:
+              - img [ref=e114]
+              - text: OpenClaw Virtual Headquarters
+            - generic [ref=e119]:
+              - img [ref=e120]
+              - text: Operational
+          - generic [ref=e124]:
+            - generic:
+              - img
+            - generic:
+              - generic [ref=e125]:
+                - generic:
+                  - generic: Command Center
+              - generic [ref=e126]:
+                - generic:
+                  - img [ref=e127]
+                  - generic: Break Room
+              - generic [ref=e129]:
+                - generic:
+                  - img [ref=e130]
+                  - generic: Server Room
+              - generic:
+                - generic:
+                  - generic:
+                    - generic: 👤
+                    - generic:
+                      - generic: Hamza
+                      - generic: Command Bridge
+                    - generic: 85%
+                  - generic:
+                    - generic:
+                      - generic:
+                        - generic: Hamza
+                        - generic: Strategic Planning Session - Q1 2024 Roa...
+                        - generic:
+                          - generic: •
+                          - generic: 45m
+              - generic:
+                - generic:
+                  - generic:
+                    - generic: 🤘
+                    - generic:
+                      - generic: Manus
+                      - generic: Operations Center
+                    - generic: 95%
+                  - generic:
+                    - generic:
+                      - generic:
+                        - generic: Manus
+                        - generic: System Health Monitoring - Infrastructur...
+                        - generic:
+                          - generic: •
+                          - generic: 23m
+              - generic:
+                - generic:
+                  - generic:
+                    - generic: ✈️
+                    - generic:
+                      - generic: Monica
+                      - generic: Creative Studio
+                    - generic: 78%
+                  - generic:
+                    - generic:
+                      - generic:
+                        - generic: Monica
+                        - generic: Content Pipeline Review - YouTube Strate...
+                        - generic:
+                          - generic: •
+                          - generic: 67m
+              - generic:
+                - generic:
+                  - generic:
+                    - generic: 🔍
+                    - generic:
+                      - generic: Jarvis
+                      - generic: Research Lab
+                    - generic: 92%
+                  - generic:
+                    - generic:
+                      - generic:
+                        - generic: Jarvis
+                        - generic: Market Research Analysis - Competitive I...
+                        - generic:
+                          - generic: •
+                          - generic: 12m
+              - generic:
+                - generic:
+                  - generic:
+                    - generic: 🌙
+                    - generic:
+                      - generic: Luna
+                      - generic: Flex Desk
+                    - generic: 15%
+                  - generic:
+                    - generic:
+                      - generic:
+                        - generic: Luna
+                        - generic: Available for Assignment
+                        - generic:
+                          - generic: •
+                          - generic: 8m
+        - generic [ref=e132]:
+          - generic [ref=e133]:
+            - heading "Live Activities" [level=3] [ref=e135]:
+              - img [ref=e136]
+              - text: Live Activities
+            - generic [ref=e138]:
+              - generic [ref=e139] [cursor=pointer]:
+                - generic [ref=e140]: 👤
+                - generic [ref=e141]:
+                  - generic [ref=e142]: Hamza
+                  - generic [ref=e143]: Strategic Planning Session - Q1 2024 Roadmap
+                - generic [ref=e145]: 45m
+              - generic [ref=e146] [cursor=pointer]:
+                - generic [ref=e147]: 🤘
+                - generic [ref=e148]:
+                  - generic [ref=e149]: Manus
+                  - generic [ref=e150]: System Health Monitoring - Infrastructure Check
+                - generic [ref=e152]: 23m
+              - generic [ref=e153] [cursor=pointer]:
+                - generic [ref=e154]: ✈️
+                - generic [ref=e155]:
+                  - generic [ref=e156]: Monica
+                  - generic [ref=e157]: Content Pipeline Review - YouTube Strategy
+                - generic [ref=e159]: 67m
+              - generic [ref=e160] [cursor=pointer]:
+                - generic [ref=e161]: 🔍
+                - generic [ref=e162]:
+                  - generic [ref=e163]: Jarvis
+                  - generic [ref=e164]: Market Research Analysis - Competitive Intelligence
+                - generic [ref=e166]: 12m
+          - generic [ref=e167]:
+            - heading "Workstation Status" [level=3] [ref=e169]:
+              - img [ref=e170]
+              - text: Workstation Status
+            - generic [ref=e172]:
+              - generic [ref=e173]:
+                - generic [ref=e174]:
+                  - img [ref=e175]
+                  - generic [ref=e177]:
+                    - generic [ref=e178]: Command Bridge
+                    - generic [ref=e179]: Hamza
+                - generic [ref=e181]: 85%
+              - generic [ref=e182]:
+                - generic [ref=e183]:
+                  - img [ref=e184]
+                  - generic [ref=e186]:
+                    - generic [ref=e187]: Operations Center
+                    - generic [ref=e188]: Manus
+                - generic [ref=e190]: 95%
+              - generic [ref=e191]:
+                - generic [ref=e192]:
+                  - img [ref=e193]
+                  - generic [ref=e195]:
+                    - generic [ref=e196]: Creative Studio
+                    - generic [ref=e197]: Monica
+                - generic [ref=e199]: 78%
+              - generic [ref=e200]:
+                - generic [ref=e201]:
+                  - img [ref=e202]
+                  - generic [ref=e205]:
+                    - generic [ref=e206]: Research Lab
+                    - generic [ref=e207]: Jarvis
+                - generic [ref=e209]: 92%
+              - generic [ref=e210]:
+                - generic [ref=e211]:
+                  - img [ref=e212]
+                  - generic [ref=e214]:
+                    - generic [ref=e215]: Flex Desk
+                    - generic [ref=e216]: Luna
+                - generic [ref=e218]: 15%
+  - button "Open Next.js Dev Tools" [ref=e224] [cursor=pointer]:
+    - img [ref=e225]
+  - alert [ref=e228]
+```

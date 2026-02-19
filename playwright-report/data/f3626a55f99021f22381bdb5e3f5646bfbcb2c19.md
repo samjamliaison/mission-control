@@ -1,0 +1,191 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - navigation [ref=e5]:
+      - generic [ref=e6]:
+        - generic [ref=e7]:
+          - img [ref=e9]
+          - generic [ref=e11]:
+            - heading "Mission Control" [level=1] [ref=e12]
+            - paragraph [ref=e13]: OpenClaw Command Center
+        - generic [ref=e14]:
+          - link "Mission Control" [ref=e16] [cursor=pointer]:
+            - /url: /
+            - generic [ref=e17]:
+              - img [ref=e18]
+              - generic:
+                - generic: Mission Control
+          - link "Content Creation" [ref=e22] [cursor=pointer]:
+            - /url: /pipeline
+            - generic [ref=e23]:
+              - img [ref=e24]
+              - generic:
+                - generic: Content Creation
+          - link "Schedule View" [ref=e27] [cursor=pointer]:
+            - /url: /calendar
+            - generic [ref=e29]:
+              - img [ref=e30]
+              - generic:
+                - generic: Schedule View
+          - link "Knowledge Base" [ref=e33] [cursor=pointer]:
+            - /url: /memory
+            - generic [ref=e34]:
+              - img [ref=e35]
+              - generic:
+                - generic: Knowledge Base
+          - link "Agent Status" [ref=e44] [cursor=pointer]:
+            - /url: /team
+            - generic [ref=e45]:
+              - img [ref=e46]
+              - generic:
+                - generic: Agent Status
+          - link "Virtual HQ" [ref=e52] [cursor=pointer]:
+            - /url: /office
+            - generic [ref=e53]:
+              - img [ref=e54]
+              - generic:
+                - generic: Virtual HQ
+        - generic:
+          - generic: Online
+    - main [ref=e57]:
+      - generic [ref=e60]:
+        - generic [ref=e61]:
+          - generic [ref=e62]:
+            - generic [ref=e63]:
+              - generic [ref=e64]:
+                - img [ref=e66]
+                - heading "Mission Calendar" [level=1] [ref=e68]
+              - paragraph [ref=e69]: Strategic scheduling and timeline coordination. Real-time tracking of all scheduled operations and automated processes.
+            - generic [ref=e71]:
+              - generic [ref=e72]:
+                - img [ref=e73]
+                - generic [ref=e77]: Execution Rate
+              - generic [ref=e78]:
+                - generic [ref=e79]: 29%
+                - generic [ref=e80]:
+                  - generic [ref=e81]: 2/7 Complete
+                  - generic [ref=e82]: 4 Pending • 1 Failed
+          - generic [ref=e83]:
+            - generic [ref=e84]:
+              - generic [ref=e85]:
+                - button [ref=e86]:
+                  - img [ref=e87]
+                - generic [ref=e89]: February 2024
+                - button [ref=e90]:
+                  - img [ref=e91]
+                - button "Today" [ref=e93]
+              - generic [ref=e94]:
+                - generic [ref=e95]:
+                  - img [ref=e96]
+                  - generic [ref=e99]: 4 pending
+                - generic [ref=e100]:
+                  - img [ref=e101]
+                  - generic [ref=e104]: 2 completed
+                - generic [ref=e105]:
+                  - img [ref=e106]
+                  - generic [ref=e110]: 1 failed
+            - generic [ref=e111]:
+              - button "Month" [ref=e112]:
+                - img [ref=e113]
+                - text: Month
+              - button "Week" [ref=e115]:
+                - img [ref=e116]
+                - text: Week
+        - generic [ref=e118]:
+          - generic [ref=e120]:
+            - generic [ref=e121]: Sun
+            - generic [ref=e122]: Mon
+            - generic [ref=e123]: Tue
+            - generic [ref=e124]: Wed
+            - generic [ref=e125]: Thu
+            - generic [ref=e126]: Fri
+            - generic [ref=e127]: Sat
+          - generic [ref=e129]:
+            - generic [ref=e132]: "28"
+            - generic [ref=e135]: "29"
+            - generic [ref=e138]: "30"
+            - generic [ref=e141]: "31"
+            - generic [ref=e144]: "1"
+            - generic [ref=e147]: "2"
+            - generic [ref=e150]: "3"
+            - generic [ref=e153]: "4"
+            - generic [ref=e156]: "5"
+            - generic [ref=e159]: "6"
+            - generic [ref=e162]: "7"
+            - generic [ref=e165]: "8"
+            - generic [ref=e168]: "9"
+            - generic [ref=e171]: "10"
+            - generic [ref=e174]: "11"
+            - generic [ref=e177]: "12"
+            - generic [ref=e180]: "13"
+            - generic [ref=e183]: "14"
+            - generic [ref=e186]: "15"
+            - generic [ref=e189]: "16"
+            - generic [ref=e192]: "17"
+            - generic [ref=e195]: "18"
+            - generic [ref=e196]:
+              - generic [ref=e197]:
+                - generic [ref=e198]: "19"
+                - generic [ref=e199]: "2"
+              - generic [ref=e200]:
+                - generic [ref=e202] [cursor=pointer]:
+                  - generic [ref=e203]: 🤘
+                  - generic [ref=e204]: Daily Status Sync
+                - generic [ref=e206] [cursor=pointer]:
+                  - generic [ref=e207]: ✈️
+                  - generic [ref=e208]: Content Review Meeting
+            - generic [ref=e209]:
+              - generic [ref=e210]:
+                - generic [ref=e211]: "20"
+                - generic [ref=e212]: "1"
+              - generic [ref=e215] [cursor=pointer]:
+                - generic [ref=e216]: 🔍
+                - generic [ref=e217]: System Health Check
+            - generic [ref=e218]:
+              - generic [ref=e219]:
+                - generic [ref=e220]: "21"
+                - generic [ref=e221]: "1"
+              - generic [ref=e224] [cursor=pointer]:
+                - generic [ref=e225]: 🌙
+                - generic [ref=e226]: Research Sprint Planning
+            - generic [ref=e227]:
+              - generic [ref=e228]:
+                - generic [ref=e229]: "22"
+                - generic [ref=e230]: "1"
+              - generic [ref=e233] [cursor=pointer]:
+                - generic [ref=e234]: 👤
+                - generic [ref=e235]: Weekly Team Sync
+            - generic [ref=e236]:
+              - generic [ref=e237]:
+                - generic [ref=e238]: "23"
+                - generic [ref=e239]: "1"
+              - generic [ref=e242] [cursor=pointer]:
+                - generic [ref=e243]: ✈️
+                - generic [ref=e244]: Content Publishing
+            - generic [ref=e247]: "24"
+            - generic [ref=e248]:
+              - generic [ref=e249]:
+                - generic [ref=e250]: "25"
+                - generic [ref=e251]: "1"
+              - generic [ref=e254] [cursor=pointer]:
+                - generic [ref=e255]: 👤
+                - generic [ref=e256]: Mission Critical Review
+            - generic [ref=e259]: "26"
+            - generic [ref=e262]: "27"
+            - generic [ref=e265]: "28"
+            - generic [ref=e268]: "29"
+            - generic [ref=e271]: "1"
+            - generic [ref=e274]: "2"
+            - generic [ref=e277]: "3"
+            - generic [ref=e280]: "4"
+            - generic [ref=e283]: "5"
+            - generic [ref=e286]: "6"
+            - generic [ref=e289]: "7"
+            - generic [ref=e292]: "8"
+            - generic [ref=e295]: "9"
+  - button "Open Next.js Dev Tools" [ref=e301] [cursor=pointer]:
+    - img [ref=e302]
+  - alert [ref=e305]
+```

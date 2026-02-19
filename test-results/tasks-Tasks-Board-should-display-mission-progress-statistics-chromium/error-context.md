@@ -1,0 +1,272 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - navigation [ref=e5]:
+      - generic [ref=e6]:
+        - generic [ref=e7]:
+          - img [ref=e9]
+          - generic [ref=e11]:
+            - heading "Mission Control" [level=1] [ref=e12]
+            - paragraph [ref=e13]: OpenClaw Command Center
+        - generic [ref=e14]:
+          - link "Mission Control" [ref=e16] [cursor=pointer]:
+            - /url: /
+            - generic [ref=e18]:
+              - img [ref=e19]
+              - generic:
+                - generic: Mission Control
+          - link "Content Creation" [ref=e23] [cursor=pointer]:
+            - /url: /pipeline
+            - generic [ref=e24]:
+              - img [ref=e25]
+              - generic:
+                - generic: Content Creation
+          - link "Schedule View" [ref=e28] [cursor=pointer]:
+            - /url: /calendar
+            - generic [ref=e29]:
+              - img [ref=e30]
+              - generic:
+                - generic: Schedule View
+          - link "Knowledge Base" [ref=e33] [cursor=pointer]:
+            - /url: /memory
+            - generic [ref=e34]:
+              - img [ref=e35]
+              - generic:
+                - generic: Knowledge Base
+          - link "Agent Status" [ref=e44] [cursor=pointer]:
+            - /url: /team
+            - generic [ref=e45]:
+              - img [ref=e46]
+              - generic:
+                - generic: Agent Status
+          - link "Virtual HQ" [ref=e52] [cursor=pointer]:
+            - /url: /office
+            - generic [ref=e53]:
+              - img [ref=e54]
+              - generic:
+                - generic: Virtual HQ
+        - generic [ref=e57]: Online
+    - main [ref=e59]:
+      - generic [ref=e62]:
+        - generic [ref=e63]:
+          - generic [ref=e64]:
+            - generic [ref=e65]:
+              - generic [ref=e66]:
+                - img [ref=e68]
+                - heading "Mission Control" [level=1] [ref=e70]
+              - paragraph [ref=e71]: Advanced task orchestration system for OpenClaw operations. Real-time coordination across all agents and systems.
+            - generic [ref=e73]:
+              - generic [ref=e74]:
+                - img [ref=e75]
+                - generic [ref=e79]: Mission Progress
+              - generic [ref=e80]:
+                - generic [ref=e81]: 33%
+                - generic [ref=e82]:
+                  - generic [ref=e83]: 2/6 Complete
+                  - generic [ref=e84]: 2 Active
+          - generic [ref=e85]:
+            - generic [ref=e86]:
+              - generic [ref=e88]:
+                - img [ref=e89]
+                - combobox [ref=e91]:
+                  - generic:
+                    - generic:
+                      - generic: All
+                  - img [ref=e92]
+              - generic [ref=e94]:
+                - img [ref=e95]
+                - generic [ref=e100]:
+                  - generic [ref=e101]:
+                    - generic [ref=e102] [cursor=pointer]: 👤
+                    - generic:
+                      - generic: "Hamza: 0 active"
+                  - generic [ref=e103]:
+                    - generic [ref=e104] [cursor=pointer]: 🤘
+                    - generic [ref=e105]: "1"
+                    - generic:
+                      - generic: "Manus: 1 active"
+                  - generic [ref=e106]:
+                    - generic [ref=e107] [cursor=pointer]: ✈️
+                    - generic:
+                      - generic: "Monica: 0 active"
+                  - generic [ref=e108]:
+                    - generic [ref=e109] [cursor=pointer]: 🔍
+                    - generic [ref=e110]: "2"
+                    - generic:
+                      - generic: "Jarvis: 2 active"
+                  - generic [ref=e111]:
+                    - generic [ref=e112] [cursor=pointer]: 🌙
+                    - generic [ref=e113]: "1"
+                    - generic:
+                      - generic: "Luna: 1 active"
+            - button "Deploy Task" [ref=e115]:
+              - img [ref=e116]
+              - text: Deploy Task
+        - generic [ref=e118]:
+          - generic [ref=e120]:
+            - generic [ref=e122]:
+              - generic [ref=e123]:
+                - img [ref=e125]
+                - heading "Awaiting Deployment" [level=3] [ref=e128]
+              - generic [ref=e130]: "2"
+            - generic [ref=e132]:
+              - button "Mobile responsiveness Ensure the command center works flawlessly on mobile devices with touch-optimized interactions 🤘 Manus MEDIUM Feb 19 Updated Feb 19" [ref=e134]:
+                - generic [ref=e135] [cursor=pointer]:
+                  - generic [ref=e137]:
+                    - heading "Mobile responsiveness" [level=3] [ref=e138]
+                    - generic [ref=e139]:
+                      - button [ref=e140]:
+                        - img [ref=e141]
+                      - button [ref=e144]:
+                        - img [ref=e145]
+                  - generic [ref=e148]:
+                    - paragraph [ref=e149]: Ensure the command center works flawlessly on mobile devices with touch-optimized interactions
+                    - generic [ref=e151]:
+                      - generic [ref=e152]: 🤘
+                      - generic [ref=e153]: Manus
+                    - generic [ref=e154]:
+                      - generic [ref=e155]: MEDIUM
+                      - generic [ref=e156]:
+                        - img [ref=e157]
+                        - generic [ref=e159]: Feb 19
+                    - generic [ref=e161]:
+                      - img [ref=e162]
+                      - generic [ref=e165]: Updated Feb 19
+              - button "Performance optimization Optimize rendering performance and implement virtualization for large task datasets 🔍 Jarvis LOW Feb 19 Updated Feb 19" [ref=e167]:
+                - generic [ref=e168] [cursor=pointer]:
+                  - generic [ref=e170]:
+                    - heading "Performance optimization" [level=3] [ref=e171]
+                    - generic [ref=e172]:
+                      - button [ref=e173]:
+                        - img [ref=e174]
+                      - button [ref=e177]:
+                        - img [ref=e178]
+                  - generic [ref=e181]:
+                    - paragraph [ref=e182]: Optimize rendering performance and implement virtualization for large task datasets
+                    - generic [ref=e184]:
+                      - generic [ref=e185]: 🔍
+                      - generic [ref=e186]: Jarvis
+                    - generic [ref=e187]:
+                      - generic [ref=e188]: LOW
+                      - generic [ref=e189]:
+                        - img [ref=e190]
+                        - generic [ref=e192]: Feb 19
+                    - generic [ref=e194]:
+                      - img [ref=e195]
+                      - generic [ref=e198]: Updated Feb 19
+          - generic [ref=e200]:
+            - generic [ref=e202]:
+              - generic [ref=e203]:
+                - img [ref=e205]
+                - heading "Active Operations" [level=3] [ref=e207]
+              - generic [ref=e209]: "2"
+            - generic [ref=e211]:
+              - button "Design database schema Create Convex schema for tasks and user management with real-time synchronization capabilities 🔍 Jarvis HIGH Feb 18 Updated Feb 19" [ref=e213]:
+                - generic [ref=e214] [cursor=pointer]:
+                  - generic [ref=e216]:
+                    - heading "Design database schema" [level=3] [ref=e217]
+                    - generic [ref=e218]:
+                      - button [ref=e219]:
+                        - img [ref=e220]
+                      - button [ref=e223]:
+                        - img [ref=e224]
+                  - generic [ref=e227]:
+                    - paragraph [ref=e228]: Create Convex schema for tasks and user management with real-time synchronization capabilities
+                    - generic [ref=e229]:
+                      - generic [ref=e230]:
+                        - generic [ref=e231]: 🔍
+                        - generic [ref=e232]: Jarvis
+                      - img [ref=e234]
+                    - generic [ref=e236]:
+                      - generic [ref=e237]: HIGH
+                      - generic [ref=e238]:
+                        - img [ref=e239]
+                        - generic [ref=e241]: Feb 18
+                    - generic [ref=e243]:
+                      - img [ref=e244]
+                      - generic [ref=e247]: Updated Feb 19
+              - button "Add real-time updates Implement Convex real-time subscriptions for live task updates across all connected clients 🌙 Luna HIGH Feb 19 Updated Feb 19" [ref=e249]:
+                - generic [ref=e250] [cursor=pointer]:
+                  - generic [ref=e252]:
+                    - heading "Add real-time updates" [level=3] [ref=e253]
+                    - generic [ref=e254]:
+                      - button [ref=e255]:
+                        - img [ref=e256]
+                      - button [ref=e259]:
+                        - img [ref=e260]
+                  - generic [ref=e263]:
+                    - paragraph [ref=e264]: Implement Convex real-time subscriptions for live task updates across all connected clients
+                    - generic [ref=e265]:
+                      - generic [ref=e266]:
+                        - generic [ref=e267]: 🌙
+                        - generic [ref=e268]: Luna
+                      - img [ref=e270]
+                    - generic [ref=e272]:
+                      - generic [ref=e273]: HIGH
+                      - generic [ref=e274]:
+                        - img [ref=e275]
+                        - generic [ref=e277]: Feb 19
+                    - generic [ref=e279]:
+                      - img [ref=e280]
+                      - generic [ref=e283]: Updated Feb 19
+          - generic [ref=e285]:
+            - generic [ref=e287]:
+              - generic [ref=e288]:
+                - img [ref=e290]
+                - heading "Mission Complete" [level=3] [ref=e293]
+              - generic [ref=e295]: "2"
+            - generic [ref=e297]:
+              - button "Set up project structure Initialize the NextJS project with all required dependencies and establish the foundation for the command center interface 👤 Hamza HIGH Feb 18 Updated Feb 18 Complete" [ref=e299]:
+                - generic [ref=e300] [cursor=pointer]:
+                  - generic [ref=e302]:
+                    - heading "Set up project structure" [level=3] [ref=e303]
+                    - generic [ref=e304]:
+                      - button [ref=e305]:
+                        - img [ref=e306]
+                      - button [ref=e309]:
+                        - img [ref=e310]
+                  - generic [ref=e313]:
+                    - paragraph [ref=e314]: Initialize the NextJS project with all required dependencies and establish the foundation for the command center interface
+                    - generic [ref=e316]:
+                      - generic [ref=e317]: 👤
+                      - generic [ref=e318]: Hamza
+                    - generic [ref=e319]:
+                      - generic [ref=e320]: HIGH
+                      - generic [ref=e321]:
+                        - img [ref=e322]
+                        - generic [ref=e324]: Feb 18
+                    - generic [ref=e325]:
+                      - generic [ref=e326]:
+                        - img [ref=e327]
+                        - generic [ref=e330]: Updated Feb 18
+                      - generic [ref=e332]: Complete
+              - button "Implement drag and drop Add beautiful drag and drop functionality using react-beautiful-dnd with smooth animations ✈️ Monica MEDIUM Feb 19 Updated Feb 19 Complete" [ref=e334]:
+                - generic [ref=e335] [cursor=pointer]:
+                  - generic [ref=e337]:
+                    - heading "Implement drag and drop" [level=3] [ref=e338]
+                    - generic [ref=e339]:
+                      - button [ref=e340]:
+                        - img [ref=e341]
+                      - button [ref=e344]:
+                        - img [ref=e345]
+                  - generic [ref=e348]:
+                    - paragraph [ref=e349]: Add beautiful drag and drop functionality using react-beautiful-dnd with smooth animations
+                    - generic [ref=e351]:
+                      - generic [ref=e352]: ✈️
+                      - generic [ref=e353]: Monica
+                    - generic [ref=e354]:
+                      - generic [ref=e355]: MEDIUM
+                      - generic [ref=e356]:
+                        - img [ref=e357]
+                        - generic [ref=e359]: Feb 19
+                    - generic [ref=e360]:
+                      - generic [ref=e361]:
+                        - img [ref=e362]
+                        - generic [ref=e365]: Updated Feb 19
+                      - generic [ref=e367]: Complete
+  - button "Open Next.js Dev Tools" [ref=e373] [cursor=pointer]:
+    - img [ref=e374]
+  - alert [ref=e377]
+```

@@ -1,0 +1,334 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - navigation [ref=e5]:
+      - generic [ref=e6]:
+        - generic [ref=e7]:
+          - img [ref=e9]
+          - generic [ref=e11]:
+            - heading "Mission Control" [level=1] [ref=e12]
+            - paragraph [ref=e13]: OpenClaw Command Center
+        - generic [ref=e14]:
+          - link "Mission Control" [ref=e16] [cursor=pointer]:
+            - /url: /
+            - generic [ref=e17]:
+              - img [ref=e18]
+              - generic:
+                - generic: Mission Control
+          - link "Content Creation" [ref=e22] [cursor=pointer]:
+            - /url: /pipeline
+            - generic [ref=e23]:
+              - img [ref=e24]
+              - generic:
+                - generic: Content Creation
+          - link "Schedule View" [ref=e27] [cursor=pointer]:
+            - /url: /calendar
+            - generic [ref=e28]:
+              - img [ref=e29]
+              - generic:
+                - generic: Schedule View
+          - link "Knowledge Base" [ref=e32] [cursor=pointer]:
+            - /url: /memory
+            - generic [ref=e33]:
+              - img [ref=e34]
+              - generic:
+                - generic: Knowledge Base
+          - link "Agent Status" [ref=e43] [cursor=pointer]:
+            - /url: /team
+            - generic [ref=e45]:
+              - img [ref=e46]
+              - generic:
+                - generic: Agent Status
+          - link "Virtual HQ" [ref=e52] [cursor=pointer]:
+            - /url: /office
+            - generic [ref=e53]:
+              - img [ref=e54]
+              - generic:
+                - generic: Virtual HQ
+        - generic:
+          - generic: Online
+    - main [ref=e57]:
+      - generic [ref=e60]:
+        - generic [ref=e61]:
+          - generic [ref=e62]:
+            - generic [ref=e63]:
+              - generic [ref=e64]:
+                - img [ref=e66]
+                - heading "Team Command" [level=1] [ref=e71]
+              - paragraph [ref=e72]: Agent status dashboard and team coordination center. Real-time visibility into all operational personnel and their current activities.
+            - generic [ref=e74]:
+              - generic [ref=e75]:
+                - img [ref=e76]
+                - generic [ref=e80]: Team Performance
+              - generic [ref=e81]:
+                - generic [ref=e82]: 93%
+                - generic [ref=e83]:
+                  - generic [ref=e84]: 4/5 Active
+                  - generic [ref=e85]: 21 Current Tasks
+          - generic [ref=e86]:
+            - generic [ref=e89]:
+              - img [ref=e91]
+              - generic [ref=e96]:
+                - generic [ref=e97]: "5"
+                - generic [ref=e98]: Total Agents
+            - generic [ref=e101]:
+              - img [ref=e103]
+              - generic [ref=e105]:
+                - generic [ref=e106]: "4"
+                - generic [ref=e107]: Online Now
+            - generic [ref=e110]:
+              - img [ref=e112]
+              - generic [ref=e115]:
+                - generic [ref=e116]: "21"
+                - generic [ref=e117]: Active Tasks
+            - generic [ref=e120]:
+              - img [ref=e122]
+              - generic [ref=e125]:
+                - generic [ref=e126]: "493"
+                - generic [ref=e127]: Completed
+        - generic [ref=e129]:
+          - generic [ref=e131] [cursor=pointer]:
+            - generic [ref=e133]:
+              - generic [ref=e134]:
+                - generic [ref=e135]: 👤
+                - generic [ref=e136]:
+                  - heading "Hamza" [level=3] [ref=e137]
+                  - paragraph [ref=e138]: Mission Commander
+              - generic [ref=e139]:
+                - img [ref=e140]
+                - text: Online
+            - generic [ref=e143]:
+              - generic [ref=e144]:
+                - generic [ref=e145]:
+                  - img [ref=e146]
+                  - generic [ref=e148]: Current Activity
+                - paragraph [ref=e149]: Strategic Planning Session
+              - generic [ref=e150]:
+                - generic [ref=e151]:
+                  - generic [ref=e152]: "3"
+                  - generic [ref=e153]: Active
+                - generic [ref=e154]:
+                  - generic [ref=e155]: "47"
+                  - generic [ref=e156]: Done
+                - generic [ref=e157]:
+                  - generic [ref=e158]: 94%
+                  - generic [ref=e159]: Rate
+              - generic [ref=e160]:
+                - generic [ref=e161]:
+                  - img [ref=e162]
+                  - generic [ref=e164]: Core Expertise
+                - generic [ref=e165]:
+                  - generic [ref=e166]: Leadership
+                  - generic [ref=e167]: Strategy
+                  - generic [ref=e168]: Communication
+              - generic [ref=e169]:
+                - generic [ref=e170]:
+                  - img [ref=e171]
+                  - generic [ref=e174]: Last seen 30m ago
+                - generic [ref=e175]:
+                  - img [ref=e176]
+                  - generic [ref=e178]: Joined 180d ago
+              - img [ref=e181]
+          - generic [ref=e185] [cursor=pointer]:
+            - generic [ref=e187]:
+              - generic [ref=e188]:
+                - generic [ref=e189]: 🤘
+                - generic [ref=e190]:
+                  - heading "Manus" [level=3] [ref=e191]
+                  - paragraph [ref=e192]: Chief of Staff
+              - generic [ref=e193]:
+                - img [ref=e194]
+                - text: Active
+            - generic [ref=e196]:
+              - generic [ref=e197]:
+                - generic [ref=e198]:
+                  - img [ref=e199]
+                  - generic [ref=e201]: Current Activity
+                - paragraph [ref=e202]: System Health Monitoring
+              - generic [ref=e203]:
+                - generic [ref=e204]:
+                  - generic [ref=e205]: "5"
+                  - generic [ref=e206]: Active
+                - generic [ref=e207]:
+                  - generic [ref=e208]: "123"
+                  - generic [ref=e209]: Done
+                - generic [ref=e210]:
+                  - generic [ref=e211]: 97%
+                  - generic [ref=e212]: Rate
+              - generic [ref=e213]:
+                - generic [ref=e214]:
+                  - img [ref=e215]
+                  - generic [ref=e217]: Core Expertise
+                - generic [ref=e218]:
+                  - generic [ref=e219]: Infrastructure
+                  - generic [ref=e220]: Automation
+                  - generic [ref=e221]: Operations
+              - generic [ref=e222]:
+                - generic [ref=e223]:
+                  - img [ref=e224]
+                  - generic [ref=e227]: Last seen 5m ago
+                - generic [ref=e228]:
+                  - img [ref=e229]
+                  - generic [ref=e231]: Joined 150d ago
+              - img [ref=e234]
+          - generic [ref=e238] [cursor=pointer]:
+            - generic [ref=e240]:
+              - generic [ref=e241]:
+                - generic [ref=e242]: ✈️
+                - generic [ref=e243]:
+                  - heading "Monica" [level=3] [ref=e244]
+                  - paragraph [ref=e245]: Creative Director
+              - generic [ref=e246]:
+                - img [ref=e247]
+                - text: Active
+            - generic [ref=e249]:
+              - generic [ref=e250]:
+                - generic [ref=e251]:
+                  - img [ref=e252]
+                  - generic [ref=e254]: Current Activity
+                - paragraph [ref=e255]: Content Pipeline Review
+              - generic [ref=e256]:
+                - generic [ref=e257]:
+                  - generic [ref=e258]: "4"
+                  - generic [ref=e259]: Active
+                - generic [ref=e260]:
+                  - generic [ref=e261]: "89"
+                  - generic [ref=e262]: Done
+                - generic [ref=e263]:
+                  - generic [ref=e264]: 91%
+                  - generic [ref=e265]: Rate
+              - generic [ref=e266]:
+                - generic [ref=e267]:
+                  - img [ref=e268]
+                  - generic [ref=e270]: Core Expertise
+                - generic [ref=e271]:
+                  - generic [ref=e272]: Content
+                  - generic [ref=e273]: Design
+                  - generic [ref=e274]: Branding
+              - generic [ref=e275]:
+                - generic [ref=e276]:
+                  - img [ref=e277]
+                  - generic [ref=e280]: Last seen 10m ago
+                - generic [ref=e281]:
+                  - img [ref=e282]
+                  - generic [ref=e284]: Joined 120d ago
+              - img [ref=e287]
+          - generic [ref=e291] [cursor=pointer]:
+            - generic [ref=e293]:
+              - generic [ref=e294]:
+                - generic [ref=e295]: 🔍
+                - generic [ref=e296]:
+                  - heading "Jarvis" [level=3] [ref=e297]
+                  - paragraph [ref=e298]: Intelligence Analyst
+              - generic [ref=e299]:
+                - img [ref=e300]
+                - text: Online
+            - generic [ref=e303]:
+              - generic [ref=e304]:
+                - generic [ref=e305]:
+                  - img [ref=e306]
+                  - generic [ref=e308]: Current Activity
+                - paragraph [ref=e309]: Market Research Analysis
+              - generic [ref=e310]:
+                - generic [ref=e311]:
+                  - generic [ref=e312]: "7"
+                  - generic [ref=e313]: Active
+                - generic [ref=e314]:
+                  - generic [ref=e315]: "156"
+                  - generic [ref=e316]: Done
+                - generic [ref=e317]:
+                  - generic [ref=e318]: 96%
+                  - generic [ref=e319]: Rate
+              - generic [ref=e320]:
+                - generic [ref=e321]:
+                  - img [ref=e322]
+                  - generic [ref=e324]: Core Expertise
+                - generic [ref=e325]:
+                  - generic [ref=e326]: Research
+                  - generic [ref=e327]: Analytics
+                  - generic [ref=e328]: Intelligence
+              - generic [ref=e329]:
+                - generic [ref=e330]:
+                  - img [ref=e331]
+                  - generic [ref=e334]: Last seen 2m ago
+                - generic [ref=e335]:
+                  - img [ref=e336]
+                  - generic [ref=e338]: Joined 200d ago
+              - img [ref=e341]
+          - generic [ref=e345] [cursor=pointer]:
+            - generic [ref=e347]:
+              - generic [ref=e348]:
+                - generic [ref=e349]: 🌙
+                - generic [ref=e350]:
+                  - heading "Luna" [level=3] [ref=e351]
+                  - paragraph [ref=e352]: Versatility Specialist
+              - generic [ref=e353]:
+                - img [ref=e354]
+                - text: Idle
+            - generic [ref=e357]:
+              - generic [ref=e358]:
+                - generic [ref=e359]:
+                  - img [ref=e360]
+                  - generic [ref=e362]: Current Activity
+                - paragraph [ref=e363]: Available for Assignment
+              - generic [ref=e364]:
+                - generic [ref=e365]:
+                  - generic [ref=e366]: "2"
+                  - generic [ref=e367]: Active
+                - generic [ref=e368]:
+                  - generic [ref=e369]: "78"
+                  - generic [ref=e370]: Done
+                - generic [ref=e371]:
+                  - generic [ref=e372]: 89%
+                  - generic [ref=e373]: Rate
+              - generic [ref=e374]:
+                - generic [ref=e375]:
+                  - img [ref=e376]
+                  - generic [ref=e378]: Core Expertise
+                - generic [ref=e379]:
+                  - generic [ref=e380]: Adaptation
+                  - generic [ref=e381]: QA
+                  - generic [ref=e382]: Optimization
+              - generic [ref=e383]:
+                - generic [ref=e384]:
+                  - img [ref=e385]
+                  - generic [ref=e388]: Last seen 15m ago
+                - generic [ref=e389]:
+                  - img [ref=e390]
+                  - generic [ref=e392]: Joined 90d ago
+              - img [ref=e395]
+        - generic [ref=e399]:
+          - heading "Recent Activity" [level=3] [ref=e401]:
+            - img [ref=e402]
+            - text: Recent Activity
+          - generic [ref=e404]:
+            - generic [ref=e405]:
+              - generic [ref=e406]: 👤
+              - generic [ref=e407]:
+                - generic [ref=e408]: Hamza
+                - generic [ref=e409]: Strategic Planning Session
+              - generic [ref=e411]: 3 tasks
+            - generic [ref=e412]:
+              - generic [ref=e413]: 🤘
+              - generic [ref=e414]:
+                - generic [ref=e415]: Manus
+                - generic [ref=e416]: System Health Monitoring
+              - generic [ref=e418]: 5 tasks
+            - generic [ref=e419]:
+              - generic [ref=e420]: ✈️
+              - generic [ref=e421]:
+                - generic [ref=e422]: Monica
+                - generic [ref=e423]: Content Pipeline Review
+              - generic [ref=e425]: 4 tasks
+            - generic [ref=e426]:
+              - generic [ref=e427]: 🔍
+              - generic [ref=e428]:
+                - generic [ref=e429]: Jarvis
+                - generic [ref=e430]: Market Research Analysis
+              - generic [ref=e432]: 7 tasks
+  - button "Open Next.js Dev Tools" [ref=e438] [cursor=pointer]:
+    - img [ref=e439]
+  - alert [ref=e442]
+```
