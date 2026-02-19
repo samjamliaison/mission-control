@@ -2,10 +2,11 @@
 
 import { Draggable } from "@hello-pangea/dnd"
 import { motion } from "framer-motion"
+import Link from "next/link"
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { Edit, Trash2, User, Calendar, Clock, Zap } from "lucide-react"
+import { Edit, Trash2, User, Calendar, Clock, Zap, ExternalLink } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 export interface Task {
@@ -199,12 +200,19 @@ export function TaskCard({ task, index, onEdit, onDelete }: TaskCardProps) {
 
             <CardHeader className="pb-3 pt-5 px-5 relative">
               <div className="flex items-start justify-between gap-3">
-                <h3 className={cn(
-                  "font-semibold text-body-large flex-1",
-                  isCompleted && "line-through text-muted"
-                )}>
-                  {task.title}
-                </h3>
+                <Link
+                  href={`/tasks/${task._id}`}
+                  className="flex-1 group/title"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <h3 className={cn(
+                    "font-semibold text-body-large transition-colors duration-200 group-hover/title:text-[#06b6d4] cursor-pointer flex items-center gap-2",
+                    isCompleted && "line-through text-muted"
+                  )}>
+                    {task.title}
+                    <ExternalLink className="h-3 w-3 opacity-0 group-hover/title:opacity-100 transition-opacity duration-200" />
+                  </h3>
+                </Link>
                 <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200 shrink-0">
                   <Button
                     variant="ghost"
