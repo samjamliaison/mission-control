@@ -11,6 +11,7 @@ import { ContentItem } from "@/types/content"
 interface ContentItemCardProps {
   content: ContentItem
   index: number
+  onView: (content: ContentItem) => void
   onEdit: (content: ContentItem) => void
   onDelete: (contentId: string) => void
 }
@@ -97,7 +98,7 @@ const priorityConfig = {
   }
 }
 
-export function ContentItemCard({ content, index, onEdit, onDelete }: ContentItemCardProps) {
+export function ContentItemCard({ content, index, onView, onEdit, onDelete }: ContentItemCardProps) {
   const formatDate = (timestamp: number) => {
     return new Date(timestamp).toLocaleDateString("en-US", {
       month: "short",
@@ -159,9 +160,15 @@ export function ContentItemCard({ content, index, onEdit, onDelete }: ContentIte
           }}
         >
           <Card
+            onClick={(e) => {
+              // Don't open detail panel when dragging or clicking action buttons
+              if (!snapshot.isDragging && !e.defaultPrevented) {
+                onView(content)
+              }
+            }}
             className={cn(
               "backdrop-blur-xl bg-gradient-to-br from-[hsl(var(--command-surface-elevated))]/95 to-[hsl(var(--command-surface))]/90",
-              "border border-white/5 rounded-xl relative overflow-hidden card-hover-premium transition-all duration-200",
+              "border border-white/5 rounded-xl relative overflow-hidden card-hover-premium transition-all duration-200 cursor-pointer",
               snapshot.isDragging && "border-[hsl(var(--command-accent))]/40 bg-gradient-to-br from-[hsl(var(--command-surface-elevated))]/98 to-[hsl(var(--command-surface))]/95",
               isPublished && !snapshot.isDragging && "opacity-70",
               isActive && !snapshot.isDragging && "ring-1 ring-[hsl(var(--command-accent))]/30"
@@ -222,6 +229,7 @@ export function ContentItemCard({ content, index, onEdit, onDelete }: ContentIte
                     className="h-7 w-7 hover:bg-[hsl(var(--command-accent))]/20 hover:text-[hsl(var(--command-accent))] rounded-lg"
                     onClick={(e) => {
                       e.stopPropagation()
+                      e.preventDefault()
                       onEdit(content)
                     }}
                   >
@@ -233,6 +241,7 @@ export function ContentItemCard({ content, index, onEdit, onDelete }: ContentIte
                     className="h-7 w-7 hover:bg-[hsl(var(--command-danger))]/20 hover:text-[hsl(var(--command-danger))] rounded-lg"
                     onClick={(e) => {
                       e.stopPropagation()
+                      e.preventDefault()
                       onDelete(content._id)
                     }}
                   >

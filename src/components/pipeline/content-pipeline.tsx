@@ -15,6 +15,7 @@ import {
 import { Plus, Filter, Video, Activity, Users, Target, Film } from "lucide-react"
 import { ContentColumn } from "./content-column"
 import { AddContentDialog } from "./add-content-dialog"
+import { ContentDetailPanel } from "./content-detail-panel"
 import { ContentItem } from "@/types/content"
 import { PageHeader } from "@/components/ui/page-header"
 import { StatsCard } from "@/components/ui/stats-card"
@@ -61,6 +62,8 @@ export function ContentPipeline() {
   const [selectedPlatform, setSelectedPlatform] = useState("All")
   const [dialogOpen, setDialogOpen] = useState(false)
   const [editingContent, setEditingContent] = useState<ContentItem | null>(null)
+  const [detailPanelOpen, setDetailPanelOpen] = useState(false)
+  const [selectedContent, setSelectedContent] = useState<ContentItem | null>(null)
   const [mounted, setMounted] = useState(false)
   const toast = useToastActions()
 
@@ -179,13 +182,27 @@ export function ContentPipeline() {
     setEditingContent(null)
   }
 
+  const handleViewContent = (item: ContentItem) => {
+    setSelectedContent(item)
+    setDetailPanelOpen(true)
+  }
+
   const handleEditContent = (item: ContentItem) => {
     setEditingContent(item)
     setDialogOpen(true)
+    // Close detail panel if it's open
+    if (detailPanelOpen) {
+      setDetailPanelOpen(false)
+    }
   }
 
   const handleDeleteContent = (itemId: string) => {
     setContent(prevContent => prevContent.filter(item => item._id !== itemId))
+    // Close detail panel if the deleted item was selected
+    if (selectedContent?._id === itemId) {
+      setDetailPanelOpen(false)
+      setSelectedContent(null)
+    }
   }
 
   const handleAddNewContent = () => {
@@ -331,6 +348,7 @@ export function ContentPipeline() {
                     title="Ideation"
                     stage="idea"
                     content={contentByStatus.idea}
+                    onViewContent={handleViewContent}
                     onEditContent={handleEditContent}
                     onDeleteContent={handleDeleteContent}
                   />
@@ -338,6 +356,7 @@ export function ContentPipeline() {
                     title="Scripting"
                     stage="script"
                     content={contentByStatus.script}
+                    onViewContent={handleViewContent}
                     onEditContent={handleEditContent}
                     onDeleteContent={handleDeleteContent}
                   />
@@ -345,6 +364,7 @@ export function ContentPipeline() {
                     title="Design"
                     stage="thumbnail"
                     content={contentByStatus.thumbnail}
+                    onViewContent={handleViewContent}
                     onEditContent={handleEditContent}
                     onDeleteContent={handleDeleteContent}
                   />
@@ -352,6 +372,7 @@ export function ContentPipeline() {
                     title="Production"
                     stage="filming"
                     content={contentByStatus.filming}
+                    onViewContent={handleViewContent}
                     onEditContent={handleEditContent}
                     onDeleteContent={handleDeleteContent}
                   />
@@ -359,6 +380,7 @@ export function ContentPipeline() {
                     title="Published"
                     stage="published"
                     content={contentByStatus.published}
+                    onViewContent={handleViewContent}
                     onEditContent={handleEditContent}
                     onDeleteContent={handleDeleteContent}
                   />
@@ -375,6 +397,14 @@ export function ContentPipeline() {
         onOpenChange={setDialogOpen}
         onSave={handleAddContent}
         editingContent={editingContent}
+      />
+
+      {/* Content Detail Panel */}
+      <ContentDetailPanel
+        open={detailPanelOpen}
+        onOpenChange={setDetailPanelOpen}
+        content={selectedContent}
+        onEdit={handleEditContent}
       />
     </div>
   )

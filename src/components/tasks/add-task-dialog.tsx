@@ -20,7 +20,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Badge } from "@/components/ui/badge"
-import { Rocket, User, Flag, X, Zap, AlertTriangle, CheckCircle, FileTemplate, Sparkles } from "lucide-react"
+import { Rocket, User, Flag, X, Zap, AlertTriangle, CheckCircle, FileText, Sparkles } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { logTaskAction } from "@/lib/activity-logger"
 import { Task } from "./task-card"
@@ -189,7 +189,7 @@ export function AddTaskDialog({ open, onOpenChange, onSave, editingTask }: AddTa
                     >
                       <Sparkles className="h-4 w-4 mr-2" />
                       Choose Template
-                      <FileTemplate className="h-4 w-4 ml-2" />
+                      <FileText className="h-4 w-4 ml-2" />
                     </Button>
                   </div>
                 </div>
@@ -263,7 +263,7 @@ export function AddTaskDialog({ open, onOpenChange, onSave, editingTask }: AddTa
             className="space-y-2"
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
+            transition={{ delay: 0.15 }}
           >
             <label htmlFor="title" className="text-sm font-heading font-semibold flex items-center gap-2">
               <Flag className="h-4 w-4 text-[hsl(var(--command-accent))]" />
@@ -283,7 +283,7 @@ export function AddTaskDialog({ open, onOpenChange, onSave, editingTask }: AddTa
             className="space-y-2"
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
+            transition={{ delay: 0.25 }}
           >
             <label htmlFor="description" className="text-sm font-heading font-semibold text-[hsl(var(--command-text))]">
               Mission Brief
@@ -304,7 +304,7 @@ export function AddTaskDialog({ open, onOpenChange, onSave, editingTask }: AddTa
               className="space-y-2"
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3 }}
+              transition={{ delay: 0.35 }}
             >
               <label className="text-sm font-heading font-semibold flex items-center gap-2">
                 <User className="h-4 w-4 text-[hsl(var(--command-accent))]" />
@@ -344,7 +344,7 @@ export function AddTaskDialog({ open, onOpenChange, onSave, editingTask }: AddTa
               className="space-y-2"
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4 }}
+              transition={{ delay: 0.45 }}
             >
               <label className="text-sm font-heading font-semibold flex items-center gap-2">
                 {selectedPriority && <selectedPriority.icon className={cn("h-4 w-4", selectedPriority.color)} />}
@@ -380,7 +380,7 @@ export function AddTaskDialog({ open, onOpenChange, onSave, editingTask }: AddTa
             <motion.div
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.5, type: "spring", stiffness: 200 }}
+              transition={{ delay: 0.55, type: "spring", stiffness: 200 }}
               className="flex items-center justify-center p-4 glass-morphism rounded-xl"
             >
               <div className="text-center space-y-2">

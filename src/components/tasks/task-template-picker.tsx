@@ -21,7 +21,7 @@ import {
   User, 
   Tag,
   ChevronRight,
-  FileTemplate,
+  FileText,
   Zap
 } from "lucide-react"
 import { cn } from "@/lib/utils"
@@ -88,7 +88,7 @@ export function TaskTemplatePicker({ open, onOpenChange, onSelectTemplate }: Tas
       opacity: 1,
       transition: {
         duration: 0.3,
-        ease: [0.4, 0.0, 0.2, 1]
+        ease: "easeOut"
       }
     }
   }
@@ -108,7 +108,7 @@ export function TaskTemplatePicker({ open, onOpenChange, onSelectTemplate }: Tas
           <DialogHeader className="relative">
             <div className="flex items-center gap-3 mb-2">
               <div className="p-2 glass-morphism rounded-lg">
-                <FileTemplate className="h-5 w-5 text-[hsl(var(--command-accent))]" />
+                <FileText className="h-5 w-5 text-[hsl(var(--command-accent))]" />
               </div>
               <DialogTitle className="text-xl font-display font-bold">
                 Mission Templates

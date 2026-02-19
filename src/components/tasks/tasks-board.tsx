@@ -12,10 +12,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { Plus, Filter, Command, Activity, Users, Target, CheckSquare } from "lucide-react"
+import { Plus, Filter, Command, Activity, Users, Target, CheckSquare, FileText, Sparkles } from "lucide-react"
 import { TaskColumn } from "./task-column"
 import { AddTaskDialog } from "./add-task-dialog"
+import { TaskTemplatePicker } from "./task-template-picker"
 import { Task } from "./task-card"
+import { TaskTemplate, createTaskFromTemplate } from "@/lib/task-templates"
 import { PageHeader } from "@/components/ui/page-header"
 import { StatsCard } from "@/components/ui/stats-card"
 import { EmptyState } from "@/components/ui/empty-state"
@@ -63,6 +65,7 @@ export function TasksBoard() {
   const [dialogOpen, setDialogOpen] = useState(false)
   const [editingTask, setEditingTask] = useState<Task | null>(null)
   const [mounted, setMounted] = useState(false)
+  const [showTemplatePicker, setShowTemplatePicker] = useState(false)
   const toast = useToastActions()
 
   // Load data from localStorage on mount
@@ -82,16 +85,22 @@ export function TasksBoard() {
     }
   }, [tasks, mounted])
 
-  // Keyboard shortcut: N to add new task
+  // Keyboard shortcuts: N to add new task, T for template picker
   useEffect(() => {
     const handleKeydown = (e: KeyboardEvent) => {
+      // Don't trigger if user is typing in an input/textarea
+      if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) {
+        return
+      }
+      
       if (e.key === 'n' || e.key === 'N') {
-        // Don't trigger if user is typing in an input/textarea
-        if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) {
-          return
-        }
         e.preventDefault()
         handleAddNewTask()
+      }
+      
+      if (e.key === 't' || e.key === 'T') {
+        e.preventDefault()
+        setShowTemplatePicker(true)
       }
     }
 
@@ -239,6 +248,41 @@ export function TasksBoard() {
     setDialogOpen(true)
   }
 
+  const handleTemplateSelect = (template: TaskTemplate) => {
+    const taskData = createTaskFromTemplate(template)
+    
+    // Create task directly from template
+    const newTask: Task = {
+      _id: `task-${Date.now()}`,
+      title: taskData.title!,
+      description: taskData.description || "",
+      assignee: taskData.assignee || "",
+      status: taskData.status || "todo",
+      priority: taskData.priority || "medium",
+      createdAt: Date.now(),
+      updatedAt: Date.now(),
+    }
+
+    setTasks(prevTasks => [...prevTasks, newTask])
+    setShowTemplatePicker(false)
+    
+    // Log the activity
+    logTaskAction(
+      'created',
+      newTask.title,
+      newTask.assignee,
+      newTask._id,
+      { 
+        priority: newTask.priority,
+        fromTemplate: template.name,
+        templateId: template.id,
+        hasDescription: !!newTask.description
+      }
+    )
+    
+    toast.success('Task Created from Template', `"${newTask.title}" has been deployed using the ${template.name} template.`)
+  }
+
   const totalTasks = tasks.length
   const completedTasks = tasks.filter(task => task.status === "done").length
   const inProgressTasks = tasks.filter(task => task.status === "in-progress").length
@@ -350,19 +394,36 @@ export function TasksBoard() {
                 </div>
               </div>
 
-              <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-                <Button 
-                  onClick={handleAddNewTask} 
-                  className="btn-premium text-body font-semibold px-6 relative group min-h-[44px]"
-                  title="Press 'N' to quickly add a new task"
-                >
-                  <Plus className="h-4 w-4 mr-2" />
-                  Deploy Task
-                  <kbd className="hidden group-hover:block absolute -bottom-8 left-1/2 transform -translate-x-1/2 px-2 py-1 text-xs bg-black/80 text-white rounded border border-white/20 pointer-events-none">
-                    N
-                  </kbd>
-                </Button>
-              </motion.div>
+              <div className="flex items-center gap-3">
+                <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+                  <Button 
+                    variant="outline"
+                    onClick={() => setShowTemplatePicker(true)} 
+                    className="glass-morphism border-[hsl(var(--command-accent))]/30 text-[hsl(var(--command-accent))] hover:bg-[hsl(var(--command-accent))]/10 font-semibold px-4 min-h-[44px] relative group"
+                    title="Quick create from template"
+                  >
+                    <Sparkles className="h-4 w-4 mr-2" />
+                    Template
+                    <kbd className="hidden group-hover:block absolute -bottom-8 left-1/2 transform -translate-x-1/2 px-2 py-1 text-xs bg-black/80 text-white rounded border border-white/20 pointer-events-none">
+                      T
+                    </kbd>
+                  </Button>
+                </motion.div>
+                
+                <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+                  <Button 
+                    onClick={handleAddNewTask} 
+                    className="btn-premium text-body font-semibold px-6 relative group min-h-[44px]"
+                    title="Press 'N' to quickly add a new task"
+                  >
+                    <Plus className="h-4 w-4 mr-2" />
+                    Deploy Task
+                    <kbd className="hidden group-hover:block absolute -bottom-8 left-1/2 transform -translate-x-1/2 px-2 py-1 text-xs bg-black/80 text-white rounded border border-white/20 pointer-events-none">
+                      N
+                    </kbd>
+                  </Button>
+                </motion.div>
+              </div>
             </div>
           </motion.div>
 
@@ -413,6 +474,13 @@ export function TasksBoard() {
         onOpenChange={setDialogOpen}
         onSave={handleAddTask}
         editingTask={editingTask}
+      />
+      
+      {/* Template Picker */}
+      <TaskTemplatePicker
+        open={showTemplatePicker}
+        onOpenChange={setShowTemplatePicker}
+        onSelectTemplate={handleTemplateSelect}
       />
     </div>
   )

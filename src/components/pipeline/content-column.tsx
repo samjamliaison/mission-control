@@ -20,6 +20,7 @@ interface ContentColumnProps {
     bg: string
     icon: string
   }
+  onViewContent: (content: ContentItem) => void
   onEditContent: (content: ContentItem) => void
   onDeleteContent: (contentId: string) => void
 }
@@ -325,6 +326,7 @@ export function ContentColumn({ title, stage, content, config, onEditContent, on
                         <ContentItemCard
                           content={item}
                           index={index}
+                          onView={onViewContent}
                           onEdit={onEditContent}
                           onDelete={onDeleteContent}
                         />
