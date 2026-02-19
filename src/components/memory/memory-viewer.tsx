@@ -25,7 +25,8 @@ import {
   Tag,
   Eye,
   Archive,
-  Zap
+  Zap,
+  X
 } from "lucide-react"
 import { MemoryEntry } from "./memory-entry"
 import { MemoryCard } from "./memory-card"
@@ -408,10 +409,18 @@ export function MemoryViewer() {
                       {categoryOptions.map((category) => (
                         <SelectItem key={category} value={category} className="focus:bg-[hsl(var(--command-accent))]/10">
                           <div className="flex items-center gap-2">
-                            {category !== "All" && categoryConfig[category as keyof typeof categoryConfig] && (
+                            {category !== "All" && category in categoryConfig && (
                               <>
-                                <categoryConfig[category as keyof typeof categoryConfig].icon className="h-4 w-4" />
-                                <span>{categoryConfig[category as keyof typeof categoryConfig].label}</span>
+                                {(() => {
+                                  const config = categoryConfig[category as keyof typeof categoryConfig]
+                                  const IconComponent = config.icon
+                                  return (
+                                    <>
+                                      <IconComponent className="h-4 w-4" />
+                                      <span>{config.label}</span>
+                                    </>
+                                  )
+                                })()}
                               </>
                             )}
                             {category === "All" && <span>All Categories</span>}
@@ -530,8 +539,8 @@ function MemoryDetailModal({ memory, onClose }: { memory: MemoryEntry, onClose: 
         <div className="p-6 border-b border-[hsl(var(--command-border))]">
           <div className="flex items-start justify-between">
             <div className="flex items-start gap-4">
-              <div className={cn("p-2 glass-morphism rounded-lg", config?.color && `bg-${config.color.split('-')[1]}-500/10`)}>
-                <IconComponent className={cn("h-5 w-5", config?.color)} />
+              <div className={cn("p-2 glass-morphism rounded-lg")}>
+                <IconComponent className={cn("h-5 w-5", config?.color || "text-[hsl(var(--command-accent))]")} />
               </div>
               <div>
                 <h2 className="text-2xl font-display font-bold">{memory.title}</h2>
