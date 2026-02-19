@@ -830,12 +830,12 @@ export function DashboardView() {
                             {item.type === 'memory' && <Brain className="h-4 w-4 text-green-400" />}
                             {item.type === 'webhook' && (
                               <>
-                                {item.eventType === 'task_complete' && <CheckSquare className="h-4 w-4 text-green-400" />}
-                                {item.eventType === 'agent_start' && <Users className="h-4 w-4 text-blue-400" />}
-                                {item.eventType === 'cron_run' && <Clock className="h-4 w-4 text-yellow-400" />}
-                                {item.eventType === 'error' && <X className="h-4 w-4 text-red-400" />}
-                                {item.eventType === 'system_alert' && <Shield className="h-4 w-4 text-orange-400" />}
-                                {!['task_complete', 'agent_start', 'cron_run', 'error', 'system_alert'].includes(item.eventType) && <Activity className="h-4 w-4 text-[hsl(var(--command-accent))]" />}
+                                {(item as any).eventType === 'task_complete' && <CheckSquare className="h-4 w-4 text-green-400" />}
+                                {(item as any).eventType === 'agent_start' && <Users className="h-4 w-4 text-blue-400" />}
+                                {(item as any).eventType === 'cron_run' && <Clock className="h-4 w-4 text-yellow-400" />}
+                                {(item as any).eventType === 'error' && <X className="h-4 w-4 text-red-400" />}
+                                {(item as any).eventType === 'system_alert' && <Shield className="h-4 w-4 text-orange-400" />}
+                                {!['task_complete', 'agent_start', 'cron_run', 'error', 'system_alert'].includes((item as any).eventType) && <Activity className="h-4 w-4 text-[hsl(var(--command-accent))]" />}
                               </>
                             )}
 
@@ -855,13 +855,13 @@ export function DashboardView() {
                             variant="outline" 
                             className={cn(
                               "text-xs",
-                              item.type === 'webhook' && item.severity === 'error' && "text-red-400 border-red-400/30",
-                              item.type === 'webhook' && item.severity === 'warning' && "text-yellow-400 border-yellow-400/30",
-                              item.type === 'webhook' && item.severity === 'success' && "text-green-400 border-green-400/30",
-                              item.type === 'webhook' && item.severity === 'info' && "text-blue-400 border-blue-400/30"
+                              item.type === 'webhook' && (item as any).severity === 'error' && "text-red-400 border-red-400/30",
+                              item.type === 'webhook' && (item as any).severity === 'warning' && "text-yellow-400 border-yellow-400/30",
+                              item.type === 'webhook' && (item as any).severity === 'success' && "text-green-400 border-green-400/30",
+                              item.type === 'webhook' && (item as any).severity === 'info' && "text-blue-400 border-blue-400/30"
                             )}
                           >
-                            {item.type === 'webhook' ? item.severity : item.status}
+                            {item.type === 'webhook' ? (item as any).severity : item.status}
                           </Badge>
                         </motion.div>
                       ))}
