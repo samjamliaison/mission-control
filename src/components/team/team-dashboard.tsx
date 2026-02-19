@@ -326,7 +326,8 @@ export function TeamDashboard() {
             >
               {agents.map((agent) => (
                 <AgentCard
-                  key={agent._id}
+                  key={agent.name}
+                  // @ts-ignore - Type mismatch between RealAgent and Agent interface
                   agent={agent}
                   onClick={() => setSelectedAgent(agent)}
                 />

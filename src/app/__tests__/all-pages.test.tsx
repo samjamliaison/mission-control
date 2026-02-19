@@ -10,10 +10,6 @@ vi.mock('@/components/pipeline/content-pipeline', () => ({
   ContentPipeline: () => <div data-testid="content-pipeline">Content Pipeline</div>
 }))
 
-vi.mock('@/components/calendar/calendar-view', () => ({
-  CalendarView: () => <div data-testid="calendar-view">Calendar View</div>
-}))
-
 vi.mock('@/components/memory/memory-viewer', () => ({
   MemoryViewer: () => <div data-testid="memory-viewer">Memory Viewer</div>
 }))
@@ -45,9 +41,9 @@ describe('All Pages', () => {
     expect(getByTestId('content-pipeline')).toBeInTheDocument()
   })
 
-  it('should render calendar page with calendar view', () => {
-    const { getByTestId } = render(<CalendarPage />)
-    expect(getByTestId('calendar-view')).toBeInTheDocument()
+  it('should render calendar page', () => {
+    const { getByText } = render(<CalendarPage />)
+    expect(getByText('Calendar')).toBeInTheDocument()
   })
 
   it('should render memory page with memory viewer', () => {

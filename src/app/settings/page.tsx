@@ -1,10 +1,15 @@
 "use client"
 
-import { DataManagement } from "@/components/settings/data-management"
+import dynamic from 'next/dynamic'
 import { PageTransition } from "@/components/ui/page-transition"
 import { PageHeader } from "@/components/ui/page-header"
 import { StatsCard } from "@/components/ui/stats-card"
+import { PageSkeleton } from "@/components/ui/loading-skeleton"
 import { Settings, Database } from "lucide-react"
+
+const DataManagement = dynamic(() => import("@/components/settings/data-management").then(mod => ({ default: mod.DataManagement })), {
+  loading: () => <div className="p-6"><PageSkeleton /></div>
+})
 
 export default function SettingsPage() {
   return (
