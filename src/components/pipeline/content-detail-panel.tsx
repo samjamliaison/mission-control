@@ -243,7 +243,7 @@ export function ContentDetailPanel({ open, onOpenChange, content, onEdit }: Cont
       opacity: 1, 
       x: 0,
       transition: {
-        type: "spring",
+        type: "spring" as any,
         damping: 30,
         stiffness: 300
       }
@@ -622,17 +622,7 @@ export function ContentDetailPanel({ open, onOpenChange, content, onEdit }: Cont
                                 </div>
                               )}
                               
-                              {content.shares && (
-                                <div className="flex items-center justify-between">
-                                  <div className="flex items-center gap-2">
-                                    <Share className="h-4 w-4 text-[hsl(var(--command-text-muted))]" />
-                                    <span className="text-sm">Shares</span>
-                                  </div>
-                                  <span className="font-semibold text-purple-400">
-                                    {content.shares.toLocaleString()}
-                                  </span>
-                                </div>
-                              )}
+                              {/* Shares analytics would go here */}
                             </CardContent>
                           </Card>
                         )}
@@ -767,9 +757,9 @@ export function ContentDetailPanel({ open, onOpenChange, content, onEdit }: Cont
                               </CardHeader>
                               <CardContent>
                                 <div className="text-3xl font-bold text-purple-400 mb-2">
-                                  {content.shares?.toLocaleString() || "0"}
+                                  {content.engagement || "0"}
                                 </div>
-                                <p className="text-sm text-[hsl(var(--command-text-muted))]">Total Shares</p>
+                                <p className="text-sm text-[hsl(var(--command-text-muted))]">Engagement</p>
                               </CardContent>
                             </Card>
                           </>
