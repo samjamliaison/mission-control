@@ -32,7 +32,10 @@ import {
   PlayCircle,
   PauseCircle,
   RefreshCw,
-  Star
+  Star,
+  HardDrive,
+  Cpu,
+  Shield
 } from "lucide-react"
 import { loadTasks, loadContent, loadEvents, loadMemories } from "@/lib/data-persistence"
 import { Task } from "@/components/tasks/task-card"
@@ -56,6 +59,57 @@ interface AgentStatus {
   model?: string
   uptime: number
   avatar: string
+}
+
+interface SystemHealth {
+  system: {
+    uptime: number
+    uptimeFormatted: string
+    platform: string
+    arch: string
+    nodeVersion: string
+    nextVersion: string
+    openclawVersion?: string
+  }
+  disk: {
+    total: number
+    used: number
+    available: number
+    usagePercent: number
+    formatted: {
+      total: string
+      used: string
+      available: string
+    }
+  }
+  memory: {
+    total: number
+    used: number
+    free: number
+    usagePercent: number
+    formatted: {
+      total: string
+      used: string
+      free: string
+    }
+  }
+  agents: {
+    total: number
+    online: number
+    active: number
+  }
+  tasks: {
+    active: number
+    completed: number
+  }
+  cron: {
+    jobs: number
+  }
+  timestamp: string
+  meta: {
+    responseTime: number
+    healthy: boolean
+  }
 }
 
 interface CronJob {
@@ -159,6 +213,7 @@ export function DashboardView() {
   const [agentStatuses, setAgentStatuses] = useState<AgentStatus[]>([])
   const [cronJobs, setCronJobs] = useState<CronJob[]>([])
   const [sessions, setSessions] = useState<SessionInfo[]>([])
+  const [systemHealth, setSystemHealth] = useState<SystemHealth | null>(null)
   const [liveDataLoading, setLiveDataLoading] = useState(true)
   const [mounted, setMounted] = useState(false)
   const [lastUpdated, setLastUpdated] = useState<number>(Date.now())
@@ -176,10 +231,11 @@ export function DashboardView() {
       // Add cache-busting timestamp to prevent stale data
       const cacheBuster = `?t=${Date.now()}`
 
-      const [agentsRes, cronRes, sessionsRes] = await Promise.allSettled([
+      const [agentsRes, cronRes, sessionsRes, healthRes] = await Promise.allSettled([
         fetch(`/api/agents/status${cacheBuster}`),
         fetch(`/api/cron${cacheBuster}`),
-        fetch(`/api/sessions${cacheBuster}`)
+        fetch(`/api/sessions${cacheBuster}`),
+        fetch(`/api/health${cacheBuster}`)
       ])
 
       let newAgents = agentStatuses
@@ -202,6 +258,11 @@ export function DashboardView() {
         const sessionsData = await sessionsRes.value.json()
         newSessions = sessionsData.sessions || []
         setSessions(newSessions)
+      }
+
+      if (healthRes.status === 'fulfilled' && healthRes.value.ok) {
+        const healthData = await healthRes.value.json()
+        setSystemHealth(healthData)
       }
 
       // Check if data changed to trigger pulse animation
@@ -388,7 +449,7 @@ export function DashboardView() {
           {/* Overview Stats */}
           <SectionErrorBoundary sectionName="Overview Stats">
             <motion.div variants={itemVariants}>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
               <Card className="stats-glass stats-mesh-bg border-[hsl(var(--command-border-bright))]">
                 <CardContent className="p-6">
                   <div className="flex items-center justify-between">
@@ -489,6 +550,47 @@ export function DashboardView() {
                       color="#4ade80"
                       className="w-16"
                     />
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* System Health Card */}
+              <Card className={cn(
+                "stats-glass stats-mesh-bg border-[hsl(var(--command-border-bright))]",
+                systemHealth && !systemHealth.meta.healthy && "ring-1 ring-red-500/30"
+              )}>
+                <CardContent className="p-6">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-4">
+                      <div className={cn(
+                        "p-3 rounded-xl",
+                        systemHealth?.meta.healthy ? "bg-green-500/10" : "bg-red-500/10"
+                      )}>
+                        <Shield className={cn(
+                          "h-6 w-6",
+                          systemHealth?.meta.healthy ? "text-green-400" : "text-red-400"
+                        )} />
+                      </div>
+                      <div>
+                        <div className="text-2xl font-display font-bold text-contrast-high">
+                          {systemHealth?.meta.healthy ? "Healthy" : "Warning"}
+                        </div>
+                        <div className="text-sm text-contrast-medium">
+                          System Status
+                        </div>
+                        <div className="text-xs text-[hsl(var(--command-text-muted))]">
+                          {systemHealth ? `${systemHealth.disk.usagePercent}% disk, ${systemHealth.memory.usagePercent}% memory` : "Loading..."}
+                        </div>
+                      </div>
+                    </div>
+                    <div className="text-right text-xs space-y-1">
+                      <div className="text-[hsl(var(--command-text-muted))]">
+                        Uptime: {systemHealth?.system.uptimeFormatted || "Unknown"}
+                      </div>
+                      <div className="text-[hsl(var(--command-text-muted))]">
+                        {systemHealth?.system.openclawVersion || "OpenClaw"}
+                      </div>
+                    </div>
                   </div>
                 </CardContent>
               </Card>
