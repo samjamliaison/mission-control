@@ -12,7 +12,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { Plus, Filter, Command, Activity, Users, Target, CheckSquare, FileText, Sparkles, Square, CheckSquare as CheckedSquare } from "lucide-react"
+import { Plus, Filter, Command, Activity, Users, Target, CheckSquare, FileText, Sparkles, Square, CheckSquare as CheckedSquare, ArrowUpDown } from "lucide-react"
 import { TaskColumn } from "./task-column"
 import { AddTaskDialog } from "./add-task-dialog"
 import { TaskTemplatePicker } from "./task-template-picker"
@@ -70,6 +70,8 @@ export function TasksBoard() {
   const [showTemplatePicker, setShowTemplatePicker] = useState(false)
   const [selectedTasks, setSelectedTasks] = useState<Set<string>>(new Set())
   const [bulkSelectionMode, setBulkSelectionMode] = useState(false)
+  const [sortBy, setSortBy] = useState<string>('dateCreated')
+  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc')
   const toast = useToastActions()
 
   // Load data from localStorage on mount
@@ -77,6 +79,14 @@ export function TasksBoard() {
     setMounted(true)
     const loadedTasks = loadTasks()
     setTasks(loadedTasks)
+    
+    // Load sort preferences
+    const savedSort = localStorage.getItem('mission-control-sort')
+    if (savedSort) {
+      const { sortBy: savedSortBy, sortOrder: savedSortOrder } = JSON.parse(savedSort)
+      setSortBy(savedSortBy)
+      setSortOrder(savedSortOrder)
+    }
     
     // Log navigation to tasks board
     logNavigationAction('Task Board')
@@ -112,11 +122,46 @@ export function TasksBoard() {
     return () => document.removeEventListener('keydown', handleKeydown)
   }, [])
 
-  // Filter tasks by assignee
+  // Filter and sort tasks
   const filteredTasks = useMemo(() => {
-    if (selectedAssignee === "All") return tasks
-    return tasks.filter(task => task.assignee === selectedAssignee)
-  }, [tasks, selectedAssignee])
+    let filtered = selectedAssignee === "All" ? [...tasks] : tasks.filter(task => task.assignee === selectedAssignee)
+    
+    // Sort tasks
+    filtered.sort((a, b) => {
+      let aVal, bVal
+      
+      switch (sortBy) {
+        case 'dateCreated':
+          aVal = a.createdAt
+          bVal = b.createdAt
+          break
+        case 'priority':
+          const priorityOrder = { high: 3, medium: 2, low: 1 }
+          aVal = priorityOrder[a.priority]
+          bVal = priorityOrder[b.priority]
+          break
+        case 'assignee':
+          aVal = a.assignee.toLowerCase()
+          bVal = b.assignee.toLowerCase()
+          break
+        case 'title':
+          aVal = a.title.toLowerCase()
+          bVal = b.title.toLowerCase()
+          break
+        default:
+          aVal = a.createdAt
+          bVal = b.createdAt
+      }
+      
+      if (sortOrder === 'asc') {
+        return aVal < bVal ? -1 : aVal > bVal ? 1 : 0
+      } else {
+        return aVal > bVal ? -1 : aVal < bVal ? 1 : 0
+      }
+    })
+    
+    return filtered
+  }, [tasks, selectedAssignee, sortBy, sortOrder])
 
   // Group tasks by status
   const tasksByStatus = useMemo(() => {
@@ -347,6 +392,18 @@ export function TasksBoard() {
     }
   }
 
+  const handleSortChange = (newSortBy: string) => {
+    const newSortOrder = sortBy === newSortBy && sortOrder === 'desc' ? 'asc' : 'desc'
+    setSortBy(newSortBy)
+    setSortOrder(newSortOrder)
+    
+    // Save to localStorage
+    localStorage.setItem('mission-control-sort', JSON.stringify({
+      sortBy: newSortBy,
+      sortOrder: newSortOrder
+    }))
+  }
+
   const totalTasks = tasks.length
   const completedTasks = tasks.filter(task => task.status === "done").length
   const inProgressTasks = tasks.filter(task => task.status === "in-progress").length
@@ -405,6 +462,29 @@ export function TasksBoard() {
                             </div>
                           </SelectItem>
                         ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <div className="flex items-center gap-2 glass-morphism p-2 rounded-lg">
+                    <ArrowUpDown className="h-4 w-4 text-[hsl(var(--command-accent))]" />
+                    <Select value={sortBy} onValueChange={handleSortChange}>
+                      <SelectTrigger className="w-36 border-0 bg-transparent focus:ring-1 focus:ring-[hsl(var(--command-accent))] font-medium">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent className="glass-morphism border-[hsl(var(--command-border-bright))]">
+                        <SelectItem value="dateCreated" className="focus:bg-[hsl(var(--command-accent))]/10">
+                          Date Created {sortBy === 'dateCreated' && (sortOrder === 'desc' ? '↓' : '↑')}
+                        </SelectItem>
+                        <SelectItem value="priority" className="focus:bg-[hsl(var(--command-accent))]/10">
+                          Priority {sortBy === 'priority' && (sortOrder === 'desc' ? '↓' : '↑')}
+                        </SelectItem>
+                        <SelectItem value="assignee" className="focus:bg-[hsl(var(--command-accent))]/10">
+                          Assignee {sortBy === 'assignee' && (sortOrder === 'desc' ? '↓' : '↑')}
+                        </SelectItem>
+                        <SelectItem value="title" className="focus:bg-[hsl(var(--command-accent))]/10">
+                          Title {sortBy === 'title' && (sortOrder === 'desc' ? '↓' : '↑')}
+                        </SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
