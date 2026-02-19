@@ -173,6 +173,8 @@ export function Navigation() {
               className="p-2 rounded-lg hover:backdrop-blur-xl hover:bg-white/[0.03] hover:border hover:border-white/[0.06] transition-all duration-200 text-white/50 hover:text-[#06b6d4] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#06b6d4] focus-visible:ring-opacity-60"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
+              aria-label={isCollapsed ? "Expand navigation" : "Collapse navigation"}
+              aria-expanded={!isCollapsed}
             >
               {isCollapsed ? (
                 <ChevronRight className="h-4 w-4" />
@@ -183,7 +185,7 @@ export function Navigation() {
           </div>
 
           {/* Navigation Links */}
-          <div className="flex-1 space-y-3">
+          <nav className="flex-1 space-y-3" role="navigation" aria-label="Main navigation">
             {navigationItems.map((item, index) => {
               const isActive = pathname === item.href
               const IconComponent = item.icon
@@ -206,6 +208,8 @@ export function Navigation() {
                         ? "text-[#06b6d4] bg-white/[0.05] border-white/[0.08]" 
                         : "text-white/50 hover:text-white/90 hover:bg-white/[0.03]"
                     )}
+                    aria-label={`Navigate to ${item.name} - ${item.description}`}
+                    aria-current={isActive ? "page" : undefined}
                   >
                     {/* Active indicator - Cyan left bar */}
                     {isActive && (
@@ -267,7 +271,7 @@ export function Navigation() {
                 </motion.div>
               )
             })}
-          </div>
+          </nav>
 
           {/* Bottom Section - Command Palette, System Status & Settings */}
           <div className="space-y-3 pt-4 border-t border-white/[0.06]">
@@ -325,6 +329,8 @@ export function Navigation() {
                   ? "text-[#06b6d4] bg-white/[0.05] border-white/[0.08]"
                   : "text-white/50 hover:text-white/90 hover:bg-white/[0.03]"
               )}
+              aria-label="Open settings and configuration"
+              aria-current={pathname === "/settings" ? "page" : undefined}
             >
               <motion.div
                 whileHover={{ scale: 1.02 }}
@@ -349,9 +355,9 @@ export function Navigation() {
             </Link>
 
             {/* Keyboard Shortcuts Hint */}
-            <motion.div 
+            <motion.button 
               className={cn(
-                "flex items-center gap-3 p-2 rounded-lg bg-white/[0.02] border border-white/[0.04] cursor-pointer group transition-all duration-200 hover:bg-white/[0.03]",
+                "w-full flex items-center gap-3 p-2 rounded-lg bg-white/[0.02] border border-white/[0.04] cursor-pointer group transition-all duration-200 hover:bg-white/[0.03] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#06b6d4] focus-visible:ring-opacity-60",
                 isCollapsed && "justify-center"
               )}
               onClick={() => {
@@ -367,6 +373,7 @@ export function Navigation() {
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
               transition={{ delay: 0.7, type: "spring", stiffness: 200 }}
+              aria-label="Show keyboard shortcuts help"
             >
               <div className="flex items-center gap-2">
                 <Keyboard className="h-3 w-3 text-white/40 group-hover:text-[#06b6d4] transition-colors" />
@@ -390,7 +397,7 @@ export function Navigation() {
                   </motion.div>
                 )}
               </AnimatePresence>
-            </motion.div>
+            </motion.button>
           </div>
         </motion.nav>
       </div>

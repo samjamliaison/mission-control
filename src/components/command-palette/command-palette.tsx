@@ -415,6 +415,11 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
               onChange={(e) => setQuery(e.target.value)}
               className="border-0 bg-transparent text-lg placeholder:text-[hsl(var(--command-text-muted))] focus-visible:ring-0 focus-visible:ring-offset-0"
               autoFocus
+              role="searchbox"
+              aria-label="Search for commands, tasks, content, or navigate to pages"
+              aria-expanded={filteredItems.length > 0}
+              aria-haspopup="listbox"
+              aria-activedescendant={filteredItems[selectedIndex]?.id}
             />
             <div className="flex items-center gap-1">
               <Badge variant="outline" className="text-xs bg-[hsl(var(--command-surface))]/50">
@@ -427,7 +432,7 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
           {/* Results */}
           <div className="max-h-96 overflow-y-auto">
             {filteredItems.length > 0 ? (
-              <div className="p-2">
+              <div className="p-2" role="listbox" aria-label="Search results">
                 {filteredItems.map((item, index) => {
                   const IconComponent = item.icon
                   const isSelected = index === selectedIndex
@@ -435,6 +440,7 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
                   return (
                     <motion.div
                       key={item.id}
+                      id={item.id}
                       className={cn(
                         "flex items-center gap-3 p-3 rounded-lg cursor-pointer transition-colors",
                         isSelected 
@@ -444,6 +450,10 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
                       onClick={item.action}
                       whileHover={{ scale: 1.01 }}
                       whileTap={{ scale: 0.99 }}
+                      role="option"
+                      aria-selected={isSelected}
+                      aria-label={`${item.title} - ${item.subtitle || item.type}`}
+                      tabIndex={isSelected ? 0 : -1}
                     >
                       <div className={cn(
                         "p-2 rounded-lg",

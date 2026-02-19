@@ -32,6 +32,9 @@ function ToastItem({ toast }: ToastProps) {
       initial={{ opacity: 0, y: 50, scale: 0.3 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
       exit={{ opacity: 0, scale: 0.5, transition: { duration: 0.2 } }}
+      role="alert"
+      aria-live="polite"
+      aria-atomic="true"
       className={cn(
         "group relative flex items-start gap-3 p-4 rounded-lg border backdrop-blur-md",
         "shadow-lg shadow-black/20 min-w-[320px] max-w-[420px]",

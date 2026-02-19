@@ -21,9 +21,18 @@ export function RootLayoutClient({ children }: RootLayoutClientProps) {
   return (
     <ThemeProvider>
       <ToastProvider>
+        {/* Skip to content link for screen readers */}
+        <a 
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[9999] bg-white text-black px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-cyan-500"
+          aria-label="Skip to main content"
+        >
+          Skip to content
+        </a>
+        
         <div className="min-h-screen bg-[hsl(var(--command-background))] flex">
           <Navigation />
-          <main className="flex-1 min-h-screen">
+          <main id="main-content" className="flex-1 min-h-screen" role="main" aria-label="Main content area">
             <PageTransitionProvider>
               <div className="p-4 sm:p-6 lg:p-8">
                 {children}
