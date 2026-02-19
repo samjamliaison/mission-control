@@ -22,156 +22,58 @@ import {
   Search,
   Plane,
   Settings,
-  Eye
+  Eye,
+  RefreshCw,
+  Database
 } from "lucide-react"
 import { AgentCard } from "./agent-card"
 import { AgentProfile } from "./agent-profile"
-import { Agent } from "./agent"
 import { cn } from "@/lib/utils"
 
-// Mock agent data
-const mockAgents: Agent[] = [
-  {
-    _id: "1",
-    name: "Hamza",
-    avatar: "👤", 
-    role: "Mission Commander",
-    status: "online",
-    currentActivity: "Strategic Planning Session",
-    activeTasks: 3,
-    completedTasks: 47,
-    skills: [
-      "Strategic Planning",
-      "Decision Making", 
-      "Team Leadership",
-      "Stakeholder Communication",
-      "Resource Allocation",
-      "Risk Assessment"
-    ],
-    expertise: ["Leadership", "Strategy", "Communication"],
-    lastSeen: Date.now() - 1800000, // 30 minutes ago
-    joinedAt: Date.now() - 86400000 * 180, // 6 months ago
-    efficiency: 94,
-    description: "Strategic oversight and final decision authority. Coordinates high-level operations and ensures mission alignment across all agents.",
-    recentAchievements: [
-      "Launched Mission Control v1.0",
-      "Streamlined agent coordination protocols", 
-      "Achieved 94% task completion rate"
-    ]
-  },
-  {
-    _id: "2",
-    name: "Manus",
-    avatar: "🤘",
-    role: "Chief of Staff", 
-    status: "active",
-    currentActivity: "System Health Monitoring",
-    activeTasks: 5,
-    completedTasks: 123,
-    skills: [
-      "System Administration",
-      "Process Automation",
-      "Infrastructure Management",
-      "Performance Optimization",
-      "Technical Documentation",
-      "Incident Response"
-    ],
-    expertise: ["Infrastructure", "Automation", "Operations"],
-    lastSeen: Date.now() - 300000, // 5 minutes ago
-    joinedAt: Date.now() - 86400000 * 150, // 5 months ago
-    efficiency: 97,
-    description: "Technical operations and infrastructure management. Ensures all systems run smoothly and efficiently with proactive monitoring.",
-    recentAchievements: [
-      "99.9% system uptime achieved",
-      "Automated 15+ recurring processes",
-      "Reduced response time by 60%" 
-    ]
-  },
-  {
-    _id: "3", 
-    name: "Monica",
-    avatar: "✈️",
-    role: "Creative Director",
-    status: "active",
-    currentActivity: "Content Pipeline Review",
-    activeTasks: 4,
-    completedTasks: 89,
-    skills: [
-      "Content Strategy",
-      "Brand Management",
-      "Creative Direction", 
-      "Multi-Platform Coordination",
-      "Visual Design",
-      "Campaign Planning"
-    ],
-    expertise: ["Content", "Design", "Branding"],
-    lastSeen: Date.now() - 600000, // 10 minutes ago
-    joinedAt: Date.now() - 86400000 * 120, // 4 months ago
-    efficiency: 91,
-    description: "Content creation and brand strategy lead. Manages the full content pipeline from ideation to publication across all platforms.",
-    recentAchievements: [
-      "Launched 5-stage content pipeline",
-      "Increased engagement by 150%",
-      "Coordinated 12 successful campaigns"
-    ]
-  },
-  {
-    _id: "4",
-    name: "Jarvis", 
-    avatar: "🔍",
-    role: "Intelligence Analyst",
-    status: "online",
-    currentActivity: "Market Research Analysis",
-    activeTasks: 7,
-    completedTasks: 156,
-    skills: [
-      "Data Analysis",
-      "Market Research",
-      "Technical Documentation",
-      "Competitive Intelligence",
-      "Report Generation", 
-      "Trend Analysis"
-    ],
-    expertise: ["Research", "Analytics", "Intelligence"],
-    lastSeen: Date.now() - 120000, // 2 minutes ago
-    joinedAt: Date.now() - 86400000 * 200, // 6.5 months ago
-    efficiency: 96,
-    description: "Research and intelligence gathering specialist. Provides data-driven insights and comprehensive analysis for strategic decision making.",
-    recentAchievements: [
-      "Generated 25+ detailed research reports",
-      "Identified 8 major market opportunities", 
-      "Built comprehensive competitive analysis framework"
-    ]
-  },
-  {
-    _id: "5",
-    name: "Luna",
-    avatar: "🌙",
-    role: "Versatility Specialist",
-    status: "idle",
-    currentActivity: "Available for Assignment",
-    activeTasks: 2,
-    completedTasks: 78,
-    skills: [
-      "Cross-Platform Adaptation",
-      "Quality Assurance",
-      "Workflow Optimization", 
-      "Multi-Domain Knowledge",
-      "Problem Solving",
-      "Knowledge Synthesis"
-    ],
-    expertise: ["Adaptation", "QA", "Optimization"],
-    lastSeen: Date.now() - 900000, // 15 minutes ago
-    joinedAt: Date.now() - 86400000 * 90, // 3 months ago
-    efficiency: 89,
-    description: "Multi-platform specialist and generalist. Adapts to various domains and ensures quality across all operations with flexible skill application.",
-    recentAchievements: [
-      "Successfully adapted to 10+ different domains",
-      "Maintained 95% quality score across projects",
-      "Optimized 8 major workflows"
-    ]
+// Real agent data from OpenClaw API
+interface RealAgent {
+  id: string
+  name: string
+  avatar: string
+  role: string
+  status: 'online' | 'active' | 'idle' | 'offline'
+  workspace: string
+  soul?: string
+  currentActivity?: string
+  activeTasks: number
+  completedTasks: number
+  skills: string[]
+  expertise: string[]
+  lastSeen: number
+  joinedAt: number
+  efficiency: number
+  description: string
+  recentAchievements: string[]
+  model?: string
+  identity?: {
+    name?: string
+    emoji?: string
   }
-]
+}
+
+// API response structure
+interface AgentsApiResponse {
+  agents: RealAgent[]
+  meta: {
+    total: number
+    online: number
+    active: number
+    idle: number
+    offline: number
+    totalActiveTasks: number
+    totalCompletedTasks: number
+    averageEfficiency: number
+    primaryModel: string
+  }
+  timestamp: string
+}
+
+// Status configuration for real agent statuses
 
 const statusConfig = {
   "online": {
@@ -194,6 +96,13 @@ const statusConfig = {
     border: "border-yellow-500/20",
     icon: Clock,
     label: "Idle"
+  },
+  "offline": {
+    color: "text-gray-400",
+    bg: "bg-gray-500/10",
+    border: "border-gray-500/20",
+    icon: Clock,
+    label: "Offline"
   }
 }
 
@@ -220,24 +129,93 @@ const itemVariants = {
 }
 
 export function TeamDashboard() {
-  const [agents] = useState<Agent[]>(mockAgents)
-  const [selectedAgent, setSelectedAgent] = useState<Agent | null>(null)
-  const [mounted, setMounted] = useState(false)
+  const [agents, setAgents] = useState<RealAgent[]>([])
+  const [selectedAgent, setSelectedAgent] = useState<RealAgent | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+  const [lastUpdated, setLastUpdated] = useState<string | null>(null)
 
+  // Load data from OpenClaw API
+  const loadAgentsFromApi = async () => {
+    try {
+      setLoading(true)
+      setError(null)
+      
+      const response = await fetch('/api/agents')
+      if (!response.ok) {
+        throw new Error(`API Error: ${response.status} ${response.statusText}`)
+      }
+      
+      const data: AgentsApiResponse = await response.json()
+      setAgents(data.agents)
+      setLastUpdated(data.timestamp)
+    } catch (err) {
+      console.error('Failed to load agents:', err)
+      setError(err instanceof Error ? err.message : 'Failed to load agents')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  // Load agents on component mount
   useEffect(() => {
-    setMounted(true)
+    loadAgentsFromApi()
   }, [])
 
-  // Team statistics
+  // Team statistics  
   const totalAgents = agents.length
   const onlineAgents = agents.filter(a => a.status === "online" || a.status === "active").length
   const totalActiveTasks = agents.reduce((sum, agent) => sum + agent.activeTasks, 0)
   const totalCompletedTasks = agents.reduce((sum, agent) => sum + agent.completedTasks, 0)
-  const averageEfficiency = Math.round(
+  const averageEfficiency = totalAgents > 0 ? Math.round(
     agents.reduce((sum, agent) => sum + agent.efficiency, 0) / agents.length
-  )
+  ) : 0
 
-  if (!mounted) return null
+  if (loading) {
+    return (
+      <div className="min-h-[calc(100vh-5rem)] relative">
+        <div className="fixed inset-0 bg-gradient-to-br from-[hsl(var(--command-background))] via-[hsl(220_13%_3%)] to-[hsl(var(--command-background))] pointer-events-none" />
+        <div className="relative z-10 p-6 flex items-center justify-center min-h-[60vh]">
+          <div className="text-center space-y-4">
+            <div className="w-16 h-16 mx-auto glass-morphism rounded-full flex items-center justify-center">
+              <RefreshCw className="h-6 w-6 text-[hsl(var(--command-accent))] animate-spin" />
+            </div>
+            <div>
+              <h3 className="font-heading font-semibold text-lg mb-2">Loading Team Command</h3>
+              <p className="text-[hsl(var(--command-text-muted))]">
+                Retrieving agent data from OpenClaw...
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-[calc(100vh-5rem)] relative">
+        <div className="fixed inset-0 bg-gradient-to-br from-[hsl(var(--command-background))] via-[hsl(220_13%_3%)] to-[hsl(var(--command-background))] pointer-events-none" />
+        <div className="relative z-10 p-6 flex items-center justify-center min-h-[60vh]">
+          <div className="text-center space-y-4">
+            <div className="w-16 h-16 mx-auto glass-morphism rounded-full flex items-center justify-center">
+              <Database className="h-6 w-6 text-red-400" />
+            </div>
+            <div>
+              <h3 className="font-heading font-semibold text-lg mb-2 text-red-400">Team Access Error</h3>
+              <p className="text-[hsl(var(--command-text-muted))] mb-4">
+                {error}
+              </p>
+              <Button onClick={loadAgentsFromApi} className="gap-2">
+                <RefreshCw className="h-4 w-4" />
+                Retry
+              </Button>
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="min-h-[calc(100vh-5rem)] relative">
@@ -255,15 +233,27 @@ export function TeamDashboard() {
           <PageHeader
             icon={Users}
             title="Team Command"
-            subtitle="Agent status dashboard and team coordination center. Real-time visibility into all operational personnel and their current activities."
+            subtitle="Real-time OpenClaw agent dashboard. Live status, SOUL.md content, and workspace analysis from actual agent configurations."
           >
-            <StatsCard
-              icon={Target}
-              label="Team Performance"
-              value={`${averageEfficiency}%`}
-              subLabel="Active"
-              subValue={`${onlineAgents}/${totalAgents}`}
-            />
+            <div className="flex items-center gap-4">
+              <StatsCard
+                icon={Target}
+                label="Team Performance"
+                value={`${averageEfficiency}%`}
+                subLabel="Active"
+                subValue={`${onlineAgents}/${totalAgents}`}
+              />
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={loadAgentsFromApi}
+                disabled={loading}
+                className="glass-morphism"
+                title="Refresh from OpenClaw"
+              >
+                <RefreshCw className={cn("h-4 w-4", loading && "animate-spin")} />
+              </Button>
+            </div>
           </PageHeader>
 
           <motion.div variants={itemVariants} className="space-y-6">
@@ -354,11 +344,12 @@ export function TeamDashboard() {
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                {agents.filter(a => a.status !== "idle").map((agent) => (
+                {agents.filter(a => a.status !== "idle" && a.status !== "offline").map((agent) => (
                   <motion.div 
-                    key={agent._id}
-                    className="flex items-center gap-4 p-3 glass-morphism rounded-lg"
+                    key={agent.id}
+                    className="flex items-center gap-4 p-3 glass-morphism rounded-lg cursor-pointer"
                     whileHover={{ scale: 1.01 }}
+                    onClick={() => setSelectedAgent(agent)}
                   >
                     <div className="text-2xl">{agent.avatar}</div>
                     <div className="flex-1">

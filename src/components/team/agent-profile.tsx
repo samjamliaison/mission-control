@@ -21,11 +21,36 @@ import {
   TrendingUp,
   X
 } from "lucide-react"
-import { Agent } from "./agent"
 import { cn } from "@/lib/utils"
 
+// Real agent data from OpenClaw API  
+interface RealAgent {
+  id: string
+  name: string
+  avatar: string
+  role: string
+  status: 'online' | 'active' | 'idle' | 'offline'
+  workspace: string
+  soul?: string
+  currentActivity?: string
+  activeTasks: number
+  completedTasks: number
+  skills: string[]
+  expertise: string[]
+  lastSeen: number
+  joinedAt: number
+  efficiency: number
+  description: string
+  recentAchievements: string[]
+  model?: string
+  identity?: {
+    name?: string
+    emoji?: string
+  }
+}
+
 interface AgentProfileProps {
-  agent: Agent
+  agent: RealAgent
   onClose: () => void
 }
 
@@ -48,6 +73,13 @@ const statusConfig = {
     color: "text-yellow-400",
     bg: "bg-yellow-500/10",
     border: "border-yellow-500/20",
+    icon: Clock,
+    label: "Idle"
+  },
+  "offline": {
+    color: "text-gray-400",
+    bg: "bg-gray-500/10",
+    border: "border-gray-500/20",
     icon: Clock,
     label: "Idle"
   }
