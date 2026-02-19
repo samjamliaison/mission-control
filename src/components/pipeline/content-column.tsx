@@ -100,7 +100,7 @@ const contentVariants = {
   }
 }
 
-export function ContentColumn({ title, stage, content, config, onEditContent, onDeleteContent }: ContentColumnProps) {
+export function ContentColumn({ title, stage, content, config, onViewContent, onEditContent, onDeleteContent }: ContentColumnProps) {
   const stageStyle = stageConfig[stage]
   const IconComponent = stageIcons[stage]
   
