@@ -5,6 +5,8 @@ import { motion, AnimatePresence } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { PageHeader } from "@/components/ui/page-header"
+import { StatsCard } from "@/components/ui/stats-card"
 import { 
   Calendar, 
   ChevronLeft, 
@@ -269,46 +271,20 @@ export function CalendarView() {
         animate="visible"
       >
         <div className="max-w-7xl mx-auto space-y-8">
-          {/* Header */}
-          <motion.div variants={itemVariants} className="space-y-6">
-            <div className="flex items-center justify-between">
-              <div className="space-y-2">
-                <div className="flex items-center gap-3">
-                  <div className="p-2 rounded-lg glass-morphism glow-border">
-                    <Calendar className="h-6 w-6 text-[hsl(var(--command-accent))]" />
-                  </div>
-                  <h1 className="text-4xl font-display font-bold text-premium">
-                    Mission Calendar
-                  </h1>
-                </div>
-                <p className="text-[hsl(var(--command-text-muted))] text-lg max-w-2xl">
-                  Strategic scheduling and timeline coordination. Real-time tracking of all scheduled operations and automated processes.
-                </p>
-              </div>
-              
-              {/* Statistics Dashboard */}
-              <div className="flex items-center gap-4">
-                <motion.div 
-                  className="glass-morphism p-4 rounded-xl space-y-3"
-                  whileHover={{ scale: 1.02 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  <div className="flex items-center gap-2">
-                    <Target className="h-4 w-4 text-[hsl(var(--command-success))]" />
-                    <span className="text-sm font-medium">Execution Rate</span>
-                  </div>
-                  <div className="flex items-center gap-4">
-                    <div className="text-2xl font-display font-bold text-[hsl(var(--command-success))]">
-                      {completionRate}%
-                    </div>
-                    <div className="text-xs text-[hsl(var(--command-text-muted))] space-y-1">
-                      <div>{completedEvents}/{totalEvents} Complete</div>
-                      <div>{pendingEvents} Pending • {failedEvents} Failed</div>
-                    </div>
-                  </div>
-                </motion.div>
-              </div>
-            </div>
+          {/* Page Header */}
+          <PageHeader
+            icon={Calendar}
+            title="Mission Calendar"
+            subtitle="Strategic scheduling and timeline coordination. Real-time tracking of all scheduled operations and automated processes."
+          >
+            <StatsCard
+              icon={Target}
+              label="Execution Rate"
+              value={`${completionRate}%`}
+              subLabel="Complete"
+              subValue={`${completedEvents}/${totalEvents}`}
+            />
+          </PageHeader>
 
             {/* Controls */}
             <div className="flex items-center justify-between">

@@ -6,6 +6,8 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { PageHeader } from "@/components/ui/page-header"
+import { StatsCard } from "@/components/ui/stats-card"
 import {
   Select,
   SelectContent,
@@ -341,46 +343,20 @@ export function MemoryViewer() {
         animate="visible"
       >
         <div className="max-w-7xl mx-auto space-y-8">
-          {/* Header */}
-          <motion.div variants={itemVariants} className="space-y-6">
-            <div className="flex items-center justify-between">
-              <div className="space-y-2">
-                <div className="flex items-center gap-3">
-                  <div className="p-2 rounded-lg glass-morphism glow-border">
-                    <Brain className="h-6 w-6 text-[hsl(var(--command-accent))]" />
-                  </div>
-                  <h1 className="text-4xl font-display font-bold text-premium">
-                    Memory Vault
-                  </h1>
-                </div>
-                <p className="text-[hsl(var(--command-text-muted))] text-lg max-w-2xl">
-                  Centralized knowledge repository and learning archive. Searchable insights, daily notes, and accumulated wisdom.
-                </p>
-              </div>
-              
-              {/* Knowledge Stats */}
-              <div className="flex items-center gap-4">
-                <motion.div 
-                  className="glass-morphism p-4 rounded-xl space-y-3"
-                  whileHover={{ scale: 1.02 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  <div className="flex items-center gap-2">
-                    <Archive className="h-4 w-4 text-[hsl(var(--command-success))]" />
-                    <span className="text-sm font-medium">Knowledge Base</span>
-                  </div>
-                  <div className="flex items-center gap-4">
-                    <div className="text-2xl font-display font-bold text-[hsl(var(--command-success))]">
-                      {totalMemories}
-                    </div>
-                    <div className="text-xs text-[hsl(var(--command-text-muted))] space-y-1">
-                      <div>{totalWords.toLocaleString()} words</div>
-                      <div>{filteredMemories.length} shown</div>
-                    </div>
-                  </div>
-                </motion.div>
-              </div>
-            </div>
+          {/* Page Header */}
+          <PageHeader
+            icon={Brain}
+            title="Memory Vault"
+            subtitle="Centralized knowledge repository and learning archive. Searchable insights, daily notes, and accumulated wisdom."
+          >
+            <StatsCard
+              icon={Archive}
+              label="Knowledge Base"
+              value={totalMemories}
+              subLabel="words"
+              subValue={totalWords.toLocaleString()}
+            />
+          </PageHeader>
 
             {/* Search and Filters */}
             <div className="flex items-center gap-6">

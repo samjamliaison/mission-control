@@ -12,10 +12,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { Plus, Filter, Command, Activity, Users, Target } from "lucide-react"
+import { Plus, Filter, Command, Activity, Users, Target, CheckSquare } from "lucide-react"
 import { TaskColumn } from "./task-column"
 import { AddTaskDialog } from "./add-task-dialog"
 import { Task } from "./task-card"
+import { PageHeader } from "@/components/ui/page-header"
+import { StatsCard } from "@/components/ui/stats-card"
 
 // Mock data with agent assignments
 const mockTasks: Task[] = [
@@ -216,46 +218,20 @@ export function TasksBoard() {
         animate="visible"
       >
         <div className="max-w-7xl mx-auto space-y-8">
-          {/* Command Header */}
-          <motion.div variants={itemVariants} className="space-y-6">
-            <div className="flex items-center justify-between">
-              <div className="space-y-2">
-                <div className="flex items-center gap-3">
-                  <div className="p-2 rounded-lg glass-morphism glow-border">
-                    <Command className="h-6 w-6 text-[hsl(var(--command-accent))]" />
-                  </div>
-                  <h1 className="text-4xl font-display font-bold text-premium">
-                    Mission Control
-                  </h1>
-                </div>
-                <p className="text-[hsl(var(--command-text-muted))] text-lg max-w-2xl">
-                  Advanced task orchestration system for OpenClaw operations. Real-time coordination across all agents and systems.
-                </p>
-              </div>
-              
-              {/* Status Dashboard */}
-              <div className="flex items-center gap-4">
-                <motion.div 
-                  className="glass-morphism p-4 rounded-xl space-y-3"
-                  whileHover={{ scale: 1.02 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  <div className="flex items-center gap-2">
-                    <Target className="h-4 w-4 text-[hsl(var(--command-success))]" />
-                    <span className="text-sm font-medium">Mission Progress</span>
-                  </div>
-                  <div className="flex items-center gap-4">
-                    <div className="text-2xl font-display font-bold text-[hsl(var(--command-success))]">
-                      {completionRate}%
-                    </div>
-                    <div className="text-xs text-[hsl(var(--command-text-muted))] space-y-1">
-                      <div>{completedTasks}/{totalTasks} Complete</div>
-                      <div>{inProgressTasks} Active</div>
-                    </div>
-                  </div>
-                </motion.div>
-              </div>
-            </div>
+          {/* Page Header */}
+          <PageHeader
+            icon={CheckSquare}
+            title="Mission Control"
+            subtitle="Advanced task orchestration system for OpenClaw operations. Real-time coordination across all agents and systems."
+          >
+            <StatsCard
+              icon={Target}
+              label="Mission Progress"
+              value={`${completionRate}%`}
+              subLabel="Complete"
+              subValue={`${completedTasks}/${totalTasks}`}
+            />
+          </PageHeader>
 
             {/* Command Controls */}
             <div className="flex items-center justify-between">

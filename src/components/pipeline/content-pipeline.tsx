@@ -16,6 +16,8 @@ import { Plus, Filter, Video, Activity, Users, Target, Film } from "lucide-react
 import { ContentColumn } from "./content-column"
 import { AddContentDialog } from "./add-content-dialog"
 import { ContentItem } from "@/types/content"
+import { PageHeader } from "@/components/ui/page-header"
+import { StatsCard } from "@/components/ui/stats-card"
 
 // Mock data for content pipeline
 const mockContent: ContentItem[] = [
@@ -220,46 +222,20 @@ export function ContentPipeline() {
         animate="visible"
       >
         <div className="max-w-7xl mx-auto space-y-8">
-          {/* Command Header */}
-          <motion.div variants={itemVariants} className="space-y-6">
-            <div className="flex items-center justify-between">
-              <div className="space-y-2">
-                <div className="flex items-center gap-3">
-                  <div className="p-2 rounded-lg glass-morphism glow-border">
-                    <Film className="h-6 w-6 text-[hsl(var(--command-accent))]" />
-                  </div>
-                  <h1 className="text-4xl font-display font-bold text-premium">
-                    Content Pipeline
-                  </h1>
-                </div>
-                <p className="text-[hsl(var(--command-text-muted))] text-lg max-w-2xl">
-                  Strategic content creation workflow. From ideation to publication across all platforms and channels.
-                </p>
-              </div>
-              
-              {/* Status Dashboard */}
-              <div className="flex items-center gap-4">
-                <motion.div 
-                  className="glass-morphism p-4 rounded-xl space-y-3"
-                  whileHover={{ scale: 1.02 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  <div className="flex items-center gap-2">
-                    <Target className="h-4 w-4 text-[hsl(var(--command-success))]" />
-                    <span className="text-sm font-medium">Publication Rate</span>
-                  </div>
-                  <div className="flex items-center gap-4">
-                    <div className="text-2xl font-display font-bold text-[hsl(var(--command-success))]">
-                      {completionRate}%
-                    </div>
-                    <div className="text-xs text-[hsl(var(--command-text-muted))] space-y-1">
-                      <div>{publishedContent}/{totalContent} Published</div>
-                      <div>{inProductionContent} In Production</div>
-                    </div>
-                  </div>
-                </motion.div>
-              </div>
-            </div>
+          {/* Page Header */}
+          <PageHeader
+            icon={Film}
+            title="Content Pipeline"
+            subtitle="Strategic content creation workflow. From ideation to publication across all platforms and channels."
+          >
+            <StatsCard
+              icon={Target}
+              label="Publication Rate"
+              value={`${completionRate}%`}
+              subLabel="Published"
+              subValue={`${publishedContent}/${totalContent}`}
+            />
+          </PageHeader>
 
             {/* Command Controls */}
             <div className="flex items-center justify-between">

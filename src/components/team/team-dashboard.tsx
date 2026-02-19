@@ -5,6 +5,8 @@ import { motion, AnimatePresence } from "framer-motion"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
+import { PageHeader } from "@/components/ui/page-header"
+import { StatsCard } from "@/components/ui/stats-card"
 import { 
   Users,
   Activity,
@@ -248,46 +250,20 @@ export function TeamDashboard() {
         animate="visible"
       >
         <div className="max-w-7xl mx-auto space-y-8">
-          {/* Header */}
-          <motion.div variants={itemVariants} className="space-y-6">
-            <div className="flex items-center justify-between">
-              <div className="space-y-2">
-                <div className="flex items-center gap-3">
-                  <div className="p-2 rounded-lg glass-morphism glow-border">
-                    <Users className="h-6 w-6 text-[hsl(var(--command-accent))]" />
-                  </div>
-                  <h1 className="text-4xl font-display font-bold text-premium">
-                    Team Command
-                  </h1>
-                </div>
-                <p className="text-[hsl(var(--command-text-muted))] text-lg max-w-2xl">
-                  Agent status dashboard and team coordination center. Real-time visibility into all operational personnel and their current activities.
-                </p>
-              </div>
-              
-              {/* Team Stats */}
-              <div className="flex items-center gap-4">
-                <motion.div 
-                  className="glass-morphism p-4 rounded-xl space-y-3"
-                  whileHover={{ scale: 1.02 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  <div className="flex items-center gap-2">
-                    <Target className="h-4 w-4 text-[hsl(var(--command-success))]" />
-                    <span className="text-sm font-medium">Team Performance</span>
-                  </div>
-                  <div className="flex items-center gap-4">
-                    <div className="text-2xl font-display font-bold text-[hsl(var(--command-success))]">
-                      {averageEfficiency}%
-                    </div>
-                    <div className="text-xs text-[hsl(var(--command-text-muted))] space-y-1">
-                      <div>{onlineAgents}/{totalAgents} Active</div>
-                      <div>{totalActiveTasks} Current Tasks</div>
-                    </div>
-                  </div>
-                </motion.div>
-              </div>
-            </div>
+          {/* Page Header */}
+          <PageHeader
+            icon={Users}
+            title="Team Command"
+            subtitle="Agent status dashboard and team coordination center. Real-time visibility into all operational personnel and their current activities."
+          >
+            <StatsCard
+              icon={Target}
+              label="Team Performance"
+              value={`${averageEfficiency}%`}
+              subLabel="Active"
+              subValue={`${onlineAgents}/${totalAgents}`}
+            />
+          </PageHeader>
 
             {/* Team Overview */}
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">

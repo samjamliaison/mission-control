@@ -5,6 +5,8 @@ import { motion, AnimatePresence } from "framer-motion"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
+import { PageHeader } from "@/components/ui/page-header"
+import { StatsCard } from "@/components/ui/stats-card"
 import { 
   Building2,
   Monitor,
@@ -177,46 +179,20 @@ export function OfficeView() {
         animate="visible"
       >
         <div className="max-w-7xl mx-auto space-y-8">
-          {/* Header */}
-          <motion.div variants={itemVariants} className="space-y-6">
-            <div className="flex items-center justify-between">
-              <div className="space-y-2">
-                <div className="flex items-center gap-3">
-                  <div className="p-2 rounded-lg glass-morphism glow-border">
-                    <Building2 className="h-6 w-6 text-[hsl(var(--command-accent))]" />
-                  </div>
-                  <h1 className="text-4xl font-display font-bold text-premium">
-                    Virtual Office
-                  </h1>
-                </div>
-                <p className="text-[hsl(var(--command-text-muted))] text-lg max-w-2xl">
-                  Digital headquarters visualization. Real-time view of agent workstations and current activities across the virtual office space.
-                </p>
-              </div>
-              
-              {/* Office Stats */}
-              <div className="flex items-center gap-4">
-                <motion.div 
-                  className="glass-morphism p-4 rounded-xl space-y-3"
-                  whileHover={{ scale: 1.02 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  <div className="flex items-center gap-2">
-                    <Activity className="h-4 w-4 text-[hsl(var(--command-success))]" />
-                    <span className="text-sm font-medium">Office Activity</span>
-                  </div>
-                  <div className="flex items-center gap-4">
-                    <div className="text-2xl font-display font-bold text-[hsl(var(--command-success))]">
-                      {totalActivity}%
-                    </div>
-                    <div className="text-xs text-[hsl(var(--command-text-muted))] space-y-1">
-                      <div>{activeAgents}/5 Active</div>
-                      <div>{busyWorkstations} Busy</div>
-                    </div>
-                  </div>
-                </motion.div>
-              </div>
-            </div>
+          {/* Page Header */}
+          <PageHeader
+            icon={Building2}
+            title="Virtual Office"
+            subtitle="Digital headquarters visualization. Real-time view of agent workstations and current activities across the virtual office space."
+          >
+            <StatsCard
+              icon={Activity}
+              label="Office Activity"
+              value={`${totalActivity}%`}
+              subLabel="Active"
+              subValue={`${activeAgents}/5`}
+            />
+          </PageHeader>
 
             {/* Office Controls */}
             <div className="flex items-center justify-between">
