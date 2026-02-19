@@ -45,6 +45,13 @@ const navigationItems = [
     description: "Knowledge Base"
   },
   {
+    name: "Activity",
+    href: "/activity",
+    icon: Activity,
+    emoji: "📊",
+    description: "Audit Trail"
+  },
+  {
     name: "Team",
     href: "/team",
     icon: Users,

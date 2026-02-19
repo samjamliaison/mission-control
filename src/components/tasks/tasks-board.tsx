@@ -21,6 +21,7 @@ import { StatsCard } from "@/components/ui/stats-card"
 import { EmptyState } from "@/components/ui/empty-state"
 import { loadTasks, saveTasks } from "@/lib/data-persistence"
 import { useToastActions } from "@/components/ui/toast"
+import { logTaskAction, logNavigationAction } from "@/lib/activity-logger"
 
 // Note: Tasks are now loaded from localStorage via loadTasks()
 
@@ -69,6 +70,9 @@ export function TasksBoard() {
     setMounted(true)
     const loadedTasks = loadTasks()
     setTasks(loadedTasks)
+    
+    // Log navigation to tasks board
+    logNavigationAction('Task Board')
   }, [])
 
   // Save tasks whenever they change
@@ -119,6 +123,55 @@ export function TasksBoard() {
     }
 
     const newStatus = destination.droppableId as "todo" | "in-progress" | "done"
+    const task = tasks.find(t => t._id === draggableId)
+    
+    if (task) {
+      const oldStatus = task.status
+      
+      // Log the status change activity
+      if (newStatus === 'done' && oldStatus !== 'done') {
+        logTaskAction(
+          'completed',
+          task.title,
+          task.assignee,
+          draggableId,
+          { 
+            fromStatus: oldStatus,
+            toStatus: newStatus,
+            priority: task.priority,
+            viaDragDrop: true
+          }
+        )
+      } else if (oldStatus === 'done' && newStatus !== 'done') {
+        logTaskAction(
+          'updated',
+          task.title,
+          task.assignee,
+          draggableId,
+          { 
+            fromStatus: oldStatus,
+            toStatus: newStatus,
+            priority: task.priority,
+            action: 'reopened',
+            viaDragDrop: true
+          }
+        )
+      } else {
+        logTaskAction(
+          'updated',
+          task.title,
+          task.assignee,
+          draggableId,
+          { 
+            fromStatus: oldStatus,
+            toStatus: newStatus,
+            priority: task.priority,
+            action: 'status_changed',
+            viaDragDrop: true
+          }
+        )
+      }
+    }
     
     setTasks(prevTasks => 
       prevTasks.map(task => 
@@ -165,6 +218,18 @@ export function TasksBoard() {
     const taskToDelete = tasks.find(task => task._id === taskId)
     setTasks(prevTasks => prevTasks.filter(task => task._id !== taskId))
     if (taskToDelete) {
+      // Log the deletion activity
+      logTaskAction(
+        'deleted',
+        taskToDelete.title,
+        taskToDelete.assignee,
+        taskId,
+        { 
+          status: taskToDelete.status,
+          priority: taskToDelete.priority,
+          wasCompleted: taskToDelete.status === 'done'
+        }
+      )
       toast.success('Task Deleted', `"${taskToDelete.title}" has been removed.`)
     }
   }

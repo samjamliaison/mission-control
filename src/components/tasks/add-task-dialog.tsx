@@ -22,6 +22,7 @@ import {
 import { Badge } from "@/components/ui/badge"
 import { Rocket, User, Flag, X, Zap, AlertTriangle, CheckCircle } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { logTaskAction } from "@/lib/activity-logger"
 import { Task } from "./task-card"
 
 interface AddTaskDialogProps {
@@ -80,14 +81,31 @@ export function AddTaskDialog({ open, onOpenChange, onSave, editingTask }: AddTa
   const handleSave = () => {
     if (!title.trim() || !assignee) return
     
-    onSave({
+    const taskData = {
       ...(editingTask && { _id: editingTask._id }),
       title: title.trim(),
       description: description.trim(),
       assignee,
       priority,
-    })
+    }
     
+    // Log the activity
+    const action = editingTask ? 'updated' : 'created'
+    logTaskAction(
+      action,
+      title.trim(),
+      assignee,
+      editingTask?._id || 'new',
+      { 
+        priority, 
+        hasDescription: !!description.trim(),
+        editedFields: editingTask ? Object.keys(taskData).filter(key => 
+          editingTask[key as keyof Task] !== taskData[key as keyof typeof taskData]
+        ) : undefined
+      }
+    )
+    
+    onSave(taskData)
     onOpenChange(false)
   }
   
