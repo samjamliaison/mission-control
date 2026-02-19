@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useMemo } from "react"
 import { motion } from "framer-motion"
+import { DragDropContext, Droppable, Draggable, DropResult } from "@hello-pangea/dnd"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -36,7 +37,8 @@ import {
   HardDrive,
   Cpu,
   Shield,
-  X
+  X,
+  GripVertical
 } from "lucide-react"
 import { loadTasks, loadContent, loadEvents, loadMemories } from "@/lib/data-persistence"
 import { Task } from "@/components/tasks/task-card"
@@ -223,6 +225,50 @@ export function DashboardView() {
   const [updateCounter, setUpdateCounter] = useState(0)
   const [currentTime, setCurrentTime] = useState<number>(Date.now())
   const { starredItems } = useStarred()
+
+  // Widget ordering state
+  const defaultWidgetOrder = [
+    'overview-stats',
+    'starred-items', 
+    'agent-health',
+    'recent-activity',
+    'live-system',
+    'performance'
+  ]
+  const [widgetOrder, setWidgetOrder] = useState<string[]>(defaultWidgetOrder)
+
+  // Load widget order from localStorage
+  useEffect(() => {
+    try {
+      const savedOrder = localStorage.getItem('dashboard-widget-order')
+      if (savedOrder) {
+        setWidgetOrder(JSON.parse(savedOrder))
+      }
+    } catch (error) {
+      console.error('Failed to load widget order:', error)
+    }
+  }, [])
+
+  // Save widget order to localStorage
+  const saveWidgetOrder = (newOrder: string[]) => {
+    try {
+      localStorage.setItem('dashboard-widget-order', JSON.stringify(newOrder))
+      setWidgetOrder(newOrder)
+    } catch (error) {
+      console.error('Failed to save widget order:', error)
+    }
+  }
+
+  // Handle drag and drop
+  const handleWidgetDragEnd = (result: DropResult) => {
+    if (!result.destination) return
+
+    const newOrder = Array.from(widgetOrder)
+    const [reorderedItem] = newOrder.splice(result.source.index, 1)
+    newOrder.splice(result.destination.index, 0, reorderedItem)
+
+    saveWidgetOrder(newOrder)
+  }
 
   // Fetch OpenClaw API data
   const fetchLiveData = async () => {
@@ -438,9 +484,10 @@ export function DashboardView() {
   if (!mounted) return null
 
   return (
-    <div className="min-h-[calc(100vh-5rem)] relative" data-testid="dashboard-view">
-      {/* Command Center Background */}
-      <div className="fixed inset-0 bg-gradient-to-br from-[hsl(var(--command-background))] via-[hsl(220_13%_3%)] to-[hsl(var(--command-background))] pointer-events-none" />
+    <DragDropContext onDragEnd={handleWidgetDragEnd}>
+      <div className="min-h-[calc(100vh-5rem)] relative" data-testid="dashboard-view">
+        {/* Command Center Background */}
+        <div className="fixed inset-0 bg-gradient-to-br from-[hsl(var(--command-background))] via-[hsl(220_13%_3%)] to-[hsl(var(--command-background))] pointer-events-none" />
 
       <motion.div
         className="relative z-10 p-6"
@@ -464,9 +511,38 @@ export function DashboardView() {
             />
           </PageHeader>
 
+          <Droppable droppableId="dashboard-widgets" direction="vertical">
+            {(provided, snapshot) => (
+              <div
+                ref={provided.innerRef}
+                {...provided.droppableProps}
+                className={cn(
+                  "space-y-8",
+                  snapshot.isDraggingOver && "bg-[hsl(var(--command-surface))]/20 rounded-lg p-2"
+                )}
+              >
+
           {/* Overview Stats */}
-          <SectionErrorBoundary sectionName="Overview Stats">
-            <motion.div variants={itemVariants}>
+          <Draggable draggableId="overview-stats" index={widgetOrder.indexOf('overview-stats')}>
+            {(provided, snapshot) => (
+              <div
+                ref={provided.innerRef}
+                {...provided.draggableProps}
+                className={cn(
+                  "relative",
+                  snapshot.isDragging && "z-50 rotate-2 scale-105"
+                )}
+              >
+                <div
+                  {...provided.dragHandleProps}
+                  className="absolute top-2 right-2 z-10 opacity-0 group-hover:opacity-100 transition-opacity p-2 bg-[hsl(var(--command-surface))]/80 rounded-lg cursor-grab active:cursor-grabbing"
+                  title="Drag to reorder"
+                >
+                  <GripVertical className="h-4 w-4 text-[hsl(var(--command-text-muted))]" />
+                </div>
+                <div className="group">
+                  <SectionErrorBoundary sectionName="Overview Stats">
+                    <motion.div variants={itemVariants}>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
               <Card className="stats-glass stats-mesh-bg border-[hsl(var(--command-border-bright))]">
                 <CardContent className="p-6">
@@ -613,8 +689,12 @@ export function DashboardView() {
                 </CardContent>
               </Card>
               </div>
-            </motion.div>
-          </SectionErrorBoundary>
+                    </motion.div>
+                  </SectionErrorBoundary>
+                </div>
+              </div>
+            )}
+          </Draggable>
 
           {/* Starred Items */}
           {starredItems.length > 0 && (
@@ -1190,8 +1270,14 @@ export function DashboardView() {
             </div>
           </motion.div>
           </SectionErrorBoundary>
+
+                {provided.placeholder}
+              </div>
+            )}
+          </Droppable>
         </div>
       </motion.div>
     </div>
+    </DragDropContext>
   )
 }
