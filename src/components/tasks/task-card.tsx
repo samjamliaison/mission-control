@@ -6,7 +6,7 @@ import Link from "next/link"
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { Edit, Trash2, User, Calendar, Clock, Zap, ExternalLink, Timer, Ban } from "lucide-react"
+import { Edit, Trash2, User, Calendar, Clock, Zap, ExternalLink, Timer, Ban, Repeat } from "lucide-react"
 import { Checkbox } from "@/components/ui/checkbox"
 import { StarButton } from "@/components/ui/star-button"
 import { TimeTracker } from "./time-tracker"
@@ -24,6 +24,7 @@ export interface Task {
   updatedAt: number
   dueDate?: number
   blockedBy?: string[]
+  repeat?: "daily" | "weekly" | "monthly"
 }
 
 interface TaskCardProps {
@@ -131,6 +132,7 @@ export function TaskCard({ task, index, onEdit, onDelete, isSelected = false, on
   const isCompleted = task.status === "done"
   const isActive = task.status === "in-progress"
   const isBlocked = task.blockedBy && task.blockedBy.length > 0
+  const isRecurring = !!task.repeat
 
   const cardVariants = {
     hidden: { opacity: 0, y: 20 },
@@ -377,6 +379,14 @@ export function TaskCard({ task, index, onEdit, onDelete, isSelected = false, on
                     <div className="flex items-center gap-1 px-2 py-1 bg-orange-500/10 border border-orange-500/20 rounded text-orange-400">
                       <Ban className="h-3 w-3" />
                       <span className="text-xs font-semibold">Blocked</span>
+                    </div>
+                  )}
+                  
+                  {/* Recurring indicator */}
+                  {isRecurring && (
+                    <div className="flex items-center gap-1 px-2 py-1 bg-purple-500/10 border border-purple-500/20 rounded text-purple-400">
+                      <Repeat className="h-3 w-3" />
+                      <span className="text-xs font-semibold">{task.repeat}</span>
                     </div>
                   )}
                 </div>

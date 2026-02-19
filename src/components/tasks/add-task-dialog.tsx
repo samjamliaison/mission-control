@@ -20,7 +20,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Badge } from "@/components/ui/badge"
-import { Rocket, User, Flag, X, Zap, AlertTriangle, CheckCircle, FileText, Sparkles, Calendar, Ban } from "lucide-react"
+import { Rocket, User, Flag, X, Zap, AlertTriangle, CheckCircle, FileText, Sparkles, Calendar, Ban, Repeat } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { logTaskAction } from "@/lib/activity-logger"
 import { Task } from "./task-card"
@@ -65,6 +65,7 @@ export function AddTaskDialog({ open, onOpenChange, onSave, editingTask, allTask
   const [priority, setPriority] = useState<"low" | "medium" | "high">("medium")
   const [dueDate, setDueDate] = useState("")
   const [blockedBy, setBlockedBy] = useState<string[]>([])
+  const [repeat, setRepeat] = useState<"" | "daily" | "weekly" | "monthly">("")
   const [showTemplatePicker, setShowTemplatePicker] = useState(false)
   const [selectedTemplate, setSelectedTemplate] = useState<TaskTemplate | null>(null)
   const [templateUsed, setTemplateUsed] = useState(false)
@@ -91,6 +92,7 @@ export function AddTaskDialog({ open, onOpenChange, onSave, editingTask, allTask
         setPriority(editingTask.priority)
         setDueDate(editingTask.dueDate ? new Date(editingTask.dueDate).toISOString().split('T')[0] : "")
         setBlockedBy(editingTask.blockedBy || [])
+        setRepeat(editingTask.repeat || "")
         setSelectedTemplate(null)
         setTemplateUsed(false)
       } else {
@@ -100,6 +102,7 @@ export function AddTaskDialog({ open, onOpenChange, onSave, editingTask, allTask
         setPriority("medium")
         setDueDate("")
         setBlockedBy([])
+        setRepeat("")
         setSelectedTemplate(null)
         setTemplateUsed(false)
       }
@@ -117,6 +120,7 @@ export function AddTaskDialog({ open, onOpenChange, onSave, editingTask, allTask
       priority,
       ...(dueDate && { dueDate: new Date(dueDate).getTime() }),
       blockedBy: blockedBy.length > 0 ? blockedBy : undefined,
+      repeat: repeat || undefined,
     }
 
     // Log the activity
@@ -463,6 +467,59 @@ export function AddTaskDialog({ open, onOpenChange, onSave, editingTask, allTask
                 </div>
               )}
             </div>
+          </motion.div>
+
+          {/* Repeat Schedule */}
+          <motion.div
+            className="space-y-2"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.75 }}
+          >
+            <label className="text-sm font-heading font-semibold flex items-center gap-2">
+              <Repeat className="h-4 w-4 text-purple-400" />
+              Repeat Schedule
+            </label>
+            <Select value={repeat} onValueChange={(value: "" | "daily" | "weekly" | "monthly") => setRepeat(value)}>
+              <SelectTrigger className="glass-morphism border-[hsl(var(--command-border))] focus:ring-1 focus:ring-[hsl(var(--command-accent))]">
+                <SelectValue placeholder="No repeat">
+                  {repeat && (
+                    <div className="flex items-center gap-2">
+                      <Repeat className="h-4 w-4 text-purple-400" />
+                      <span className="capitalize">{repeat}</span>
+                    </div>
+                  )}
+                </SelectValue>
+              </SelectTrigger>
+              <SelectContent className="glass-morphism border-[hsl(var(--command-border-bright))]">
+                <SelectItem value="" className="focus:bg-[hsl(var(--command-accent))]/10">
+                  No repeat
+                </SelectItem>
+                <SelectItem value="daily" className="focus:bg-[hsl(var(--command-accent))]/10">
+                  <div className="flex items-center gap-2 py-1">
+                    <Repeat className="h-4 w-4 text-purple-400" />
+                    <span>Daily</span>
+                  </div>
+                </SelectItem>
+                <SelectItem value="weekly" className="focus:bg-[hsl(var(--command-accent))]/10">
+                  <div className="flex items-center gap-2 py-1">
+                    <Repeat className="h-4 w-4 text-purple-400" />
+                    <span>Weekly</span>
+                  </div>
+                </SelectItem>
+                <SelectItem value="monthly" className="focus:bg-[hsl(var(--command-accent))]/10">
+                  <div className="flex items-center gap-2 py-1">
+                    <Repeat className="h-4 w-4 text-purple-400" />
+                    <span>Monthly</span>
+                  </div>
+                </SelectItem>
+              </SelectContent>
+            </Select>
+            {repeat && (
+              <p className="text-xs text-[hsl(var(--command-text-muted))]">
+                A new task will be created automatically when this task is completed.
+              </p>
+            )}
           </motion.div>
 
           {/* Preview Badge */}

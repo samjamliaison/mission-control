@@ -144,6 +144,43 @@ export function TasksBoard() {
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc')
   const toast = useToastActions()
   const { canUndo, popLastAction, addTaskCreate, addTaskDelete, addTaskUpdate, addTaskStatusChange } = useUndoSystem()
+
+  // Create next occurrence for recurring tasks
+  const createRecurringTask = async (completedTask: Task) => {
+    if (!completedTask.repeat) return
+
+    const nextDueDate = () => {
+      const now = new Date()
+      switch (completedTask.repeat) {
+        case 'daily':
+          return new Date(now.getTime() + 24 * 60 * 60 * 1000).getTime()
+        case 'weekly':
+          return new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000).getTime()
+        case 'monthly':
+          const nextMonth = new Date(now)
+          nextMonth.setMonth(nextMonth.getMonth() + 1)
+          return nextMonth.getTime()
+        default:
+          return now.getTime()
+      }
+    }
+
+    const nextTask: Partial<Task> = {
+      title: completedTask.title,
+      description: completedTask.description,
+      assignee: completedTask.assignee,
+      priority: completedTask.priority,
+      repeat: completedTask.repeat,
+      dueDate: nextDueDate(),
+      status: 'todo'
+    }
+
+    const newTask = await createTask(nextTask)
+    if (newTask) {
+      setTasks(prevTasks => [...prevTasks, newTask])
+      toast.success('Recurring Task Created', `Next occurrence of "${completedTask.title}" has been scheduled.`)
+    }
+  }
   const { columns } = useKanbanColumns()
 
   // Load data from API on mount
@@ -288,6 +325,9 @@ export function TasksBoard() {
             viaDragDrop: true
           }
         )
+        
+        // Create next occurrence for recurring tasks
+        createRecurringTask(task)
       } else if (oldStatus === 'done' && newStatus !== 'done') {
         logTaskAction(
           'updated',
@@ -464,6 +504,8 @@ export function TasksBoard() {
   }
 
   const handleBulkStatusChange = (status: "todo" | "in-progress" | "done") => {
+    const tasksToUpdate = tasks.filter(task => selectedTasks.has(task._id))
+    
     setTasks(prevTasks =>
       prevTasks.map(task =>
         selectedTasks.has(task._id)
@@ -471,6 +513,16 @@ export function TasksBoard() {
           : task
       )
     )
+    
+    // Handle recurring tasks if moving to done
+    if (status === 'done') {
+      tasksToUpdate.forEach(task => {
+        if (task.status !== 'done') {
+          createRecurringTask(task)
+        }
+      })
+    }
+    
     toast.success('Bulk Update', `${selectedTasks.size} task${selectedTasks.size > 1 ? 's' : ''} moved to ${status}.`)
     setSelectedTasks(new Set())
     setBulkSelectionMode(false)
