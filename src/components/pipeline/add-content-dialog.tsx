@@ -123,7 +123,7 @@ export function AddContentDialog({ open, onOpenChange, onSave, editingContent }:
               <div className="p-2 glass-morphism rounded-lg">
                 <Film className="h-5 w-5 text-[hsl(var(--command-accent))]" />
               </div>
-              <DialogTitle className="text-xl font-display font-bold">
+              <DialogTitle className="text-lg font-semibold tracking-tight">
                 {editingContent ? "Edit Content" : "Create Content"}
               </DialogTitle>
             </div>

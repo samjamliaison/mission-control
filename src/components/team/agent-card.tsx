@@ -129,10 +129,10 @@ export function AgentCard({ agent, onClick }: AgentCardProps) {
               </motion.div>
               
               <div>
-                <h3 className="text-xl font-display font-bold group-hover:text-[hsl(var(--command-accent))] transition-colors">
+                <h3 className="text-lg font-semibold tracking-tight group-hover:text-[hsl(var(--command-accent))] transition-colors">
                   {agent.name}
                 </h3>
-                <p className="text-sm text-[hsl(var(--command-text-muted))]">
+                <p className="text-sm text-white/60">
                   {agent.role}
                 </p>
               </div>
@@ -162,30 +162,30 @@ export function AgentCard({ agent, onClick }: AgentCardProps) {
               <Activity className="h-4 w-4 text-[hsl(var(--command-accent))]" />
               <span className="text-sm font-medium">Current Activity</span>
             </div>
-            <p className="text-xs text-[hsl(var(--command-text-muted))] pl-6">
+            <p className="text-sm text-white/60 pl-6">
               {agent.currentActivity}
             </p>
           </div>
 
           {/* Task Statistics */}
           <div className="grid grid-cols-3 gap-3">
-            <div className="text-center p-2 glass-morphism rounded-lg">
-              <div className="text-lg font-display font-bold text-[hsl(var(--command-accent))]">
+            <div className="text-center p-2 bg-white/[0.03] border border-white/[0.06] rounded-xl backdrop-blur-xl">
+              <div className="text-lg font-semibold tracking-tight text-[hsl(var(--command-accent))]">
                 {agent.activeTasks}
               </div>
-              <div className="text-xs text-[hsl(var(--command-text-muted))]">Active</div>
+              <div className="text-xs text-white/60">Active</div>
             </div>
-            <div className="text-center p-2 glass-morphism rounded-lg">
-              <div className="text-lg font-display font-bold text-[hsl(var(--command-success))]">
+            <div className="text-center p-2 bg-white/[0.03] border border-white/[0.06] rounded-xl backdrop-blur-xl">
+              <div className="text-lg font-semibold tracking-tight text-[hsl(var(--command-success))]">
                 {agent.completedTasks}
               </div>
-              <div className="text-xs text-[hsl(var(--command-text-muted))]">Done</div>
+              <div className="text-xs text-white/60">Done</div>
             </div>
-            <div className="text-center p-2 glass-morphism rounded-lg">
-              <div className="text-lg font-display font-bold text-yellow-400">
+            <div className="text-center p-2 bg-white/[0.03] border border-white/[0.06] rounded-xl backdrop-blur-xl">
+              <div className="text-lg font-semibold tracking-tight text-yellow-400">
                 {agent.efficiency}%
               </div>
-              <div className="text-xs text-[hsl(var(--command-text-muted))]">Rate</div>
+              <div className="text-xs text-white/60">Rate</div>
             </div>
           </div>
 
@@ -209,7 +209,7 @@ export function AgentCard({ agent, onClick }: AgentCardProps) {
           </div>
 
           {/* Last Activity */}
-          <div className="flex items-center justify-between text-xs text-[hsl(var(--command-text-dim))]">
+          <div className="flex items-center justify-between text-sm text-white/60">
             <div className="flex items-center gap-1">
               <Clock className="h-3 w-3" />
               <span>Last seen {formatTimeSince(agent.lastSeen)}</span>

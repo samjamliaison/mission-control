@@ -221,8 +221,8 @@ export function ContentItemCard({ content, index, onView, onEdit, onDelete }: Co
             <CardHeader className="pb-3 pt-5 px-5 relative">
               <div className="flex items-start justify-between gap-3">
                 <h3 className={cn(
-                  "font-heading font-semibold text-sm leading-tight flex-1",
-                  isPublished && "line-through text-[hsl(var(--command-text-muted))]"
+                  "text-lg font-semibold tracking-tight leading-tight flex-1",
+                  isPublished && "line-through text-white/60"
                 )}>
                   {content.title}
                 </h3>
