@@ -113,6 +113,40 @@ const itemVariants = {
   }
 }
 
+// Helper function to format time since last update
+const formatTimeSince = (timestamp: number, currentTime: number) => {
+  const seconds = Math.floor((currentTime - timestamp) / 1000)
+  if (seconds < 60) return `${seconds}s ago`
+  const minutes = Math.floor(seconds / 60)
+  if (minutes < 60) return `${minutes}m ago`
+  const hours = Math.floor(minutes / 60)
+  return `${hours}h ago`
+}
+
+// Live update indicator component
+const LiveUpdateIndicator = ({ lastUpdated, isLoading, hasNewData, currentTime }: { 
+  lastUpdated: number, 
+  isLoading: boolean, 
+  hasNewData: boolean,
+  currentTime: number
+}) => (
+  <motion.div 
+    className="flex items-center gap-2 text-xs text-[hsl(var(--command-text-muted))]"
+    animate={hasNewData ? { scale: [1, 1.05, 1] } : {}}
+    transition={{ duration: 0.3 }}
+  >
+    <div className={cn(
+      "w-2 h-2 rounded-full",
+      isLoading ? "bg-orange-400 animate-pulse" : 
+      hasNewData ? "bg-green-400 animate-ping" : 
+      "bg-[hsl(var(--command-accent))]"
+    )} />
+    <span>
+      {isLoading ? 'Updating...' : `Updated ${formatTimeSince(lastUpdated, currentTime)}`}
+    </span>
+  </motion.div>
+)
+
 export function DashboardView() {
   const [tasks, setTasks] = useState<Task[]>([])
   const [content, setContent] = useState<ContentItem[]>([])
@@ -123,32 +157,57 @@ export function DashboardView() {
   const [sessions, setSessions] = useState<SessionInfo[]>([])
   const [liveDataLoading, setLiveDataLoading] = useState(true)
   const [mounted, setMounted] = useState(false)
+  const [lastUpdated, setLastUpdated] = useState<number>(Date.now())
+  const [hasNewData, setHasNewData] = useState(false)
+  const [updateCounter, setUpdateCounter] = useState(0)
+  const [currentTime, setCurrentTime] = useState<number>(Date.now())
 
   // Fetch OpenClaw API data
   const fetchLiveData = async () => {
     try {
       setLiveDataLoading(true)
+      const previousDataHash = JSON.stringify({ agents: agentStatuses, cron: cronJobs, sessions })
+      
+      // Add cache-busting timestamp to prevent stale data
+      const cacheBuster = `?t=${Date.now()}`
       
       const [agentsRes, cronRes, sessionsRes] = await Promise.allSettled([
-        fetch('/api/agents/status'),
-        fetch('/api/cron'),
-        fetch('/api/sessions')
+        fetch(`/api/agents/status${cacheBuster}`),
+        fetch(`/api/cron${cacheBuster}`),
+        fetch(`/api/sessions${cacheBuster}`)
       ])
+
+      let newAgents = agentStatuses
+      let newCron = cronJobs
+      let newSessions = sessions
 
       if (agentsRes.status === 'fulfilled' && agentsRes.value.ok) {
         const agentsData = await agentsRes.value.json()
-        setAgentStatuses(agentsData.agents || [])
+        newAgents = agentsData.agents || []
+        setAgentStatuses(newAgents)
       }
 
       if (cronRes.status === 'fulfilled' && cronRes.value.ok) {
         const cronData = await cronRes.value.json()
-        setCronJobs(cronData.jobs || [])
+        newCron = cronData.jobs || []
+        setCronJobs(newCron)
       }
 
       if (sessionsRes.status === 'fulfilled' && sessionsRes.value.ok) {
         const sessionsData = await sessionsRes.value.json()
-        setSessions(sessionsData.sessions || [])
+        newSessions = sessionsData.sessions || []
+        setSessions(newSessions)
       }
+
+      // Check if data changed to trigger pulse animation
+      const newDataHash = JSON.stringify({ agents: newAgents, cron: newCron, sessions: newSessions })
+      if (previousDataHash !== newDataHash && mounted) {
+        setHasNewData(true)
+        setUpdateCounter(prev => prev + 1)
+        setTimeout(() => setHasNewData(false), 2000) // Clear pulse after 2 seconds
+      }
+
+      setLastUpdated(Date.now())
     } catch (error) {
       console.error('Failed to fetch live data:', error)
     } finally {
@@ -156,20 +215,40 @@ export function DashboardView() {
     }
   }
 
-  // Load all data on mount
-  useEffect(() => {
-    setMounted(true)
+  // Refresh activity data
+  const refreshActivityData = () => {
     setTasks(loadTasks())
     setContent(loadContent())
     setEvents(loadEvents())
     setMemories(loadMemories())
+  }
+
+  // Load all data on mount
+  useEffect(() => {
+    setMounted(true)
+    refreshActivityData()
     
     // Fetch live data immediately
     fetchLiveData()
     
-    // Set up auto-refresh for live data every 30 seconds
-    const interval = setInterval(fetchLiveData, 30000)
-    return () => clearInterval(interval)
+    // Set up auto-refresh for live data every 10 seconds
+    const liveDataInterval = setInterval(fetchLiveData, 10000)
+    
+    // Set up auto-refresh for activity feed every 30 seconds
+    const activityInterval = setInterval(refreshActivityData, 30000)
+    
+    return () => {
+      clearInterval(liveDataInterval)
+      clearInterval(activityInterval)
+    }
+  }, [])
+
+  // Update current time every second for live time display
+  useEffect(() => {
+    const timeInterval = setInterval(() => {
+      setCurrentTime(Date.now())
+    }, 1000)
+    return () => clearInterval(timeInterval)
   }, [])
 
   // Calculate stats
@@ -369,62 +448,95 @@ export function DashboardView() {
 
           {/* Live OpenClaw Status */}
           <motion.div variants={itemVariants}>
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-lg font-medium text-contrast-high flex items-center gap-2">
+                <Zap className="h-5 w-5 text-[hsl(var(--command-accent))]" />
+                Live System Status
+              </h2>
+              <LiveUpdateIndicator 
+                lastUpdated={lastUpdated} 
+                isLoading={liveDataLoading} 
+                hasNewData={hasNewData}
+                currentTime={currentTime}
+              />
+            </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <Card className="glass-morphism border-[hsl(var(--command-border-bright))] relative">
-                <CardHeader className="pb-3">
-                  <CardTitle className="flex items-center justify-between text-sm">
-                    <div className="flex items-center gap-2">
-                      <Server className="h-4 w-4 text-[hsl(var(--command-accent))]" />
-                      Active Agents
+              <motion.div
+                animate={hasNewData ? { 
+                  boxShadow: ["0 0 0 0 rgba(var(--command-accent-rgb), 0)", "0 0 0 10px rgba(var(--command-accent-rgb), 0.3)", "0 0 0 0 rgba(var(--command-accent-rgb), 0)"] 
+                } : {}}
+                transition={{ duration: 1 }}
+              >
+                <Card className="glass-morphism border-[hsl(var(--command-border-bright))] relative">
+                  <CardHeader className="pb-3">
+                    <CardTitle className="flex items-center justify-between text-sm">
+                      <div className="flex items-center gap-2">
+                        <Server className="h-4 w-4 text-[hsl(var(--command-accent))]" />
+                        Active Agents
+                      </div>
+                      {liveDataLoading && (
+                        <RefreshCw className="h-3 w-3 animate-spin text-[hsl(var(--command-text-muted))]" />
+                      )}
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-2xl font-display font-bold text-[hsl(var(--command-accent))]">
+                      {liveStats.agents.online}
                     </div>
-                    {liveDataLoading && (
-                      <RefreshCw className="h-3 w-3 animate-spin text-[hsl(var(--command-text-muted))]" />
-                    )}
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-display font-bold text-[hsl(var(--command-accent))]">
-                    {liveStats.agents.online}
-                  </div>
-                  <p className="text-xs text-[hsl(var(--command-text-muted))] mt-1">
-                    {liveStats.agents.total} total configured
-                  </p>
-                </CardContent>
-              </Card>
+                    <p className="text-xs text-[hsl(var(--command-text-muted))] mt-1">
+                      {liveStats.agents.total} total configured
+                    </p>
+                  </CardContent>
+                </Card>
+              </motion.div>
 
-              <Card className="glass-morphism border-[hsl(var(--command-border-bright))]">
-                <CardHeader className="pb-3">
-                  <CardTitle className="flex items-center gap-2 text-sm">
-                    <PlayCircle className="h-4 w-4 text-green-400" />
-                    Active Sessions
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-display font-bold text-green-400">
-                    {liveStats.sessions.active}
-                  </div>
-                  <p className="text-xs text-[hsl(var(--command-text-muted))] mt-1">
-                    {liveStats.sessions.total} total sessions
-                  </p>
-                </CardContent>
-              </Card>
+              <motion.div
+                animate={hasNewData ? { 
+                  boxShadow: ["0 0 0 0 rgba(34, 197, 94, 0)", "0 0 0 10px rgba(34, 197, 94, 0.3)", "0 0 0 0 rgba(34, 197, 94, 0)"] 
+                } : {}}
+                transition={{ duration: 1 }}
+              >
+                <Card className="glass-morphism border-[hsl(var(--command-border-bright))]">
+                  <CardHeader className="pb-3">
+                    <CardTitle className="flex items-center gap-2 text-sm">
+                      <PlayCircle className="h-4 w-4 text-green-400" />
+                      Active Sessions
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-2xl font-display font-bold text-green-400">
+                      {liveStats.sessions.active}
+                    </div>
+                    <p className="text-xs text-[hsl(var(--command-text-muted))] mt-1">
+                      {liveStats.sessions.total} total sessions
+                    </p>
+                  </CardContent>
+                </Card>
+              </motion.div>
 
-              <Card className="glass-morphism border-[hsl(var(--command-border-bright))]">
-                <CardHeader className="pb-3">
-                  <CardTitle className="flex items-center gap-2 text-sm">
-                    <Timer className="h-4 w-4 text-orange-400" />
-                    Cron Jobs
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-display font-bold text-orange-400">
-                    {liveStats.cronJobs.active}
-                  </div>
-                  <p className="text-xs text-[hsl(var(--command-text-muted))] mt-1">
-                    {liveStats.cronJobs.total} scheduled tasks
-                  </p>
-                </CardContent>
-              </Card>
+              <motion.div
+                animate={hasNewData ? { 
+                  boxShadow: ["0 0 0 0 rgba(251, 146, 60, 0)", "0 0 0 10px rgba(251, 146, 60, 0.3)", "0 0 0 0 rgba(251, 146, 60, 0)"] 
+                } : {}}
+                transition={{ duration: 1 }}
+              >
+                <Card className="glass-morphism border-[hsl(var(--command-border-bright))]">
+                  <CardHeader className="pb-3">
+                    <CardTitle className="flex items-center gap-2 text-sm">
+                      <Timer className="h-4 w-4 text-orange-400" />
+                      Cron Jobs
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-2xl font-display font-bold text-orange-400">
+                      {liveStats.cronJobs.active}
+                    </div>
+                    <p className="text-xs text-[hsl(var(--command-text-muted))] mt-1">
+                      {liveStats.cronJobs.total} scheduled tasks
+                    </p>
+                  </CardContent>
+                </Card>
+              </motion.div>
             </div>
           </motion.div>
 
@@ -436,12 +548,25 @@ export function DashboardView() {
                 <CardHeader>
                   <CardTitle className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                      <Activity className="h-5 w-5 text-[hsl(var(--command-accent))]" />
+                      <motion.div
+                        animate={updateCounter > 0 ? { scale: [1, 1.2, 1] } : {}}
+                        transition={{ duration: 0.5 }}
+                      >
+                        <Activity className="h-5 w-5 text-[hsl(var(--command-accent))]" />
+                      </motion.div>
                       Recent Activity
                     </div>
-                    <Badge variant="outline" className="bg-[hsl(var(--command-accent))]/10 text-[hsl(var(--command-accent))]">
-                      Live Feed
-                    </Badge>
+                    <div className="flex items-center gap-2">
+                      <LiveUpdateIndicator 
+                        lastUpdated={lastUpdated} 
+                        isLoading={liveDataLoading} 
+                        hasNewData={hasNewData}
+                        currentTime={currentTime}
+                      />
+                      <Badge variant="outline" className="bg-[hsl(var(--command-accent))]/10 text-[hsl(var(--command-accent))]">
+                        Live Feed
+                      </Badge>
+                    </div>
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
@@ -540,12 +665,19 @@ export function DashboardView() {
                 <CardHeader>
                   <CardTitle className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                      <Users className="h-5 w-5 text-[hsl(var(--command-accent))]" />
+                      <motion.div
+                        animate={hasNewData ? { rotate: [0, 10, -10, 0] } : {}}
+                        transition={{ duration: 0.5 }}
+                      >
+                        <Users className="h-5 w-5 text-[hsl(var(--command-accent))]" />
+                      </motion.div>
                       Agent Status
                     </div>
-                    <Badge variant="outline" className="bg-[hsl(var(--command-accent))]/10 text-[hsl(var(--command-accent))] text-xs">
-                      Live
-                    </Badge>
+                    <div className="flex items-center gap-2">
+                      <Badge variant="outline" className="bg-[hsl(var(--command-accent))]/10 text-[hsl(var(--command-accent))] text-xs">
+                        Live
+                      </Badge>
+                    </div>
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-3">
@@ -605,18 +737,25 @@ export function DashboardView() {
           <motion.div variants={itemVariants}>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               {/* Active Sessions */}
-              <Card className="glass-morphism border-[hsl(var(--command-border-bright))]">
-                <CardHeader>
-                  <CardTitle className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <Activity className="h-5 w-5 text-green-400" />
-                      Active Sessions
-                    </div>
-                    <Badge variant="outline" className="bg-green-500/10 text-green-400 text-xs">
-                      {liveStats.sessions.active} Live
-                    </Badge>
-                  </CardTitle>
-                </CardHeader>
+              <motion.div
+                animate={hasNewData ? { 
+                  scale: [1, 1.02, 1],
+                  boxShadow: ["0 0 0 0 rgba(34, 197, 94, 0)", "0 0 0 5px rgba(34, 197, 94, 0.2)", "0 0 0 0 rgba(34, 197, 94, 0)"] 
+                } : {}}
+                transition={{ duration: 0.8 }}
+              >
+                <Card className="glass-morphism border-[hsl(var(--command-border-bright))]">
+                  <CardHeader>
+                    <CardTitle className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <Activity className="h-5 w-5 text-green-400" />
+                        Active Sessions
+                      </div>
+                      <Badge variant="outline" className="bg-green-500/10 text-green-400 text-xs">
+                        {liveStats.sessions.active} Live
+                      </Badge>
+                    </CardTitle>
+                  </CardHeader>
                 <CardContent>
                   {sessions.filter(s => s.status === 'active').slice(0, 4).length > 0 ? (
                     <div className="space-y-3">
@@ -655,22 +794,30 @@ export function DashboardView() {
                       </div>
                     </div>
                   )}
-                </CardContent>
-              </Card>
+                  </CardContent>
+                </Card>
+              </motion.div>
 
               {/* Scheduled Tasks */}
-              <Card className="glass-morphism border-[hsl(var(--command-border-bright))]">
-                <CardHeader>
-                  <CardTitle className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <Timer className="h-5 w-5 text-orange-400" />
-                      Scheduled Tasks
-                    </div>
-                    <Badge variant="outline" className="bg-orange-500/10 text-orange-400 text-xs">
-                      {liveStats.cronJobs.active} Active
-                    </Badge>
-                  </CardTitle>
-                </CardHeader>
+              <motion.div
+                animate={hasNewData ? { 
+                  scale: [1, 1.02, 1],
+                  boxShadow: ["0 0 0 0 rgba(251, 146, 60, 0)", "0 0 0 5px rgba(251, 146, 60, 0.2)", "0 0 0 0 rgba(251, 146, 60, 0)"] 
+                } : {}}
+                transition={{ duration: 0.8 }}
+              >
+                <Card className="glass-morphism border-[hsl(var(--command-border-bright))]">
+                  <CardHeader>
+                    <CardTitle className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <Timer className="h-5 w-5 text-orange-400" />
+                        Scheduled Tasks
+                      </div>
+                      <Badge variant="outline" className="bg-orange-500/10 text-orange-400 text-xs">
+                        {liveStats.cronJobs.active} Active
+                      </Badge>
+                    </CardTitle>
+                  </CardHeader>
                 <CardContent>
                   {cronJobs.filter(j => j.status === 'active').slice(0, 4).length > 0 ? (
                     <div className="space-y-3">
@@ -711,8 +858,9 @@ export function DashboardView() {
                       </div>
                     </div>
                   )}
-                </CardContent>
-              </Card>
+                  </CardContent>
+                </Card>
+              </motion.div>
             </div>
           </motion.div>
 
