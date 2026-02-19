@@ -19,6 +19,7 @@ export interface Task {
   priority: "low" | "medium" | "high"
   createdAt: number
   updatedAt: number
+  dueDate?: number
 }
 
 interface TaskCardProps {
@@ -103,6 +104,19 @@ export function TaskCard({ task, index, onEdit, onDelete, isSelected = false, on
       day: "numeric"
     })
   }
+
+  const getDueDateStatus = (dueDate: number) => {
+    const now = new Date()
+    const due = new Date(dueDate)
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate())
+    const dueDay = new Date(due.getFullYear(), due.getMonth(), due.getDate())
+    
+    if (dueDay < today) return 'overdue'
+    if (dueDay.getTime() === today.getTime()) return 'due-today'
+    return 'upcoming'
+  }
+
+  const dueDateStatus = task.dueDate ? getDueDateStatus(task.dueDate) : null
 
   const agentColor = agentColors[task.assignee as keyof typeof agentColors] || agentColors["Hamza"]
   const priorityStyle = priorityConfig[task.priority]
@@ -335,6 +349,25 @@ export function TaskCard({ task, index, onEdit, onDelete, isSelected = false, on
                   <span>{formatDate(task.createdAt)}</span>
                 </div>
               </div>
+
+              {/* Due Date Indicator */}
+              {task.dueDate && (
+                <div className="flex items-center justify-between">
+                  <div className={cn(
+                    "flex items-center gap-2 px-2 py-1 rounded-lg text-body-small font-semibold",
+                    dueDateStatus === 'overdue' && "bg-red-500/20 text-red-400 border border-red-500/30",
+                    dueDateStatus === 'due-today' && "bg-amber-500/20 text-amber-400 border border-amber-500/30",
+                    dueDateStatus === 'upcoming' && "bg-blue-500/20 text-blue-400 border border-blue-500/30"
+                  )}>
+                    <Calendar className="h-3 w-3" />
+                    <span>
+                      {dueDateStatus === 'overdue' && 'Overdue '}
+                      {dueDateStatus === 'due-today' && 'Due Today'}
+                      {dueDateStatus === 'upcoming' && `Due ${formatDate(task.dueDate)}`}
+                    </span>
+                  </div>
+                </div>
+              )}
 
               {/* Status Indicator */}
               <div className="flex items-center justify-between">

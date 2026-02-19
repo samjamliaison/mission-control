@@ -20,7 +20,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Badge } from "@/components/ui/badge"
-import { Rocket, User, Flag, X, Zap, AlertTriangle, CheckCircle, FileText, Sparkles } from "lucide-react"
+import { Rocket, User, Flag, X, Zap, AlertTriangle, CheckCircle, FileText, Sparkles, Calendar } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { logTaskAction } from "@/lib/activity-logger"
 import { Task } from "./task-card"
@@ -62,6 +62,7 @@ export function AddTaskDialog({ open, onOpenChange, onSave, editingTask }: AddTa
   const [description, setDescription] = useState("")
   const [assignee, setAssignee] = useState("")
   const [priority, setPriority] = useState<"low" | "medium" | "high">("medium")
+  const [dueDate, setDueDate] = useState("")
   const [showTemplatePicker, setShowTemplatePicker] = useState(false)
   const [selectedTemplate, setSelectedTemplate] = useState<TaskTemplate | null>(null)
   const [templateUsed, setTemplateUsed] = useState(false)
@@ -86,6 +87,7 @@ export function AddTaskDialog({ open, onOpenChange, onSave, editingTask }: AddTa
         setDescription(editingTask.description)
         setAssignee(editingTask.assignee)
         setPriority(editingTask.priority)
+        setDueDate(editingTask.dueDate ? new Date(editingTask.dueDate).toISOString().split('T')[0] : "")
         setSelectedTemplate(null)
         setTemplateUsed(false)
       } else {
@@ -93,6 +95,7 @@ export function AddTaskDialog({ open, onOpenChange, onSave, editingTask }: AddTa
         setDescription("")
         setAssignee("")
         setPriority("medium")
+        setDueDate("")
         setSelectedTemplate(null)
         setTemplateUsed(false)
       }
@@ -108,6 +111,7 @@ export function AddTaskDialog({ open, onOpenChange, onSave, editingTask }: AddTa
       description: description.trim(),
       assignee,
       priority,
+      ...(dueDate && { dueDate: new Date(dueDate).getTime() }),
     }
     
     // Log the activity
@@ -234,6 +238,7 @@ export function AddTaskDialog({ open, onOpenChange, onSave, editingTask }: AddTa
                           setDescription("")
                           setAssignee("")
                           setPriority("medium")
+                          setDueDate("")
                           setSelectedTemplate(null)
                           setTemplateUsed(false)
                         }}
@@ -298,7 +303,7 @@ export function AddTaskDialog({ open, onOpenChange, onSave, editingTask }: AddTa
             />
           </motion.div>
           
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-3 gap-4">
             {/* Agent Assignment */}
             <motion.div 
               className="space-y-2"
@@ -372,6 +377,25 @@ export function AddTaskDialog({ open, onOpenChange, onSave, editingTask }: AddTa
                   ))}
                 </SelectContent>
               </Select>
+            </motion.div>
+            
+            {/* Due Date */}
+            <motion.div 
+              className="space-y-2"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.55 }}
+            >
+              <label className="text-sm font-heading font-semibold flex items-center gap-2">
+                <Calendar className="h-4 w-4 text-[hsl(var(--command-accent))]" />
+                Due Date
+              </label>
+              <Input
+                type="date"
+                value={dueDate}
+                onChange={(e) => setDueDate(e.target.value)}
+                className="glass-morphism border-[hsl(var(--command-border))] focus:ring-1 focus:ring-[hsl(var(--command-accent))]"
+              />
             </motion.div>
           </div>
           
