@@ -650,4 +650,174 @@
     color: rgba(255, 255, 255, 0.8);
     text-shadow: 0 1px 1px rgba(0, 0, 0, 0.6);
   }
+
+  /* ===========================================
+     THEME SYSTEM - Smooth Transitions & Effects
+     =========================================== */
+  
+  :root {
+    /* Smooth theme transitions */
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+  
+  /* Apply smooth transitions to all elements that use theme variables */
+  *,
+  *::before,
+  *::after {
+    transition: 
+      background-color 0.3s ease,
+      border-color 0.3s ease,
+      color 0.3s ease,
+      box-shadow 0.3s ease,
+      backdrop-filter 0.3s ease;
+  }
+  
+  /* Theme-specific body styles */
+  body {
+    transition: background-color 0.3s ease;
+  }
+  
+  /* Dark Theme Enhancements */
+  .theme-dark {
+    --theme-glow-color: #06b6d4;
+    --theme-shadow-color: rgba(6, 182, 212, 0.1);
+  }
+  
+  .theme-dark .glass-morphism {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  }
+  
+  /* Midnight Theme Enhancements */
+  .theme-midnight {
+    --theme-glow-color: #8b5cf6;
+    --theme-shadow-color: rgba(139, 92, 246, 0.1);
+  }
+  
+  .theme-midnight body {
+    background: radial-gradient(ellipse at center, #0a0a0a 0%, #000000 100%);
+  }
+  
+  .theme-midnight .glass-morphism {
+    background: rgba(255, 255, 255, 0.02);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    box-shadow: 
+      0 8px 32px rgba(0, 0, 0, 0.5),
+      inset 0 1px 0 rgba(255, 255, 255, 0.03);
+  }
+  
+  .theme-midnight .card-hover-premium {
+    box-shadow: 0 4px 16px rgba(139, 92, 246, 0.1);
+  }
+  
+  .theme-midnight .card-hover-premium:hover {
+    box-shadow: 0 8px 32px rgba(139, 92, 246, 0.2);
+    transform: translateY(-2px);
+  }
+  
+  /* Terminal Theme Enhancements */
+  .theme-terminal {
+    --theme-glow-color: #00ff00;
+    --theme-shadow-color: rgba(0, 255, 0, 0.1);
+  }
+  
+  .theme-terminal body {
+    background: 
+      linear-gradient(45deg, transparent 24%, rgba(0, 255, 0, 0.01) 25%, rgba(0, 255, 0, 0.01) 26%, transparent 27%, transparent 74%, rgba(0, 255, 0, 0.01) 75%, rgba(0, 255, 0, 0.01) 76%, transparent 77%),
+      linear-gradient(-45deg, transparent 24%, rgba(0, 255, 0, 0.01) 25%, rgba(0, 255, 0, 0.01) 26%, transparent 27%, transparent 74%, rgba(0, 255, 0, 0.01) 75%, rgba(0, 255, 0, 0.01) 76%, transparent 77%),
+      #000000;
+    background-size: 30px 30px;
+    animation: terminal-scan 10s linear infinite;
+  }
+  
+  @keyframes terminal-scan {
+    0% { background-position: 0 0, 0 0; }
+    100% { background-position: 30px 30px, -30px -30px; }
+  }
+  
+  .theme-terminal .glass-morphism {
+    background: rgba(0, 255, 0, 0.02);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(0, 255, 0, 0.1);
+    box-shadow: 
+      0 0 20px rgba(0, 255, 0, 0.05),
+      inset 0 1px 0 rgba(0, 255, 0, 0.1);
+  }
+  
+  .theme-terminal .card-hover-premium {
+    box-shadow: 
+      0 4px 16px rgba(0, 255, 0, 0.1),
+      0 0 10px rgba(0, 255, 0, 0.05);
+  }
+  
+  .theme-terminal .card-hover-premium:hover {
+    box-shadow: 
+      0 8px 32px rgba(0, 255, 0, 0.2),
+      0 0 20px rgba(0, 255, 0, 0.1);
+    transform: translateY(-2px);
+  }
+  
+  /* Terminal text glow effect */
+  .theme-terminal h1,
+  .theme-terminal h2,
+  .theme-terminal h3,
+  .theme-terminal .font-display {
+    text-shadow: 
+      0 0 5px rgba(0, 255, 0, 0.5),
+      0 0 10px rgba(0, 255, 0, 0.3),
+      0 0 15px rgba(0, 255, 0, 0.1);
+  }
+  
+  /* Terminal cursor blink animation */
+  .theme-terminal::after {
+    content: '█';
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    color: #00ff00;
+    animation: terminal-cursor 1s infinite;
+    font-family: monospace;
+    z-index: 1000;
+    pointer-events: none;
+  }
+  
+  @keyframes terminal-cursor {
+    0%, 50% { opacity: 1; }
+    51%, 100% { opacity: 0; }
+  }
+  
+  /* Theme-specific button enhancements */
+  .theme-dark .interactive-element:hover {
+    box-shadow: 0 0 20px var(--theme-shadow-color);
+  }
+  
+  .theme-midnight .interactive-element:hover {
+    box-shadow: 0 0 20px rgba(139, 92, 246, 0.3);
+  }
+  
+  .theme-terminal .interactive-element:hover {
+    box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
+    border-color: rgba(0, 255, 0, 0.3);
+  }
+  
+  /* Smooth theme transition overlay */
+  .theme-transition-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--command-background);
+    opacity: 0;
+    pointer-events: none;
+    z-index: 9999;
+    transition: opacity 0.3s ease;
+  }
+  
+  .theme-transition-overlay.active {
+    opacity: 0.3;
+  }
 }
