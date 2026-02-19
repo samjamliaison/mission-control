@@ -33,10 +33,10 @@ import {
 import { MemoryEntry } from "./memory-entry"
 import { MemoryCard } from "./memory-card"
 import { EmptyState } from "@/components/ui/empty-state"
+import { loadMemories, saveMemories } from "@/lib/data-persistence"
 import { cn } from "@/lib/utils"
 
-// Mock memory data - empty initially to show empty state
-const mockMemories: MemoryEntry[] = []
+// Note: Memories are now loaded from localStorage via loadMemories()
 
 const categoryOptions = ["All", "daily", "knowledge", "lessons"]
 const categoryConfig = {
@@ -86,15 +86,25 @@ const itemVariants = {
 }
 
 export function MemoryViewer() {
-  const [memories] = useState<MemoryEntry[]>(mockMemories)
+  const [memories, setMemories] = useState<MemoryEntry[]>([])
   const [searchQuery, setSearchQuery] = useState("")
   const [selectedCategory, setSelectedCategory] = useState("All")
   const [selectedMemory, setSelectedMemory] = useState<MemoryEntry | null>(null)
   const [mounted, setMounted] = useState(false)
 
+  // Load data from localStorage on mount
   useEffect(() => {
     setMounted(true)
+    const loadedMemories = loadMemories()
+    setMemories(loadedMemories)
   }, [])
+
+  // Save memories whenever they change
+  useEffect(() => {
+    if (mounted) {
+      saveMemories(memories)
+    }
+  }, [memories, mounted])
 
   // Filter and search memories
   const filteredMemories = useMemo(() => {

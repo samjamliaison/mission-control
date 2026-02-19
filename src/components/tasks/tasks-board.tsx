@@ -19,9 +19,9 @@ import { Task } from "./task-card"
 import { PageHeader } from "@/components/ui/page-header"
 import { StatsCard } from "@/components/ui/stats-card"
 import { EmptyState } from "@/components/ui/empty-state"
+import { loadTasks, saveTasks } from "@/lib/data-persistence"
 
-// Mock data with agent assignments - empty initially to show empty state
-const mockTasks: Task[] = []
+// Note: Tasks are now loaded from localStorage via loadTasks()
 
 const assigneeOptions = ["All", "Hamza", "Manus", "Monica", "Jarvis", "Luna"]
 
@@ -56,15 +56,25 @@ const itemVariants = {
 }
 
 export function TasksBoard() {
-  const [tasks, setTasks] = useState<Task[]>(mockTasks)
+  const [tasks, setTasks] = useState<Task[]>([])
   const [selectedAssignee, setSelectedAssignee] = useState("All")
   const [dialogOpen, setDialogOpen] = useState(false)
   const [editingTask, setEditingTask] = useState<Task | null>(null)
   const [mounted, setMounted] = useState(false)
 
+  // Load data from localStorage on mount
   useEffect(() => {
     setMounted(true)
+    const loadedTasks = loadTasks()
+    setTasks(loadedTasks)
   }, [])
+
+  // Save tasks whenever they change
+  useEffect(() => {
+    if (mounted) {
+      saveTasks(tasks)
+    }
+  }, [tasks, mounted])
 
   // Keyboard shortcut: N to add new task
   useEffect(() => {

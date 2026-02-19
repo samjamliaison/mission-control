@@ -19,9 +19,9 @@ import { ContentItem } from "@/types/content"
 import { PageHeader } from "@/components/ui/page-header"
 import { StatsCard } from "@/components/ui/stats-card"
 import { EmptyState } from "@/components/ui/empty-state"
+import { loadContent, saveContent } from "@/lib/data-persistence"
 
-// Mock data for content pipeline - empty initially to show empty state
-const mockContent: ContentItem[] = []
+// Note: Content is now loaded from localStorage via loadContent()
 
 const platformOptions = ["All", "YouTube", "Blog", "X"]
 
@@ -56,15 +56,25 @@ const itemVariants = {
 }
 
 export function ContentPipeline() {
-  const [content, setContent] = useState<ContentItem[]>(mockContent)
+  const [content, setContent] = useState<ContentItem[]>([])
   const [selectedPlatform, setSelectedPlatform] = useState("All")
   const [dialogOpen, setDialogOpen] = useState(false)
   const [editingContent, setEditingContent] = useState<ContentItem | null>(null)
   const [mounted, setMounted] = useState(false)
 
+  // Load data from localStorage on mount
   useEffect(() => {
     setMounted(true)
+    const loadedContent = loadContent()
+    setContent(loadedContent)
   }, [])
+
+  // Save content whenever it changes
+  useEffect(() => {
+    if (mounted) {
+      saveContent(content)
+    }
+  }, [content, mounted])
 
   // Filter content by platform
   const filteredContent = useMemo(() => {

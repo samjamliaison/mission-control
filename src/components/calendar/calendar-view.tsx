@@ -24,28 +24,13 @@ import {
 } from "lucide-react"
 import { CalendarEvent } from "./calendar-event"
 import { EmptyState } from "@/components/ui/empty-state"
+import { loadEvents, saveEvents, CalendarEventData } from "@/lib/data-persistence"
 
-interface CalendarEventData {
-  _id: string
-  title: string
-  description: string
-  scheduledTime: number
-  type: "meeting" | "deadline" | "event" | "reminder" | "cron" | "task"
-  agent?: string
-  status?: "scheduled" | "completed" | "cancelled" | "pending" | "failed"
-  duration?: number
-  recurrence?: "daily" | "weekly" | "monthly" | "none" | null
-  attendees?: string[]
-  location?: string
-  priority?: "low" | "medium" | "high"
-  createdAt?: number
-  updatedAt?: number
-}
+// CalendarEventData interface is now imported from data-persistence
 import { EventDetails } from "./event-details"
 import { cn } from "@/lib/utils"
 
-// Mock calendar events - empty initially to show empty state
-const mockEvents: CalendarEventData[] = []
+// Note: Events are now loaded from localStorage via loadEvents()
 
 const agentAvatars = {
   "Hamza": "👤",
@@ -122,12 +107,22 @@ export function CalendarView() {
   const [viewMode, setViewMode] = useState<ViewMode>("month")
   const [selectedEvent, setSelectedEvent] = useState<CalendarEventData | null>(null)
   const [selectedDate, setSelectedDate] = useState<Date | null>(null)
-  const [events] = useState<CalendarEventData[]>(mockEvents)
+  const [events, setEvents] = useState<CalendarEventData[]>([])
   const [mounted, setMounted] = useState(false)
 
+  // Load data from localStorage on mount
   useEffect(() => {
     setMounted(true)
+    const loadedEvents = loadEvents()
+    setEvents(loadedEvents)
   }, [])
+
+  // Save events whenever they change
+  useEffect(() => {
+    if (mounted) {
+      saveEvents(events)
+    }
+  }, [events, mounted])
 
   // Get events for current view
   const viewEvents = useMemo(() => {
@@ -350,7 +345,8 @@ export function CalendarView() {
                 }}
               />
             ) : (
-            {viewMode === "month" ? (
+              <div>
+                {viewMode === "month" ? (
               <Card className="glass-morphism border-[hsl(var(--command-border-bright))] overflow-hidden">
                 <CardHeader className="pb-4">
                   <div className="grid grid-cols-7 gap-1 sm:gap-2">
@@ -535,6 +531,83 @@ export function CalendarView() {
                   </div>
                 </CardContent>
               </Card>
+                ) : (
+                  /* Week View */
+                  <Card className="glass-morphism border-[hsl(var(--command-border-bright))]">
+                    <CardContent className="p-6">
+                      <div className="space-y-4">
+                        {viewEvents
+                          .sort((a, b) => a.scheduledTime - b.scheduledTime)
+                          .map((event) => {
+                            const eventDate = new Date(event.scheduledTime)
+                            const statusStyle = statusConfig[event.status || "pending"]
+                            const StatusIcon = statusStyle.icon
+                            
+                            return (
+                              <motion.div
+                                key={event._id}
+                                className={cn(
+                                  "p-4 glass-morphism rounded-xl border cursor-pointer group",
+                                  statusStyle.border
+                                )}
+                                style={{ boxShadow: statusStyle.glow }}
+                                whileHover={{ scale: 1.02, y: -2 }}
+                                onClick={() => setSelectedEvent(event)}
+                              >
+                                <div className="flex items-center justify-between">
+                                  <div className="flex items-center gap-4">
+                                    <div className={cn("p-2 rounded-lg", statusStyle.bg)}>
+                                      <StatusIcon className={cn("h-4 w-4", statusStyle.color)} />
+                                    </div>
+                                    <div>
+                                      <h3 className="font-heading font-semibold">{event.title}</h3>
+                                      <p className="text-sm text-[hsl(var(--command-text-muted))]">
+                                        {event.description}
+                                      </p>
+                                    </div>
+                                  </div>
+                                  
+                                  <div className="flex items-center gap-4">
+                                    <div className="text-right">
+                                      <div className="text-sm font-medium">
+                                        {eventDate.toLocaleDateString()} {eventDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                      </div>
+                                      <div className="text-xs text-[hsl(var(--command-text-muted))]">
+                                        {event.duration} minutes • {event.type}
+                                      </div>
+                                    </div>
+                                    
+                                    <div className="flex items-center gap-2">
+                                      <span className="text-lg">
+                                        {agentAvatars[event.agent as keyof typeof agentAvatars]}
+                                      </span>
+                                      <Badge variant="outline" className={cn(statusStyle.bg, statusStyle.color)}>
+                                        {event.status}
+                                      </Badge>
+                                    </div>
+                                  </div>
+                                </div>
+                              </motion.div>
+                            )
+                          })}
+                          
+                        {viewEvents.length === 0 && (
+                          <div className="text-center py-12">
+                            <div className="space-y-3">
+                              <div className="w-12 h-12 mx-auto glass-morphism rounded-full flex items-center justify-center">
+                                <Calendar className="h-5 w-5 text-[hsl(var(--command-text-muted))]" />
+                              </div>
+                              <p className="text-[hsl(var(--command-text-dim))] text-sm">
+                                No events scheduled for this week
+                              </p>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </CardContent>
+                  </Card>
+                )}
+              </div>
             )}
           </motion.div>
 
@@ -640,7 +713,6 @@ export function CalendarView() {
               </Card>
             </motion.div>
           )}
-            )}
         </div>
       </motion.div>
 
