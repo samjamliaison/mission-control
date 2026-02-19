@@ -6,6 +6,8 @@ import { CommandPalette } from "@/components/command-palette/command-palette"
 import { ToastProvider } from "@/contexts/toast-context"
 import { ToastContainer } from "@/components/ui/toast"
 import { useCommandPalette } from "@/hooks/use-command-palette"
+import { useKeyboardShortcuts } from "@/hooks/use-keyboard-shortcuts"
+import { ShortcutsHelpModal } from "@/components/keyboard-shortcuts/shortcuts-help-modal"
 import { ThemeProvider } from "@/lib/theme-context"
 
 interface RootLayoutClientProps {
@@ -14,6 +16,7 @@ interface RootLayoutClientProps {
 
 export function RootLayoutClient({ children }: RootLayoutClientProps) {
   const { open, setOpen } = useCommandPalette()
+  const { shortcuts, showHelp, setShowHelp, pendingSequence } = useKeyboardShortcuts()
 
   return (
     <ThemeProvider>
@@ -30,6 +33,14 @@ export function RootLayoutClient({ children }: RootLayoutClientProps) {
           
           {/* Command Palette */}
           <CommandPalette open={open} onOpenChange={setOpen} />
+          
+          {/* Keyboard Shortcuts Help */}
+          <ShortcutsHelpModal 
+            open={showHelp} 
+            onOpenChange={setShowHelp}
+            shortcuts={shortcuts}
+            pendingSequence={pendingSequence}
+          />
           
           {/* Toast Container */}
           <ToastContainer />

@@ -4,7 +4,7 @@ import { useState, useEffect } from "react"
 import { usePathname } from "next/navigation"
 import Link from "next/link"
 import { motion, AnimatePresence } from "framer-motion"
-import { Command, CheckSquare, Film, Calendar, Brain, Users, Building, ChevronLeft, ChevronRight, Settings, Activity } from "lucide-react"
+import { Command, CheckSquare, Film, Calendar, Brain, Users, Building, ChevronLeft, ChevronRight, Settings, Activity, Keyboard } from "lucide-react"
 import { CommandHint } from "@/components/command-palette/command-hint"
 import { cn } from "@/lib/utils"
 
@@ -291,6 +291,50 @@ export function Navigation() {
                 </AnimatePresence>
               </motion.div>
             </Link>
+
+            {/* Keyboard Shortcuts Hint */}
+            <motion.div 
+              className={cn(
+                "flex items-center gap-3 p-2 rounded-lg bg-white/[0.02] border border-white/[0.04] cursor-pointer group transition-all duration-200 hover:bg-white/[0.03]",
+                isCollapsed && "justify-center"
+              )}
+              onClick={() => {
+                // Dispatch '?' key event to show shortcuts help
+                const event = new KeyboardEvent('keydown', {
+                  key: '?',
+                  bubbles: true
+                })
+                document.dispatchEvent(event)
+              }}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ delay: 0.7, type: "spring", stiffness: 200 }}
+            >
+              <div className="flex items-center gap-2">
+                <Keyboard className="h-3 w-3 text-white/40 group-hover:text-[#06b6d4] transition-colors" />
+                <div className="w-4 h-4 bg-white/10 rounded border border-white/20 flex items-center justify-center text-xs font-mono text-white/60 group-hover:text-[#06b6d4] group-hover:border-[#06b6d4]/40 transition-colors">
+                  ?
+                </div>
+              </div>
+              <AnimatePresence mode="wait">
+                {!isCollapsed && (
+                  <motion.div
+                    initial={{ opacity: 0, width: 0 }}
+                    animate={{ opacity: 1, width: "auto" }}
+                    exit={{ opacity: 0, width: 0 }}
+                    transition={{ duration: 0.2 }}
+                    className="flex-1 overflow-hidden"
+                  >
+                    <div className="text-body-small font-semibold text-white/70 group-hover:text-[#06b6d4] transition-colors">
+                      Shortcuts
+                    </div>
+                    <div className="text-body-small text-muted">Press ? for help</div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </motion.div>
           </div>
         </motion.nav>
       </div>
