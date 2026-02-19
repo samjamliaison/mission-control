@@ -91,19 +91,6 @@ const agentAvatars = {
   "Luna": "🌙"
 }
 
-  // Live stats from OpenClaw APIs
-  const liveStats = useMemo(() => {
-    const activeSessions = sessions.filter(s => s.status === 'active').length
-    const activeCronJobs = cronJobs.filter(j => j.status === 'active').length
-    const onlineAgents = agentStatuses.filter(a => a.status === 'online').length
-    
-    return {
-      sessions: { active: activeSessions, total: sessions.length },
-      cronJobs: { active: activeCronJobs, total: cronJobs.length },
-      agents: { online: onlineAgents, total: agentStatuses.length }
-    }
-  }, [sessions, cronJobs, agentStatuses])
-
 const containerVariants = {
   hidden: { opacity: 0 },
   visible: {
@@ -201,6 +188,19 @@ export function DashboardView() {
       memories: { total: totalMemories }
     }
   }, [tasks, content, events, memories])
+
+  // Live stats from OpenClaw APIs
+  const liveStats = useMemo(() => {
+    const activeSessions = sessions.filter(s => s.status === 'active').length
+    const activeCronJobs = cronJobs.filter(j => j.status === 'active').length
+    const onlineAgents = agentStatuses.filter(a => a.status === 'online').length
+    
+    return {
+      sessions: { active: activeSessions, total: sessions.length },
+      cronJobs: { active: activeCronJobs, total: cronJobs.length },
+      agents: { online: onlineAgents, total: agentStatuses.length }
+    }
+  }, [sessions, cronJobs, agentStatuses])
 
   // Recent activity - last 5 items based on updated time
   const recentActivity = useMemo(() => {
