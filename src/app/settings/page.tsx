@@ -1,3 +1,5 @@
+"use client"
+
 import { DataManagement } from "@/components/settings/data-management"
 import { PageTransition } from "@/components/ui/page-transition"
 import { PageHeader } from "@/components/ui/page-header"

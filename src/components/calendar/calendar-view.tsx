@@ -345,7 +345,7 @@ export function CalendarView() {
                 }}
               />
             ) : (
-              <div>
+              <>
                 {viewMode === "month" ? (
               <Card className="glass-morphism border-[hsl(var(--command-border-bright))] overflow-hidden">
                 <CardHeader className="pb-4">
@@ -531,7 +531,7 @@ export function CalendarView() {
                   </div>
                 </CardContent>
               </Card>
-                ) : (
+            ) : (
                   /* Week View */
                   <Card className="glass-morphism border-[hsl(var(--command-border-bright))]">
                     <CardContent className="p-6">
@@ -606,8 +606,8 @@ export function CalendarView() {
                       </div>
                     </CardContent>
                   </Card>
-                )}
-              </div>
+                ) : null}
+              </>
             )}
           </motion.div>
 
