@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest'
-import { render } from '@testing-library/react'
+import { render } from '@/lib/test-utils'
 
 // Mock the UI components
 vi.mock('@/components/ui/page-transition', () => ({
@@ -7,42 +7,41 @@ vi.mock('@/components/ui/page-transition', () => ({
 }))
 
 vi.mock('@/components/ui/loading-skeleton', () => ({
-  PageSkeleton: () => <div data-testid="loading">Loading...</div>
+  Skeleton: ({ className }: any) => <div className={className}>Skeleton</div>,
+  PageSkeleton: () => <div data-testid="loading">Loading...</div>,
+  DashboardSkeleton: () => <div data-testid="dashboard-loading">Dashboard Loading...</div>
 }))
 
-// Mock next/dynamic
-vi.mock('next/dynamic', () => {
-  return {
-    default: (loader: any) => {
-      const Component = loader().then((mod: any) => mod.default)
-      return Component
+// Mock next/dynamic to return components immediately
+vi.mock('next/dynamic', () => ({
+  default: (loader: () => Promise<any>, options?: any) => {
+    // For all-pages test, we return the mocked components directly
+    const MockedComponent = () => {
+      // Try to extract the component name from the loader function
+      const loaderStr = loader.toString()
+      if (loaderStr.includes('dashboard-view')) {
+        return <div data-testid="dashboard-view">Dashboard View</div>
+      }
+      if (loaderStr.includes('tasks-board')) {
+        return <div data-testid="tasks-board">Tasks Board</div>
+      }
+      if (loaderStr.includes('content-pipeline')) {
+        return <div data-testid="content-pipeline">Content Pipeline</div>
+      }
+      if (loaderStr.includes('enhanced-memory-viewer')) {
+        return <div data-testid="memory-viewer">Memory Viewer</div>
+      }
+      if (loaderStr.includes('team-dashboard')) {
+        return <div data-testid="team-dashboard">Team Dashboard</div>
+      }
+      if (loaderStr.includes('isometric-office')) {
+        return <div data-testid="office-view">Office View</div>
+      }
+      // Default fallback
+      return <div data-testid="mock-component">Mock Component</div>
     }
+    return MockedComponent
   }
-})
-
-// Mock all the main components
-vi.mock('@/components/tasks/tasks-board', () => ({
-  TasksBoard: () => <div data-testid="tasks-board">Tasks Board</div>
-}))
-
-vi.mock('@/components/pipeline/content-pipeline', () => ({
-  ContentPipeline: () => <div data-testid="content-pipeline">Content Pipeline</div>
-}))
-
-vi.mock('@/components/memory/enhanced-memory-viewer', () => ({
-  EnhancedMemoryViewer: () => <div data-testid="memory-viewer">Memory Viewer</div>
-}))
-
-vi.mock('@/components/team/team-dashboard', () => ({
-  TeamDashboard: () => <div data-testid="team-dashboard">Team Dashboard</div>
-}))
-
-vi.mock('@/components/office/isometric-office', () => ({
-  IsometricOffice: () => <div data-testid="office-view">Office View</div>
-}))
-
-vi.mock('@/components/calendar/calendar-view', () => ({
-  CalendarView: () => <div data-testid="calendar-view">Calendar</div>
 }))
 
 // Import pages after mocking
@@ -54,9 +53,9 @@ import TeamPage from '../team/page'
 import OfficePage from '../office/page'
 
 describe('All Pages', () => {
-  it('should render home page with tasks board', () => {
+  it('should render home page with dashboard view', () => {
     const { getByTestId } = render(<HomePage />)
-    expect(getByTestId('tasks-board')).toBeInTheDocument()
+    expect(getByTestId('dashboard-view')).toBeInTheDocument()
   })
 
   it('should render pipeline page with content pipeline', () => {

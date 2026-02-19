@@ -8,6 +8,9 @@ vi.mock('framer-motion', () => ({
     div: ({ children, ...props }: any) => <div {...props}>{children}</div>,
   },
   AnimatePresence: ({ children }: any) => <div>{children}</div>,
+  useScroll: () => ({ scrollYProgress: { get: () => 0 } }),
+  useTransform: (input: any, inputRange: any, outputRange: any) => ({ get: () => outputRange[0] }),
+  useSpring: (value: any) => ({ get: () => value })
 }))
 
 // Mock react-beautiful-dnd
