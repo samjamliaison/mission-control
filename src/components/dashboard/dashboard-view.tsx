@@ -31,7 +31,8 @@ import {
   Settings,
   PlayCircle,
   PauseCircle,
-  RefreshCw
+  RefreshCw,
+  Star
 } from "lucide-react"
 import { loadTasks, loadContent, loadEvents, loadMemories } from "@/lib/data-persistence"
 import { Task } from "@/components/tasks/task-card"
@@ -41,6 +42,7 @@ import { CalendarEventData } from "@/lib/data-persistence"
 import { cn } from "@/lib/utils"
 import { MiniSparkline, generateTrendData } from "@/components/ui/mini-sparkline"
 import { SectionErrorBoundary } from "@/components/ui/error-boundary"
+import { useStarred } from "@/hooks/use-starred"
 
 // OpenClaw API Types
 interface AgentStatus {
@@ -163,6 +165,7 @@ export function DashboardView() {
   const [hasNewData, setHasNewData] = useState(false)
   const [updateCounter, setUpdateCounter] = useState(0)
   const [currentTime, setCurrentTime] = useState<number>(Date.now())
+  const { starredItems } = useStarred()
 
   // Fetch OpenClaw API data
   const fetchLiveData = async () => {
@@ -492,6 +495,70 @@ export function DashboardView() {
               </div>
             </motion.div>
           </SectionErrorBoundary>
+
+          {/* Starred Items */}
+          {starredItems.length > 0 && (
+            <SectionErrorBoundary sectionName="Starred Items">
+              <motion.div variants={itemVariants}>
+                <Card className="glass-morphism border-[hsl(var(--command-border-bright))]">
+                  <CardHeader>
+                    <CardTitle className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <Star className="h-5 w-5 text-yellow-400 fill-yellow-400" />
+                        Starred Items
+                      </div>
+                      <Badge variant="outline" className="bg-yellow-400/10 text-yellow-400">
+                        {starredItems.length} starred
+                      </Badge>
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                      {starredItems.slice(0, 6).map((item) => (
+                        <Link 
+                          key={`${item.type}-${item.id}`}
+                          href={item.url || `/${item.type}s`}
+                          className="block"
+                        >
+                          <motion.div
+                            className="p-3 glass-morphism rounded-lg hover:bg-accent/50 transition-colors cursor-pointer"
+                            whileHover={{ scale: 1.02, y: -2 }}
+                          >
+                            <div className="flex items-center gap-3">
+                              <div className="flex items-center gap-2">
+                                {item.type === 'task' && <CheckSquare className="h-4 w-4 text-[hsl(var(--command-accent))]" />}
+                                {item.type === 'content' && <Film className="h-4 w-4 text-purple-400" />}
+                                {item.type === 'memory' && <Brain className="h-4 w-4 text-green-400" />}
+                                {item.type === 'pipeline' && <Activity className="h-4 w-4 text-blue-400" />}
+                                {item.type === 'agent' && <Users className="h-4 w-4 text-orange-400" />}
+                                <Star className="h-3 w-3 text-yellow-400 fill-yellow-400" />
+                              </div>
+                              <div className="flex-1 min-w-0">
+                                <div className="font-medium text-sm truncate">{item.title}</div>
+                                <div className="text-xs text-[hsl(var(--command-text-muted))] capitalize">
+                                  {item.type}
+                                </div>
+                              </div>
+                            </div>
+                          </motion.div>
+                        </Link>
+                      ))}
+                    </div>
+                    {starredItems.length > 6 && (
+                      <div className="text-center mt-4">
+                        <Link href="/starred">
+                          <Button variant="ghost" size="sm">
+                            View all {starredItems.length} starred items
+                            <ArrowRight className="h-4 w-4 ml-2" />
+                          </Button>
+                        </Link>
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
+              </motion.div>
+            </SectionErrorBoundary>
+          )}
 
           {/* Live OpenClaw Status */}
           <SectionErrorBoundary sectionName="Live System Status">

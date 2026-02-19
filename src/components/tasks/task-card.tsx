@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Edit, Trash2, User, Calendar, Clock, Zap, ExternalLink } from "lucide-react"
 import { Checkbox } from "@/components/ui/checkbox"
+import { StarButton } from "@/components/ui/star-button"
 import { cn } from "@/lib/utils"
 
 export interface Task {
@@ -247,6 +248,16 @@ export function TaskCard({ task, index, onEdit, onDelete, isSelected = false, on
                   </h3>
                 </Link>
                 <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200 shrink-0">
+                  <StarButton
+                    item={{
+                      id: task._id,
+                      type: 'task',
+                      title: task.title,
+                      url: `/tasks/${task._id}`
+                    }}
+                    className="h-9 w-9 sm:h-7 sm:w-7 rounded-lg transition-all duration-200 hover:scale-105"
+                    size={16}
+                  />
                   <Button
                     variant="ghost"
                     size="icon"

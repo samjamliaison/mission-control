@@ -4,7 +4,7 @@ import { useState, useEffect } from "react"
 import { usePathname } from "next/navigation"
 import Link from "next/link"
 import { motion, AnimatePresence } from "framer-motion"
-import { Command, CheckSquare, Film, Calendar, Brain, Users, Building, ChevronLeft, ChevronRight, Settings, Activity, Keyboard, Bell, BarChart3 } from "lucide-react"
+import { Command, CheckSquare, Film, Calendar, Brain, Users, Building, ChevronLeft, ChevronRight, Settings, Activity, Keyboard, Bell, BarChart3, Star } from "lucide-react"
 import { CommandHint } from "@/components/command-palette/command-hint"
 import { cn } from "@/lib/utils"
 
@@ -22,6 +22,13 @@ const navigationItems = [
     icon: CheckSquare,
     emoji: "✅",
     description: "Task Management"
+  },
+  {
+    name: "Starred",
+    href: "/starred",
+    icon: Star,
+    emoji: "⭐",
+    description: "Favorite Items"
   },
   {
     name: "Pipeline",
