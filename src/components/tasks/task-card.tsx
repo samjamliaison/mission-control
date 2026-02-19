@@ -136,7 +136,7 @@ export function TaskCard({ task, index, onEdit, onDelete }: TaskCardProps) {
         >
           <Card
             className={cn(
-              "glass-morphism border-[hsl(var(--command-border-bright))] relative overflow-hidden transition-all duration-300",
+              "glass-morphism-premium border-[hsl(var(--command-border-bright))] relative overflow-hidden card-hover-premium",
               "priority-bar",
               `priority-${task.priority}`,
               snapshot.isDragging && "shadow-2xl shadow-[hsl(var(--command-accent))]/20 ring-2 ring-[hsl(var(--command-accent))]/40",

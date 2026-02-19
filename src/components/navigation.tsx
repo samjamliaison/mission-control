@@ -68,7 +68,7 @@ export function Navigation() {
                 <Command className="h-5 w-5 text-[hsl(var(--command-accent))]" />
               </div>
               <div>
-                <h1 className="font-display font-bold text-lg bg-gradient-to-r from-[hsl(var(--command-text))] to-[hsl(var(--command-accent))] bg-clip-text text-transparent">
+                <h1 className="font-display font-bold text-lg text-premium">
                   Mission Control
                 </h1>
                 <p className="text-xs text-[hsl(var(--command-text-muted))]">OpenClaw Command Center</p>

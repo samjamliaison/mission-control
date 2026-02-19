@@ -98,7 +98,7 @@ export function MemoryCard({ memory, onClick }: MemoryCardProps) {
       onClick={onClick}
     >
       <Card
-        className="glass-morphism border-[hsl(var(--command-border-bright))] h-full relative overflow-hidden transition-all duration-300 group"
+        className="glass-morphism-premium border-[hsl(var(--command-border-bright))] h-full relative overflow-hidden card-hover-premium group"
         style={{
           boxShadow: `0 4px 20px rgba(0,0,0,0.1), ${config.glow}`
         }}

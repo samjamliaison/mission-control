@@ -228,7 +228,7 @@ export function ContentPipeline() {
                   <div className="p-2 rounded-lg glass-morphism glow-border">
                     <Film className="h-6 w-6 text-[hsl(var(--command-accent))]" />
                   </div>
-                  <h1 className="text-4xl font-display font-bold bg-gradient-to-r from-[hsl(var(--command-text))] to-[hsl(var(--command-accent))] bg-clip-text text-transparent">
+                  <h1 className="text-4xl font-display font-bold text-premium">
                     Content Pipeline
                   </h1>
                 </div>
@@ -338,7 +338,7 @@ export function ContentPipeline() {
               <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
                 <Button 
                   onClick={handleAddNewContent} 
-                  className="bg-gradient-to-r from-[hsl(var(--command-accent))] to-[hsl(199_89%_38%)] hover:from-[hsl(199_89%_58%)] hover:to-[hsl(var(--command-accent))] border-0 shadow-lg shadow-[hsl(var(--command-accent))]/20 font-semibold px-6"
+                  className="btn-premium font-semibold px-6"
                 >
                   <Plus className="h-4 w-4 mr-2" />
                   New Content

@@ -19,9 +19,10 @@ const config: Config = {
     },
     extend: {
       fontFamily: {
-        'instrument': ['var(--font-instrument)', 'system-ui', 'sans-serif'],
-        'display': ['Satoshi', 'var(--font-instrument)', 'system-ui', 'sans-serif'],
-        'heading': ['Satoshi', 'var(--font-instrument)', 'system-ui', 'sans-serif'],
+        'sans': ['var(--font-geist)', 'system-ui', 'sans-serif'],
+        'display': ['Clash Display', 'var(--font-plus-jakarta)', 'system-ui', 'sans-serif'],
+        'heading': ['var(--font-plus-jakarta)', 'var(--font-geist)', 'system-ui', 'sans-serif'],
+        'body': ['var(--font-geist)', 'system-ui', 'sans-serif'],
       },
       colors: {
         border: "hsl(var(--border))",
@@ -102,6 +103,22 @@ const config: Config = {
           "0%, 100%": { boxShadow: "0 0 20px hsl(var(--command-accent) / 0.2)" },
           "50%": { boxShadow: "0 0 30px hsl(var(--command-accent) / 0.4)" },
         },
+        "float": {
+          "0%, 100%": { transform: "translateY(0)" },
+          "50%": { transform: "translateY(-10px)" },
+        },
+        "scale-up": {
+          "from": { opacity: "0", transform: "scale(0.8)" },
+          "to": { opacity: "1", transform: "scale(1)" },
+        },
+        "text-shimmer": {
+          "0%, 100%": { backgroundPosition: "0% 50%" },
+          "50%": { backgroundPosition: "100% 50%" },
+        },
+        "status-pulse": {
+          "0%, 100%": { transform: "scale(1)", opacity: "0.6" },
+          "50%": { transform: "scale(1.2)", opacity: "0.2" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -109,6 +126,10 @@ const config: Config = {
         "fade-in": "fade-in 0.6s ease-out",
         "slide-up": "slide-up 0.6s ease-out",
         "glow": "glow 2s ease-in-out infinite alternate",
+        "float": "float 3s ease-in-out infinite",
+        "scale-up": "scale-up 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)",
+        "text-shimmer": "text-shimmer 3s ease-in-out infinite",
+        "status-pulse": "status-pulse 2s ease-in-out infinite",
       },
     },
   },

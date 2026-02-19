@@ -277,7 +277,7 @@ export function CalendarView() {
                   <div className="p-2 rounded-lg glass-morphism glow-border">
                     <Calendar className="h-6 w-6 text-[hsl(var(--command-accent))]" />
                   </div>
-                  <h1 className="text-4xl font-display font-bold bg-gradient-to-r from-[hsl(var(--command-text))] to-[hsl(var(--command-accent))] bg-clip-text text-transparent">
+                  <h1 className="text-4xl font-display font-bold text-premium">
                     Mission Calendar
                   </h1>
                 </div>
