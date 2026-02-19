@@ -22,7 +22,7 @@ interface ToastContextValue {
   clearAll: () => void
 }
 
-const ToastContext = createContext<ToastContextValue | undefined>(undefined)
+export const ToastContext = createContext<ToastContextValue | undefined>(undefined)
 
 interface ToastProviderProps {
   children: React.ReactNode
