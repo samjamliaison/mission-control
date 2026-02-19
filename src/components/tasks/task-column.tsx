@@ -15,6 +15,9 @@ interface TaskColumnProps {
   tasks: Task[]
   onEditTask: (task: Task) => void
   onDeleteTask: (taskId: string) => void
+  selectedTasks?: Set<string>
+  onTaskSelect?: (taskId: string, selected: boolean) => void
+  showSelection?: boolean
 }
 
 const statusConfig = {
@@ -68,7 +71,7 @@ const taskVariants = {
   }
 }
 
-export function TaskColumn({ title, status, tasks, onEditTask, onDeleteTask }: TaskColumnProps) {
+export function TaskColumn({ title, status, tasks, onEditTask, onDeleteTask, selectedTasks, onTaskSelect, showSelection }: TaskColumnProps) {
   const config = statusConfig[status]
   const IconComponent = config.icon
   
@@ -262,6 +265,9 @@ export function TaskColumn({ title, status, tasks, onEditTask, onDeleteTask }: T
                           index={index}
                           onEdit={onEditTask}
                           onDelete={onDeleteTask}
+                          isSelected={selectedTasks?.has(task._id) || false}
+                          onSelect={onTaskSelect}
+                          showSelection={showSelection}
                         />
                       </motion.div>
                     ))}

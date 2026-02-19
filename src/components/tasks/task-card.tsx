@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Edit, Trash2, User, Calendar, Clock, Zap, ExternalLink } from "lucide-react"
+import { Checkbox } from "@/components/ui/checkbox"
 import { cn } from "@/lib/utils"
 
 export interface Task {
@@ -25,6 +26,9 @@ interface TaskCardProps {
   index: number
   onEdit: (task: Task) => void
   onDelete: (taskId: string) => void
+  isSelected?: boolean
+  onSelect?: (taskId: string, selected: boolean) => void
+  showSelection?: boolean
 }
 
 const agentAvatars = {
@@ -92,7 +96,7 @@ const priorityConfig = {
   }
 }
 
-export function TaskCard({ task, index, onEdit, onDelete }: TaskCardProps) {
+export function TaskCard({ task, index, onEdit, onDelete, isSelected = false, onSelect, showSelection = false }: TaskCardProps) {
   const formatDate = (timestamp: number) => {
     return new Date(timestamp).toLocaleDateString("en-US", {
       month: "short",
@@ -183,8 +187,19 @@ export function TaskCard({ task, index, onEdit, onDelete }: TaskCardProps) {
               }}
             />
 
+            {/* Selection checkbox */}
+            {showSelection && (
+              <div className="absolute top-2 right-2 z-10">
+                <Checkbox
+                  checked={isSelected}
+                  onCheckedChange={(checked) => onSelect?.(task._id, !!checked)}
+                  className="h-4 w-4 bg-white/90 border-white/50"
+                />
+              </div>
+            )}
+
             {/* Active pulse for in-progress tasks */}
-            {isActive && (
+            {isActive && !showSelection && (
               <motion.div
                 animate={{
                   opacity: [0.3, 0.8, 0.3],

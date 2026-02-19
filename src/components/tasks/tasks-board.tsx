@@ -12,10 +12,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { Plus, Filter, Command, Activity, Users, Target, CheckSquare, FileText, Sparkles } from "lucide-react"
+import { Plus, Filter, Command, Activity, Users, Target, CheckSquare, FileText, Sparkles, Square, CheckSquare as CheckedSquare } from "lucide-react"
 import { TaskColumn } from "./task-column"
 import { AddTaskDialog } from "./add-task-dialog"
 import { TaskTemplatePicker } from "./task-template-picker"
+import { BulkActionBar } from "./bulk-action-bar"
 import { Task } from "./task-card"
 import { TaskTemplate, createTaskFromTemplate } from "@/lib/task-templates"
 import { PageHeader } from "@/components/ui/page-header"
@@ -66,6 +67,8 @@ export function TasksBoard() {
   const [editingTask, setEditingTask] = useState<Task | null>(null)
   const [mounted, setMounted] = useState(false)
   const [showTemplatePicker, setShowTemplatePicker] = useState(false)
+  const [selectedTasks, setSelectedTasks] = useState<Set<string>>(new Set())
+  const [bulkSelectionMode, setBulkSelectionMode] = useState(false)
   const toast = useToastActions()
 
   // Load data from localStorage on mount
@@ -283,6 +286,66 @@ export function TasksBoard() {
     toast.success('Task Created from Template', `"${newTask.title}" has been deployed using the ${template.name} template.`)
   }
 
+  // Bulk action handlers
+  const handleTaskSelect = (taskId: string, selected: boolean) => {
+    const newSelection = new Set(selectedTasks)
+    if (selected) {
+      newSelection.add(taskId)
+    } else {
+      newSelection.delete(taskId)
+    }
+    setSelectedTasks(newSelection)
+    if (newSelection.size === 0) {
+      setBulkSelectionMode(false)
+    }
+  }
+
+  const handleBulkStatusChange = (status: "todo" | "in-progress" | "done") => {
+    setTasks(prevTasks =>
+      prevTasks.map(task =>
+        selectedTasks.has(task._id)
+          ? { ...task, status, updatedAt: Date.now() }
+          : task
+      )
+    )
+    toast.success('Bulk Update', `${selectedTasks.size} task${selectedTasks.size > 1 ? 's' : ''} moved to ${status}.`)
+    setSelectedTasks(new Set())
+    setBulkSelectionMode(false)
+  }
+
+  const handleBulkPriorityChange = (priority: "low" | "medium" | "high") => {
+    setTasks(prevTasks =>
+      prevTasks.map(task =>
+        selectedTasks.has(task._id)
+          ? { ...task, priority, updatedAt: Date.now() }
+          : task
+      )
+    )
+    toast.success('Bulk Update', `${selectedTasks.size} task${selectedTasks.size > 1 ? 's' : ''} priority updated to ${priority}.`)
+    setSelectedTasks(new Set())
+    setBulkSelectionMode(false)
+  }
+
+  const handleBulkDelete = () => {
+    const deletedCount = selectedTasks.size
+    setTasks(prevTasks => prevTasks.filter(task => !selectedTasks.has(task._id)))
+    toast.success('Bulk Delete', `${deletedCount} task${deletedCount > 1 ? 's' : ''} deleted.`)
+    setSelectedTasks(new Set())
+    setBulkSelectionMode(false)
+  }
+
+  const handleClearSelection = () => {
+    setSelectedTasks(new Set())
+    setBulkSelectionMode(false)
+  }
+
+  const handleToggleBulkMode = () => {
+    setBulkSelectionMode(!bulkSelectionMode)
+    if (bulkSelectionMode) {
+      setSelectedTasks(new Set())
+    }
+  }
+
   const totalTasks = tasks.length
   const completedTasks = tasks.filter(task => task.status === "done").length
   const inProgressTasks = tasks.filter(task => task.status === "in-progress").length
@@ -398,6 +461,20 @@ export function TasksBoard() {
                 <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
                   <Button 
                     variant="outline"
+                    onClick={handleToggleBulkMode}
+                    className={`glass-morphism border-[hsl(var(--command-accent))]/30 hover:bg-[hsl(var(--command-accent))]/10 font-semibold px-4 min-h-[44px] ${
+                      bulkSelectionMode ? 'bg-[hsl(var(--command-accent))]/20 text-[hsl(var(--command-accent))]' : 'text-[hsl(var(--command-accent))]'
+                    }`}
+                    title="Toggle bulk selection mode"
+                  >
+                    {bulkSelectionMode ? <CheckedSquare className="h-4 w-4 mr-2" /> : <Square className="h-4 w-4 mr-2" />}
+                    Select
+                  </Button>
+                </motion.div>
+
+                <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+                  <Button 
+                    variant="outline"
                     onClick={() => setShowTemplatePicker(true)} 
                     className="glass-morphism border-[hsl(var(--command-accent))]/30 text-[hsl(var(--command-accent))] hover:bg-[hsl(var(--command-accent))]/10 font-semibold px-4 min-h-[44px] relative group"
                     title="Quick create from template"
@@ -446,6 +523,9 @@ export function TasksBoard() {
                     tasks={tasksByStatus.todo}
                     onEditTask={handleEditTask}
                     onDeleteTask={handleDeleteTask}
+                    selectedTasks={selectedTasks}
+                    onTaskSelect={handleTaskSelect}
+                    showSelection={bulkSelectionMode}
                   />
                   <TaskColumn
                     title="Active Operations"
@@ -453,6 +533,9 @@ export function TasksBoard() {
                     tasks={tasksByStatus["in-progress"]}
                     onEditTask={handleEditTask}
                     onDeleteTask={handleDeleteTask}
+                    selectedTasks={selectedTasks}
+                    onTaskSelect={handleTaskSelect}
+                    showSelection={bulkSelectionMode}
                   />
                   <TaskColumn
                     title="Mission Complete"
@@ -460,6 +543,9 @@ export function TasksBoard() {
                     tasks={tasksByStatus.done}
                     onEditTask={handleEditTask}
                     onDeleteTask={handleDeleteTask}
+                    selectedTasks={selectedTasks}
+                    onTaskSelect={handleTaskSelect}
+                    showSelection={bulkSelectionMode}
                   />
                 </div>
               </DragDropContext>
@@ -481,6 +567,15 @@ export function TasksBoard() {
         open={showTemplatePicker}
         onOpenChange={setShowTemplatePicker}
         onSelectTemplate={handleTemplateSelect}
+      />
+
+      {/* Bulk Action Bar */}
+      <BulkActionBar
+        selectedCount={selectedTasks.size}
+        onStatusChange={handleBulkStatusChange}
+        onPriorityChange={handleBulkPriorityChange}
+        onDelete={handleBulkDelete}
+        onClear={handleClearSelection}
       />
     </div>
   )
