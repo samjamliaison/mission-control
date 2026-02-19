@@ -26,7 +26,12 @@ import {
   ArrowRight,
   BarChart3,
   PieChart,
-  Timer
+  Timer,
+  Server,
+  Settings,
+  PlayCircle,
+  PauseCircle,
+  RefreshCw
 } from "lucide-react"
 import { loadTasks, loadContent, loadEvents, loadMemories } from "@/lib/data-persistence"
 import { Task } from "@/components/tasks/task-card"
@@ -34,6 +39,48 @@ import { ContentItem } from "@/types/content"
 import { MemoryEntry } from "@/components/memory/memory-entry"
 import { CalendarEventData } from "@/lib/data-persistence"
 import { cn } from "@/lib/utils"
+
+// OpenClaw API Types
+interface AgentStatus {
+  id: string
+  name: string
+  status: 'online' | 'active' | 'idle' | 'offline'
+  lastSeen: number
+  currentActivity?: string
+  activeTasks: number
+  workspace: string
+  model?: string
+  uptime: number
+  avatar: string
+}
+
+interface CronJob {
+  id: string
+  schedule: string
+  command: string
+  description?: string
+  enabled: boolean
+  lastRun?: number
+  nextRun?: number
+  runCount: number
+  agent?: string
+  status: 'active' | 'disabled' | 'error'
+}
+
+interface SessionInfo {
+  id: string
+  agentId: string
+  agentName: string
+  type: 'main' | 'subagent' | 'tool' | 'background'
+  status: 'active' | 'idle' | 'paused' | 'ended'
+  startTime: number
+  lastActivity: number
+  duration: number
+  channel?: string
+  currentTask?: string
+  messageCount: number
+  priority: 'low' | 'normal' | 'high' | 'critical'
+}
 
 // Agent avatars for quick reference
 const agentAvatars = {
@@ -44,13 +91,18 @@ const agentAvatars = {
   "Luna": "🌙"
 }
 
-const agentStatus = [
-  { name: "Hamza", avatar: "👤", role: "Mission Commander", status: "online", efficiency: 94 },
-  { name: "Manus", avatar: "🤘", role: "Chief of Staff", status: "active", efficiency: 97 },
-  { name: "Monica", avatar: "✈️", role: "Creative Director", status: "active", efficiency: 91 },
-  { name: "Jarvis", avatar: "🔍", role: "Intelligence Analyst", status: "online", efficiency: 96 },
-  { name: "Luna", avatar: "🌙", role: "Versatility Specialist", status: "idle", efficiency: 89 }
-]
+  // Live stats from OpenClaw APIs
+  const liveStats = useMemo(() => {
+    const activeSessions = sessions.filter(s => s.status === 'active').length
+    const activeCronJobs = cronJobs.filter(j => j.status === 'active').length
+    const onlineAgents = agentStatuses.filter(a => a.status === 'online').length
+    
+    return {
+      sessions: { active: activeSessions, total: sessions.length },
+      cronJobs: { active: activeCronJobs, total: cronJobs.length },
+      agents: { online: onlineAgents, total: agentStatuses.length }
+    }
+  }, [sessions, cronJobs, agentStatuses])
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -79,7 +131,43 @@ export function DashboardView() {
   const [content, setContent] = useState<ContentItem[]>([])
   const [events, setEvents] = useState<CalendarEventData[]>([])
   const [memories, setMemories] = useState<MemoryEntry[]>([])
+  const [agentStatuses, setAgentStatuses] = useState<AgentStatus[]>([])
+  const [cronJobs, setCronJobs] = useState<CronJob[]>([])
+  const [sessions, setSessions] = useState<SessionInfo[]>([])
+  const [liveDataLoading, setLiveDataLoading] = useState(true)
   const [mounted, setMounted] = useState(false)
+
+  // Fetch OpenClaw API data
+  const fetchLiveData = async () => {
+    try {
+      setLiveDataLoading(true)
+      
+      const [agentsRes, cronRes, sessionsRes] = await Promise.allSettled([
+        fetch('/api/agents/status'),
+        fetch('/api/cron'),
+        fetch('/api/sessions')
+      ])
+
+      if (agentsRes.status === 'fulfilled' && agentsRes.value.ok) {
+        const agentsData = await agentsRes.value.json()
+        setAgentStatuses(agentsData.agents || [])
+      }
+
+      if (cronRes.status === 'fulfilled' && cronRes.value.ok) {
+        const cronData = await cronRes.value.json()
+        setCronJobs(cronData.jobs || [])
+      }
+
+      if (sessionsRes.status === 'fulfilled' && sessionsRes.value.ok) {
+        const sessionsData = await sessionsRes.value.json()
+        setSessions(sessionsData.sessions || [])
+      }
+    } catch (error) {
+      console.error('Failed to fetch live data:', error)
+    } finally {
+      setLiveDataLoading(false)
+    }
+  }
 
   // Load all data on mount
   useEffect(() => {
@@ -88,6 +176,13 @@ export function DashboardView() {
     setContent(loadContent())
     setEvents(loadEvents())
     setMemories(loadMemories())
+    
+    // Fetch live data immediately
+    fetchLiveData()
+    
+    // Set up auto-refresh for live data every 30 seconds
+    const interval = setInterval(fetchLiveData, 30000)
+    return () => clearInterval(interval)
   }, [])
 
   // Calculate stats
@@ -149,10 +244,18 @@ export function DashboardView() {
       .slice(0, 5)
   }, [tasks, content, events, memories])
 
-  // Team efficiency
-  const teamEfficiency = Math.round(
-    agentStatus.reduce((sum, agent) => sum + agent.efficiency, 0) / agentStatus.length
-  )
+  // Team efficiency based on live agent data
+  const teamEfficiency = useMemo(() => {
+    if (agentStatuses.length === 0) return 95 // Default
+    
+    // Calculate efficiency based on status and activity
+    const statusWeights = { online: 100, active: 90, idle: 60, offline: 0 }
+    const totalWeight = agentStatuses.reduce((sum, agent) => 
+      sum + statusWeights[agent.status], 0
+    )
+    
+    return Math.round(totalWeight / agentStatuses.length)
+  }, [agentStatuses])
 
   if (!mounted) return null
 
@@ -259,6 +362,67 @@ export function DashboardView() {
                       </div>
                     </div>
                   </div>
+                </CardContent>
+              </Card>
+            </div>
+          </motion.div>
+
+          {/* Live OpenClaw Status */}
+          <motion.div variants={itemVariants}>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <Card className="glass-morphism border-[hsl(var(--command-border-bright))] relative">
+                <CardHeader className="pb-3">
+                  <CardTitle className="flex items-center justify-between text-sm">
+                    <div className="flex items-center gap-2">
+                      <Server className="h-4 w-4 text-[hsl(var(--command-accent))]" />
+                      Active Agents
+                    </div>
+                    {liveDataLoading && (
+                      <RefreshCw className="h-3 w-3 animate-spin text-[hsl(var(--command-text-muted))]" />
+                    )}
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-display font-bold text-[hsl(var(--command-accent))]">
+                    {liveStats.agents.online}
+                  </div>
+                  <p className="text-xs text-[hsl(var(--command-text-muted))] mt-1">
+                    {liveStats.agents.total} total configured
+                  </p>
+                </CardContent>
+              </Card>
+
+              <Card className="glass-morphism border-[hsl(var(--command-border-bright))]">
+                <CardHeader className="pb-3">
+                  <CardTitle className="flex items-center gap-2 text-sm">
+                    <PlayCircle className="h-4 w-4 text-green-400" />
+                    Active Sessions
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-display font-bold text-green-400">
+                    {liveStats.sessions.active}
+                  </div>
+                  <p className="text-xs text-[hsl(var(--command-text-muted))] mt-1">
+                    {liveStats.sessions.total} total sessions
+                  </p>
+                </CardContent>
+              </Card>
+
+              <Card className="glass-morphism border-[hsl(var(--command-border-bright))]">
+                <CardHeader className="pb-3">
+                  <CardTitle className="flex items-center gap-2 text-sm">
+                    <Timer className="h-4 w-4 text-orange-400" />
+                    Cron Jobs
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-display font-bold text-orange-400">
+                    {liveStats.cronJobs.active}
+                  </div>
+                  <p className="text-xs text-[hsl(var(--command-text-muted))] mt-1">
+                    {liveStats.cronJobs.total} scheduled tasks
+                  </p>
                 </CardContent>
               </Card>
             </div>
@@ -371,37 +535,59 @@ export function DashboardView() {
                 </CardContent>
               </Card>
 
-              {/* Agent Status */}
+              {/* Live Agent Status */}
               <Card className="glass-morphism border-[hsl(var(--command-border-bright))]">
                 <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Users className="h-5 w-5 text-[hsl(var(--command-accent))]" />
-                    Agent Status
+                  <CardTitle className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <Users className="h-5 w-5 text-[hsl(var(--command-accent))]" />
+                      Agent Status
+                    </div>
+                    <Badge variant="outline" className="bg-[hsl(var(--command-accent))]/10 text-[hsl(var(--command-accent))] text-xs">
+                      Live
+                    </Badge>
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-3">
-                  {agentStatus.map((agent) => (
-                    <div key={agent.name} className="flex items-center justify-between p-2 glass-morphism rounded-lg">
-                      <div className="flex items-center gap-3">
-                        <div className="text-lg">{agent.avatar}</div>
-                        <div>
-                          <div className="font-medium text-sm">{agent.name}</div>
-                          <div className="text-xs text-[hsl(var(--command-text-muted))]">
-                            {agent.role}
+                  {agentStatuses.length > 0 ? (
+                    <>
+                      {agentStatuses.slice(0, 5).map((agent) => (
+                        <div key={agent.id} className="flex items-center justify-between p-2 glass-morphism rounded-lg">
+                          <div className="flex items-center gap-3">
+                            <div className="text-lg">{agent.avatar}</div>
+                            <div>
+                              <div className="font-medium text-sm">{agent.name}</div>
+                              <div className="text-xs text-[hsl(var(--command-text-muted))]">
+                                {agent.currentActivity || 'Standby'}
+                              </div>
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <div className="text-xs font-medium">{agent.activeTasks}</div>
+                            <div className={cn(
+                              "w-2 h-2 rounded-full",
+                              agent.status === "online" ? "bg-[hsl(var(--command-success))]" :
+                              agent.status === "active" ? "bg-[hsl(var(--command-accent))]" :
+                              agent.status === "idle" ? "bg-yellow-400" :
+                              "bg-gray-400"
+                            )} />
                           </div>
                         </div>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <div className="text-xs font-medium">{agent.efficiency}%</div>
-                        <div className={cn(
-                          "w-2 h-2 rounded-full",
-                          agent.status === "online" ? "bg-[hsl(var(--command-success))]" :
-                          agent.status === "active" ? "bg-[hsl(var(--command-accent))]" :
-                          "bg-yellow-400"
-                        )} />
+                      ))}
+                      
+                      {agentStatuses.length > 5 && (
+                        <div className="text-xs text-[hsl(var(--command-text-muted))] text-center pt-2">
+                          +{agentStatuses.length - 5} more agents
+                        </div>
+                      )}
+                    </>
+                  ) : (
+                    <div className="text-center py-4">
+                      <div className="text-sm text-[hsl(var(--command-text-muted))]">
+                        {liveDataLoading ? 'Loading agents...' : 'No agents found'}
                       </div>
                     </div>
-                  ))}
+                  )}
                   
                   <Link href="/team">
                     <Button variant="ghost" className="w-full justify-start text-sm">
@@ -414,6 +600,121 @@ export function DashboardView() {
               </Card>
             </motion.div>
           </div>
+
+          {/* Live System Activity */}
+          <motion.div variants={itemVariants}>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              {/* Active Sessions */}
+              <Card className="glass-morphism border-[hsl(var(--command-border-bright))]">
+                <CardHeader>
+                  <CardTitle className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <Activity className="h-5 w-5 text-green-400" />
+                      Active Sessions
+                    </div>
+                    <Badge variant="outline" className="bg-green-500/10 text-green-400 text-xs">
+                      {liveStats.sessions.active} Live
+                    </Badge>
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  {sessions.filter(s => s.status === 'active').slice(0, 4).length > 0 ? (
+                    <div className="space-y-3">
+                      {sessions.filter(s => s.status === 'active').slice(0, 4).map((session) => (
+                        <div key={session.id} className="flex items-center justify-between p-2 glass-morphism rounded-lg">
+                          <div className="flex items-center gap-3">
+                            <div className={cn(
+                              "w-2 h-2 rounded-full",
+                              session.priority === 'critical' ? "bg-red-400" :
+                              session.priority === 'high' ? "bg-orange-400" :
+                              session.priority === 'normal' ? "bg-[hsl(var(--command-accent))]" :
+                              "bg-gray-400"
+                            )} />
+                            <div>
+                              <div className="font-medium text-sm">{session.agentName}</div>
+                              <div className="text-xs text-[hsl(var(--command-text-muted))]">
+                                {session.currentTask || `${session.type} session`}
+                              </div>
+                            </div>
+                          </div>
+                          <div className="text-xs text-[hsl(var(--command-text-muted))]">
+                            {Math.floor((Date.now() - session.startTime) / 1000 / 60)}m ago
+                          </div>
+                        </div>
+                      ))}
+                      {liveStats.sessions.active > 4 && (
+                        <div className="text-xs text-[hsl(var(--command-text-muted))] text-center pt-1">
+                          +{liveStats.sessions.active - 4} more sessions
+                        </div>
+                      )}
+                    </div>
+                  ) : (
+                    <div className="text-center py-4">
+                      <div className="text-sm text-[hsl(var(--command-text-muted))]">
+                        No active sessions
+                      </div>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+
+              {/* Scheduled Tasks */}
+              <Card className="glass-morphism border-[hsl(var(--command-border-bright))]">
+                <CardHeader>
+                  <CardTitle className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <Timer className="h-5 w-5 text-orange-400" />
+                      Scheduled Tasks
+                    </div>
+                    <Badge variant="outline" className="bg-orange-500/10 text-orange-400 text-xs">
+                      {liveStats.cronJobs.active} Active
+                    </Badge>
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  {cronJobs.filter(j => j.status === 'active').slice(0, 4).length > 0 ? (
+                    <div className="space-y-3">
+                      {cronJobs.filter(j => j.status === 'active').slice(0, 4).map((job) => (
+                        <div key={job.id} className="flex items-center justify-between p-2 glass-morphism rounded-lg">
+                          <div className="flex items-center gap-3">
+                            <div className={cn(
+                              "p-1 rounded",
+                              job.enabled ? "bg-green-500/10" : "bg-gray-500/10"
+                            )}>
+                              {job.enabled ? 
+                                <PlayCircle className="h-3 w-3 text-green-400" /> :
+                                <PauseCircle className="h-3 w-3 text-gray-400" />
+                              }
+                            </div>
+                            <div>
+                              <div className="font-medium text-sm">{job.description?.substring(0, 30) || job.command.substring(0, 30)}</div>
+                              <div className="text-xs text-[hsl(var(--command-text-muted))]">
+                                {job.schedule} • {job.agent || 'system'}
+                              </div>
+                            </div>
+                          </div>
+                          <div className="text-xs text-[hsl(var(--command-text-muted))]">
+                            {job.nextRun ? new Date(job.nextRun).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '--'}
+                          </div>
+                        </div>
+                      ))}
+                      {liveStats.cronJobs.active > 4 && (
+                        <div className="text-xs text-[hsl(var(--command-text-muted))] text-center pt-1">
+                          +{liveStats.cronJobs.active - 4} more scheduled
+                        </div>
+                      )}
+                    </div>
+                  ) : (
+                    <div className="text-center py-4">
+                      <div className="text-sm text-[hsl(var(--command-text-muted))]">
+                        No active cron jobs
+                      </div>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            </div>
+          </motion.div>
 
           {/* Performance Overview */}
           <motion.div variants={itemVariants}>
