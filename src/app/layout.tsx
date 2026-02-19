@@ -65,6 +65,16 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="dark">
+      <head>
+        <meta name="application-name" content="Mission Control" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+        <meta name="apple-mobile-web-app-title" content="Mission Control" />
+        <meta name="mobile-web-app-capable" content="yes" />
+        <meta name="msapplication-config" content="/browserconfig.xml" />
+        <meta name="msapplication-TileColor" content="#1a1a2e" />
+        <meta name="msapplication-tap-highlight" content="no" />
+      </head>
       <body className={`${geist.variable} ${plusJakarta.variable} antialiased`}>
         <RootLayoutClient>
           {children}

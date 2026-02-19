@@ -14,6 +14,7 @@ import { ThemeProvider } from "@/lib/theme-context"
 import { ThemeToggle } from "@/components/ui/theme-toggle"
 import { FocusModeProvider, useFocusMode } from "@/hooks/use-focus-mode"
 import { FocusModeToggle } from "@/components/ui/focus-mode-toggle"
+import { PWARegistration } from "@/components/pwa/pwa-registration"
 
 interface RootLayoutClientProps {
   children: React.ReactNode
@@ -84,6 +85,9 @@ function LayoutContent({ children }: RootLayoutClientProps) {
 
           {/* Toast Container */}
           <ToastContainer />
+          
+          {/* PWA Registration */}
+          <PWARegistration />
         </div>
     </>
   )
