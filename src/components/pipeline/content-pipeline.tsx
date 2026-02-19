@@ -25,7 +25,7 @@ import { ContentDetailPanel } from "./content-detail-panel"
 import { ContentItem } from "@/types/content"
 import { PageHeader } from "@/components/ui/page-header"
 import { StatsCard } from "@/components/ui/stats-card"
-import { EmptyState } from "@/components/ui/empty-state"
+import { PipelineEmptyState } from "@/components/ui/empty-state"
 import { PrintButton } from "@/components/ui/print-button"
 import { loadContent, saveContent } from "@/lib/data-persistence"
 import { useToastActions } from "@/components/ui/toast"
@@ -378,13 +378,7 @@ export function ContentPipeline() {
           {/* Content Pipeline or Empty State */}
           <motion.div variants={itemVariants}>
             {content.length === 0 ? (
-              <EmptyState
-                icon="🎬"
-                title="Content Pipeline Ready for Launch"
-                description="Your creative command center is empty. Begin building your content strategy from ideation to publication across all platforms. Time to create something extraordinary."
-                actionLabel="Create First Content"
-                onAction={handleAddNewContent}
-              />
+              <PipelineEmptyState onAddContent={handleAddNewContent} />
             ) : (
               <DragDropContext onDragEnd={handleDragEnd}>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 overflow-x-auto pb-4">

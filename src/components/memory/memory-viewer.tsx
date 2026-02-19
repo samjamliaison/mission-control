@@ -348,8 +348,10 @@ export function MemoryViewer() {
                 icon="🧠"
                 title="No Memories Found"
                 description="The OpenClaw workspace memory files are empty or not accessible. Check that MEMORY.md and memory/*.md files exist in the workspace."
-                actionLabel="Refresh Data"
-                onAction={loadMemoriesFromApi}
+                action={{
+                  label: "Refresh Data",
+                  onClick: loadMemoriesFromApi
+                }}
               />
             ) : filteredMemories.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">

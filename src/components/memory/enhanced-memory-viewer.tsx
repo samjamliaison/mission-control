@@ -38,7 +38,7 @@ import {
 } from "lucide-react"
 import { MemoryCard } from "./memory-card"
 import { MemoryCreationDialog } from "./memory-creation-dialog"
-import { EmptyState } from "@/components/ui/empty-state"
+import { MemoryEmptyState } from "@/components/ui/empty-state"
 import { useToastActions } from "@/components/ui/toast"
 // import { loadMemories, saveMemories } from "@/lib/data-persistence" - Replaced with API calls
 import { MemoryEntry } from "./memory-entry"
@@ -557,13 +557,7 @@ export function EnhancedMemoryViewer() {
           {/* Memory Grid or Empty State */}
           <motion.div variants={itemVariants}>
             {memories.length === 0 ? (
-              <EmptyState
-                icon="🧠"
-                title="Memory Vault is Empty"
-                description="Start building your knowledge base by creating your first memory entry. Capture insights, daily notes, and important lessons."
-                actionLabel="Create First Memory"
-                onAction={handleAddNewMemory}
-              />
+              <MemoryEmptyState onAddMemory={handleAddNewMemory} />
             ) : filteredMemories.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
                 <AnimatePresence>
