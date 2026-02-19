@@ -35,7 +35,8 @@ import {
   Star,
   HardDrive,
   Cpu,
-  Shield
+  Shield,
+  X
 } from "lucide-react"
 import { loadTasks, loadContent, loadEvents, loadMemories } from "@/lib/data-persistence"
 import { Task } from "@/components/tasks/task-card"
@@ -214,6 +215,7 @@ export function DashboardView() {
   const [cronJobs, setCronJobs] = useState<CronJob[]>([])
   const [sessions, setSessions] = useState<SessionInfo[]>([])
   const [systemHealth, setSystemHealth] = useState<SystemHealth | null>(null)
+  const [webhookEvents, setWebhookEvents] = useState<any[]>([])
   const [liveDataLoading, setLiveDataLoading] = useState(true)
   const [mounted, setMounted] = useState(false)
   const [lastUpdated, setLastUpdated] = useState<number>(Date.now())
@@ -231,11 +233,12 @@ export function DashboardView() {
       // Add cache-busting timestamp to prevent stale data
       const cacheBuster = `?t=${Date.now()}`
 
-      const [agentsRes, cronRes, sessionsRes, healthRes] = await Promise.allSettled([
+      const [agentsRes, cronRes, sessionsRes, healthRes, webhookRes] = await Promise.allSettled([
         fetch(`/api/agents/status${cacheBuster}`),
         fetch(`/api/cron${cacheBuster}`),
         fetch(`/api/sessions${cacheBuster}`),
-        fetch(`/api/health${cacheBuster}`)
+        fetch(`/api/health${cacheBuster}`),
+        fetch(`/api/webhook?limit=20${cacheBuster}`)
       ])
 
       let newAgents = agentStatuses
@@ -263,6 +266,11 @@ export function DashboardView() {
       if (healthRes.status === 'fulfilled' && healthRes.value.ok) {
         const healthData = await healthRes.value.json()
         setSystemHealth(healthData)
+      }
+
+      if (webhookRes.status === 'fulfilled' && webhookRes.value.ok) {
+        const webhookData = await webhookRes.value.json()
+        setWebhookEvents(webhookData.events || [])
       }
 
       // Check if data changed to trigger pulse animation
@@ -396,13 +404,23 @@ export function DashboardView() {
         status: 'active',
         assignee: m.author,
         action: 'saved'
+      })),
+      ...webhookEvents.map(event => ({
+        type: 'webhook',
+        title: event.message,
+        time: new Date(event.timestamp).getTime(),
+        status: event.severity || 'info',
+        assignee: event.agent || event.source || 'System',
+        action: event.type.replace('_', ' '),
+        eventType: event.type,
+        severity: event.severity
       }))
     ]
 
     return allItems
       .sort((a, b) => b.time - a.time)
-      .slice(0, 5)
-  }, [tasks, content, events, memories])
+      .slice(0, 8) // Show more items to include webhook events
+  }, [tasks, content, events, memories, webhookEvents])
 
   // Team efficiency based on live agent data
   const teamEfficiency = useMemo(() => {
@@ -810,9 +828,19 @@ export function DashboardView() {
                             {item.type === 'content' && <Film className="h-4 w-4 text-purple-400" />}
                             {item.type === 'event' && <Calendar className="h-4 w-4 text-blue-400" />}
                             {item.type === 'memory' && <Brain className="h-4 w-4 text-green-400" />}
+                            {item.type === 'webhook' && (
+                              <>
+                                {item.eventType === 'task_complete' && <CheckSquare className="h-4 w-4 text-green-400" />}
+                                {item.eventType === 'agent_start' && <Users className="h-4 w-4 text-blue-400" />}
+                                {item.eventType === 'cron_run' && <Clock className="h-4 w-4 text-yellow-400" />}
+                                {item.eventType === 'error' && <X className="h-4 w-4 text-red-400" />}
+                                {item.eventType === 'system_alert' && <Shield className="h-4 w-4 text-orange-400" />}
+                                {!['task_complete', 'agent_start', 'cron_run', 'error', 'system_alert'].includes(item.eventType) && <Activity className="h-4 w-4 text-[hsl(var(--command-accent))]" />}
+                              </>
+                            )}
 
                             <div className="text-lg">
-                              {agentAvatars[item.assignee as keyof typeof agentAvatars] || "👤"}
+                              {agentAvatars[item.assignee as keyof typeof agentAvatars] || (item.type === 'webhook' ? "🔔" : "👤")}
                             </div>
                           </div>
 
@@ -823,8 +851,17 @@ export function DashboardView() {
                             </div>
                           </div>
 
-                          <Badge variant="outline" className="text-xs">
-                            {item.status}
+                          <Badge 
+                            variant="outline" 
+                            className={cn(
+                              "text-xs",
+                              item.type === 'webhook' && item.severity === 'error' && "text-red-400 border-red-400/30",
+                              item.type === 'webhook' && item.severity === 'warning' && "text-yellow-400 border-yellow-400/30",
+                              item.type === 'webhook' && item.severity === 'success' && "text-green-400 border-green-400/30",
+                              item.type === 'webhook' && item.severity === 'info' && "text-blue-400 border-blue-400/30"
+                            )}
+                          >
+                            {item.type === 'webhook' ? item.severity : item.status}
                           </Badge>
                         </motion.div>
                       ))}
