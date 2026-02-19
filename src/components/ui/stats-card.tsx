@@ -22,9 +22,9 @@ export function StatsCard({
 }: StatsCardProps) {
   return (
     <motion.div 
-      className={`backdrop-blur-xl bg-white/[0.03] border border-white/[0.06] rounded-xl overflow-hidden p-5 transition-all duration-200 hover:scale-[1.02] hover:border-white/[0.12] hover:shadow-lg ${className}`}
+      className={`backdrop-blur-xl bg-white/[0.03] border border-white/[0.06] rounded-xl overflow-hidden p-5 transition-all duration-200 ease-out hover:scale-[1.01] hover:border-white/[0.12] hover:shadow-lg hover:shadow-black/10 ${className}`}
       whileHover={{ 
-        boxShadow: "0 8px 32px rgba(6, 182, 212, 0.1)",
+        boxShadow: "0 8px 32px rgba(6, 182, 212, 0.05)",
       }}
     >
       <div className="space-y-4">
