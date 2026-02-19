@@ -42,7 +42,7 @@ const assigneeOptions = ["All", "Hamza", "Manus", "Monica", "Jarvis", "Luna"]
 
 const agentAvatars = {
   "Hamza": "👤",
-  "Manus": "🤘", 
+  "Manus": "🤘",
   "Monica": "✈️",
   "Jarvis": "🔍",
   "Luna": "🌙"
@@ -89,7 +89,7 @@ export function TasksBoard() {
     setMounted(true)
     const loadedTasks = loadTasks()
     setTasks(loadedTasks)
-    
+
     // Load sort preferences
     const savedSort = localStorage.getItem('mission-control-sort')
     if (savedSort) {
@@ -97,7 +97,7 @@ export function TasksBoard() {
       setSortBy(savedSortBy)
       setSortOrder(savedSortOrder)
     }
-    
+
     // Log navigation to tasks board
     logNavigationAction('Task Board')
   }, [])
@@ -116,12 +116,12 @@ export function TasksBoard() {
       if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) {
         return
       }
-      
+
       if (e.key === 'n' || e.key === 'N') {
         e.preventDefault()
         handleAddNewTask()
       }
-      
+
       if (e.key === 't' || e.key === 'T') {
         e.preventDefault()
         setShowTemplatePicker(true)
@@ -141,11 +141,11 @@ export function TasksBoard() {
   // Filter and sort tasks
   const filteredTasks = useMemo(() => {
     let filtered = selectedAssignee === "All" ? [...tasks] : tasks.filter(task => task.assignee === selectedAssignee)
-    
+
     // Sort tasks
     filtered.sort((a, b) => {
       let aVal, bVal
-      
+
       switch (sortBy) {
         case 'dateCreated':
           aVal = a.createdAt
@@ -168,14 +168,14 @@ export function TasksBoard() {
           aVal = a.createdAt
           bVal = b.createdAt
       }
-      
+
       if (sortOrder === 'asc') {
         return aVal < bVal ? -1 : aVal > bVal ? 1 : 0
       } else {
         return aVal > bVal ? -1 : aVal < bVal ? 1 : 0
       }
     })
-    
+
     return filtered
   }, [tasks, selectedAssignee, sortBy, sortOrder])
 
@@ -198,14 +198,14 @@ export function TasksBoard() {
 
     const newStatus = destination.droppableId as "todo" | "in-progress" | "done"
     const task = tasks.find(t => t._id === draggableId)
-    
+
     if (task) {
       const oldStatus = task.status
       const updatedTask = { ...task, status: newStatus, updatedAt: Date.now() }
-      
+
       // Add to undo history
       addTaskStatusChange(task, updatedTask)
-      
+
       // Log the status change activity
       if (newStatus === 'done' && oldStatus !== 'done') {
         logTaskAction(
@@ -213,7 +213,7 @@ export function TasksBoard() {
           task.title,
           task.assignee,
           draggableId,
-          { 
+          {
             fromStatus: oldStatus,
             toStatus: newStatus,
             priority: task.priority,
@@ -226,7 +226,7 @@ export function TasksBoard() {
           task.title,
           task.assignee,
           draggableId,
-          { 
+          {
             fromStatus: oldStatus,
             toStatus: newStatus,
             priority: task.priority,
@@ -240,7 +240,7 @@ export function TasksBoard() {
           task.title,
           task.assignee,
           draggableId,
-          { 
+          {
             fromStatus: oldStatus,
             toStatus: newStatus,
             priority: task.priority,
@@ -250,10 +250,10 @@ export function TasksBoard() {
         )
       }
     }
-    
-    setTasks(prevTasks => 
-      prevTasks.map(task => 
-        task._id === draggableId 
+
+    setTasks(prevTasks =>
+      prevTasks.map(task =>
+        task._id === draggableId
           ? { ...task, status: newStatus, updatedAt: Date.now() }
           : task
       )
@@ -264,7 +264,7 @@ export function TasksBoard() {
     if (editingTask) {
       const updatedTask = { ...editingTask, ...taskData, updatedAt: Date.now() }
       addTaskUpdate(editingTask, updatedTask)
-      
+
       setTasks(prevTasks =>
         prevTasks.map(task =>
           task._id === editingTask._id
@@ -285,7 +285,7 @@ export function TasksBoard() {
         updatedAt: Date.now(),
         ...(taskData.dueDate && { dueDate: taskData.dueDate }),
       }
-      
+
       addTaskCreate(newTask)
       setTasks(prevTasks => [newTask, ...prevTasks])
       toast.success('Task Created', `"${taskData.title}" assigned to ${taskData.assignee}.`)
@@ -303,14 +303,14 @@ export function TasksBoard() {
     if (taskToDelete) {
       addTaskDelete(taskToDelete)
       setTasks(prevTasks => prevTasks.filter(task => task._id !== taskId))
-      
+
       // Log the deletion activity
       logTaskAction(
         'deleted',
         taskToDelete.title,
         taskToDelete.assignee,
         taskId,
-        { 
+        {
           status: taskToDelete.status,
           priority: taskToDelete.priority,
           wasCompleted: taskToDelete.status === 'done'
@@ -327,7 +327,7 @@ export function TasksBoard() {
 
   const handleTemplateSelect = (template: TaskTemplate) => {
     const taskData = createTaskFromTemplate(template)
-    
+
     // Create task directly from template
     const newTask: Task = {
       _id: `task-${Date.now()}`,
@@ -343,21 +343,21 @@ export function TasksBoard() {
     addTaskCreate(newTask)
     setTasks(prevTasks => [...prevTasks, newTask])
     setShowTemplatePicker(false)
-    
+
     // Log the activity
     logTaskAction(
       'created',
       newTask.title,
       newTask.assignee,
       newTask._id,
-      { 
+      {
         priority: newTask.priority,
         fromTemplate: template.name,
         templateId: template.id,
         hasDescription: !!newTask.description
       }
     )
-    
+
     toast.success('Task Created from Template', `"${newTask.title}" has been deployed using the ${template.name} template.`)
   }
 
@@ -425,7 +425,7 @@ export function TasksBoard() {
     const newSortOrder = sortBy === newSortBy && sortOrder === 'desc' ? 'asc' : 'desc'
     setSortBy(newSortBy)
     setSortOrder(newSortOrder)
-    
+
     // Save to localStorage
     localStorage.setItem('mission-control-sort', JSON.stringify({
       sortBy: newSortBy,
@@ -496,8 +496,8 @@ export function TasksBoard() {
     <div className="min-h-[calc(100vh-5rem)] relative" data-testid="tasks-board">
       {/* Command Center Background Effects */}
       <div className="fixed inset-0 bg-gradient-to-br from-[hsl(var(--command-background))] via-[hsl(220_13%_3%)] to-[hsl(var(--command-background))] pointer-events-none" />
-      
-      <motion.div 
+
+      <motion.div
         className="relative z-10"
         variants={containerVariants}
         initial="hidden"
@@ -569,7 +569,7 @@ export function TasksBoard() {
                       </SelectContent>
                     </Select>
                   </div>
-                  
+
                   {selectedAssignee !== "All" && (
                     <motion.div
                       initial={{ opacity: 0, scale: 0.8 }}
@@ -621,7 +621,7 @@ export function TasksBoard() {
 
               <div className="flex items-center gap-3">
                 <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-                  <Button 
+                  <Button
                     variant="outline"
                     onClick={handleToggleBulkMode}
                     className={`glass-morphism border-[hsl(var(--command-accent))]/30 hover:bg-[hsl(var(--command-accent))]/10 font-semibold px-4 min-h-[44px] ${
@@ -637,7 +637,7 @@ export function TasksBoard() {
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-                      <Button 
+                      <Button
                         variant="outline"
                         className="glass-morphism border-[hsl(var(--command-accent))]/30 text-[hsl(var(--command-accent))] hover:bg-[hsl(var(--command-accent))]/10 font-semibold px-4 min-h-[44px]"
                         title="Export tasks data"
@@ -660,9 +660,9 @@ export function TasksBoard() {
                 </DropdownMenu>
 
                 <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-                  <Button 
+                  <Button
                     variant="outline"
-                    onClick={() => setShowTemplatePicker(true)} 
+                    onClick={() => setShowTemplatePicker(true)}
                     className="glass-morphism border-[hsl(var(--command-accent))]/30 text-[hsl(var(--command-accent))] hover:bg-[hsl(var(--command-accent))]/10 font-semibold px-4 min-h-[44px] relative group"
                     title="Quick create from template"
                   >
@@ -673,10 +673,10 @@ export function TasksBoard() {
                     </kbd>
                   </Button>
                 </motion.div>
-                
+
                 <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-                  <Button 
-                    onClick={handleAddNewTask} 
+                  <Button
+                    onClick={handleAddNewTask}
                     className="btn-premium text-body font-semibold px-6 relative group min-h-[44px]"
                     title="Press 'N' to quickly add a new task"
                   >
@@ -750,7 +750,7 @@ export function TasksBoard() {
         onSave={handleAddTask}
         editingTask={editingTask}
       />
-      
+
       {/* Template Picker */}
       <TaskTemplatePicker
         open={showTemplatePicker}

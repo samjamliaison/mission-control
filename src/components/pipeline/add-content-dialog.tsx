@@ -82,10 +82,10 @@ export function AddContentDialog({ open, onOpenChange, onSave, editingContent }:
       }
     }
   }, [open, editingContent])
-  
+
   const handleSave = () => {
     if (!title.trim() || !assignee) return
-    
+
     onSave({
       ...(editingContent && { _id: editingContent._id }),
       title: title.trim(),
@@ -95,29 +95,29 @@ export function AddContentDialog({ open, onOpenChange, onSave, editingContent }:
       scriptText: scriptText.trim(),
       thumbnailUrl: thumbnailUrl.trim(),
     })
-    
+
     onOpenChange(false)
   }
-  
+
   const handleCancel = () => {
     onOpenChange(false)
   }
 
   const isFormValid = title.trim() && assignee
   const selectedPlatform = platformOptions.find(p => p.value === platform)
-  
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[600px] glass-morphism border-[hsl(var(--command-border-bright))] p-0 overflow-hidden max-h-[90vh] overflow-y-auto">
         {/* Header with gradient */}
         <div className="relative p-6 pb-4">
-          <div 
+          <div
             className="absolute inset-0 opacity-10"
             style={{
               background: "linear-gradient(135deg, hsl(var(--command-accent)) 0%, transparent 50%)"
             }}
           />
-          
+
           <DialogHeader className="relative">
             <div className="flex items-center gap-3 mb-2">
               <div className="p-2 glass-morphism rounded-lg">
@@ -128,17 +128,17 @@ export function AddContentDialog({ open, onOpenChange, onSave, editingContent }:
               </DialogTitle>
             </div>
             <DialogDescription className="text-[hsl(var(--command-text-muted))]">
-              {editingContent 
-                ? "Update the content details and pipeline status." 
+              {editingContent
+                ? "Update the content details and pipeline status."
                 : "Add new content to the creation pipeline."
               }
             </DialogDescription>
           </DialogHeader>
         </div>
-        
+
         <div className="px-6 pb-6 space-y-6">
           {/* Content Title */}
-          <motion.div 
+          <motion.div
             className="space-y-2"
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
@@ -156,9 +156,9 @@ export function AddContentDialog({ open, onOpenChange, onSave, editingContent }:
               className="glass-morphism border-[hsl(var(--command-border))] focus:ring-1 focus:ring-[hsl(var(--command-accent))] font-medium"
             />
           </motion.div>
-          
+
           {/* Content Description */}
-          <motion.div 
+          <motion.div
             className="space-y-2"
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
@@ -176,10 +176,10 @@ export function AddContentDialog({ open, onOpenChange, onSave, editingContent }:
               className="glass-morphism border-[hsl(var(--command-border))] focus:ring-1 focus:ring-[hsl(var(--command-accent))] resize-none"
             />
           </motion.div>
-          
+
           <div className="grid grid-cols-2 gap-4">
             {/* Platform Selection */}
-            <motion.div 
+            <motion.div
               className="space-y-2"
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
@@ -214,7 +214,7 @@ export function AddContentDialog({ open, onOpenChange, onSave, editingContent }:
             </motion.div>
 
             {/* Creator Assignment */}
-            <motion.div 
+            <motion.div
               className="space-y-2"
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
@@ -255,7 +255,7 @@ export function AddContentDialog({ open, onOpenChange, onSave, editingContent }:
           </div>
 
           {/* Script Text */}
-          <motion.div 
+          <motion.div
             className="space-y-2"
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
@@ -279,7 +279,7 @@ export function AddContentDialog({ open, onOpenChange, onSave, editingContent }:
           </motion.div>
 
           {/* Thumbnail URL */}
-          <motion.div 
+          <motion.div
             className="space-y-2"
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
@@ -297,7 +297,7 @@ export function AddContentDialog({ open, onOpenChange, onSave, editingContent }:
               className="glass-morphism border-[hsl(var(--command-border))] focus:ring-1 focus:ring-[hsl(var(--command-accent))]"
             />
           </motion.div>
-          
+
           {/* Preview Badge */}
           {assignee && platform && (
             <motion.div
@@ -309,14 +309,14 @@ export function AddContentDialog({ open, onOpenChange, onSave, editingContent }:
               <div className="text-center space-y-2">
                 <div className="text-xs text-[hsl(var(--command-text-muted))] font-medium">Content Preview</div>
                 <div className="flex items-center gap-2">
-                  <Badge 
-                    variant="outline" 
+                  <Badge
+                    variant="outline"
                     className="bg-[hsl(var(--command-accent))]/10 text-[hsl(var(--command-accent))] border-[hsl(var(--command-accent))]/20 text-sm px-3 py-1"
                   >
                     {agentAvatars[assignee as keyof typeof agentAvatars]} {assignee}
                   </Badge>
-                  <Badge 
-                    variant="outline" 
+                  <Badge
+                    variant="outline"
                     className={cn("text-sm px-3 py-1", selectedPlatform && `${selectedPlatform.color.replace('text-', 'text-')} bg-current/10 border-current/20`)}
                   >
                     {selectedPlatform && <selectedPlatform.icon className="h-3 w-3 mr-1" />}
@@ -327,12 +327,12 @@ export function AddContentDialog({ open, onOpenChange, onSave, editingContent }:
             </motion.div>
           )}
         </div>
-        
+
         {/* Action Buttons */}
         <div className="px-6 py-4 bg-[hsl(var(--command-surface))]/50 backdrop-blur border-t border-[hsl(var(--command-border))]">
           <div className="flex justify-end gap-3">
-            <Button 
-              variant="ghost" 
+            <Button
+              variant="ghost"
               onClick={handleCancel}
               className="hover:bg-[hsl(var(--command-text-muted))]/10"
             >
@@ -343,13 +343,13 @@ export function AddContentDialog({ open, onOpenChange, onSave, editingContent }:
               whileHover={{ scale: isFormValid ? 1.02 : 1 }}
               whileTap={{ scale: isFormValid ? 0.98 : 1 }}
             >
-              <Button 
+              <Button
                 onClick={handleSave}
                 disabled={!isFormValid}
                 className={cn(
                   "font-semibold px-6",
-                  isFormValid 
-                    ? "bg-gradient-to-r from-[hsl(var(--command-accent))] to-[hsl(199_89%_38%)] hover:from-[hsl(199_89%_58%)] hover:to-[hsl(var(--command-accent))] shadow-lg shadow-[hsl(var(--command-accent))]/20" 
+                  isFormValid
+                    ? "bg-gradient-to-r from-[hsl(var(--command-accent))] to-[hsl(199_89%_38%)] hover:from-[hsl(199_89%_58%)] hover:to-[hsl(var(--command-accent))] shadow-lg shadow-[hsl(var(--command-accent))]/20"
                     : "opacity-50 cursor-not-allowed"
                 )}
               >

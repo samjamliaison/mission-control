@@ -15,9 +15,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { 
+import {
   Brain,
-  Search, 
+  Search,
   Filter,
   Calendar,
   BookOpen,
@@ -55,7 +55,7 @@ const categoryConfig = {
   },
   "knowledge": {
     icon: BookOpen,
-    color: "text-green-400", 
+    color: "text-green-400",
     bg: "bg-green-500/10",
     border: "border-green-500/20",
     label: "Knowledge Base"
@@ -63,7 +63,7 @@ const categoryConfig = {
   "lessons": {
     icon: Lightbulb,
     color: "text-yellow-400",
-    bg: "bg-yellow-500/10", 
+    bg: "bg-yellow-500/10",
     border: "border-yellow-500/20",
     label: "Lessons Learned"
   }
@@ -85,7 +85,7 @@ const agentColors = {
   },
   "Manus": {
     bg: "bg-purple-500/10",
-    text: "text-purple-400", 
+    text: "text-purple-400",
     border: "border-purple-500/20"
   },
   "Monica": {
@@ -177,10 +177,10 @@ export function EnhancedMemoryViewer() {
       filtered = filtered.filter(memory => memory.tags?.includes(selectedTag))
     }
 
-    // Search filter  
+    // Search filter
     if (searchQuery.trim()) {
       const query = searchQuery.toLowerCase()
-      filtered = filtered.filter(memory => 
+      filtered = filtered.filter(memory =>
         memory.title.toLowerCase().includes(query) ||
         memory.content.toLowerCase().includes(query) ||
         memory.author.toLowerCase().includes(query) ||
@@ -193,7 +193,7 @@ export function EnhancedMemoryViewer() {
       // Pinned items first
       if (a.pinned && !b.pinned) return -1
       if (!a.pinned && b.pinned) return 1
-      
+
       // Then by date
       return b.updatedAt - a.updatedAt
     })
@@ -272,7 +272,7 @@ export function EnhancedMemoryViewer() {
     const memory = memories.find(m => m._id === memoryId)
     if (memory) {
       toast.success(
-        memory.pinned ? 'Memory Unpinned' : 'Memory Pinned', 
+        memory.pinned ? 'Memory Unpinned' : 'Memory Pinned',
         `"${memory.title}" ${memory.pinned ? 'removed from' : 'added to'} pinned memories.`
       )
     }
@@ -300,8 +300,8 @@ export function EnhancedMemoryViewer() {
     <div className="min-h-[calc(100vh-5rem)] relative" data-testid="memory-viewer">
       {/* Background */}
       <div className="fixed inset-0 bg-gradient-to-br from-[hsl(var(--command-background))] via-[hsl(220_13%_3%)] to-[hsl(var(--command-background))] pointer-events-none" />
-      
-      <motion.div 
+
+      <motion.div
         className="relative z-10 p-6"
         variants={containerVariants}
         initial="hidden"
@@ -388,7 +388,7 @@ export function EnhancedMemoryViewer() {
               </div>
 
               <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-                <Button 
+                <Button
                   onClick={handleAddNewMemory}
                   className="btn-premium font-semibold px-6"
                 >
@@ -421,7 +421,7 @@ export function EnhancedMemoryViewer() {
                   {allTags.slice(0, 20).map((tag) => {
                     const tagCount = memories.filter(m => m.tags?.includes(tag)).length
                     const isSelected = selectedTag === tag
-                    
+
                     return (
                       <motion.div
                         key={tag}
@@ -432,8 +432,8 @@ export function EnhancedMemoryViewer() {
                           variant={isSelected ? "default" : "outline"}
                           className={cn(
                             "cursor-pointer transition-all duration-200",
-                            isSelected 
-                              ? "bg-[hsl(var(--command-accent))] text-white" 
+                            isSelected
+                              ? "bg-[hsl(var(--command-accent))] text-white"
                               : "hover:bg-[hsl(var(--command-surface))]/60"
                           )}
                           onClick={() => setSelectedTag(isSelected ? null : tag)}
@@ -613,13 +613,13 @@ export function EnhancedMemoryViewer() {
 }
 
 // Enhanced Memory Card Component
-function EnhancedMemoryCard({ 
-  memory, 
-  onView, 
-  onEdit, 
-  onDelete, 
-  onTogglePin 
-}: { 
+function EnhancedMemoryCard({
+  memory,
+  onView,
+  onEdit,
+  onDelete,
+  onTogglePin
+}: {
   memory: MemoryEntry
   onView: () => void
   onEdit: () => void
@@ -648,7 +648,7 @@ function EnhancedMemoryCard({
           </div>
         </div>
       )}
-      
+
       <div className="p-6 relative" onClick={onView}>
         <div className="flex items-start gap-4">
           <div className={cn("p-2 glass-morphism rounded-lg group-hover:scale-110 transition-transform", config?.bg)}>
@@ -662,7 +662,7 @@ function EnhancedMemoryCard({
               {memory.content.substring(0, 150)}
               {memory.content.length > 150 && '...'}
             </p>
-            
+
             <div className="flex items-center justify-between mb-3">
               <div className="flex items-center gap-3 text-xs text-[hsl(var(--command-text-muted))]">
                 <div className="flex items-center gap-1">
@@ -683,7 +683,7 @@ function EnhancedMemoryCard({
                 </Badge>
               </div>
             </div>
-            
+
             {memory.tags && memory.tags.length > 0 && (
               <div className="flex flex-wrap gap-1 mb-3">
                 {memory.tags.slice(0, 3).map((tag) => (
@@ -700,7 +700,7 @@ function EnhancedMemoryCard({
             )}
           </div>
         </div>
-        
+
         {/* Action Buttons */}
         <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex gap-1">
           <Button
@@ -743,13 +743,13 @@ function EnhancedMemoryCard({
 }
 
 // Memory Detail Modal Component
-function MemoryDetailModal({ 
-  memory, 
-  onClose, 
-  onEdit, 
-  onDelete, 
-  onTogglePin 
-}: { 
+function MemoryDetailModal({
+  memory,
+  onClose,
+  onEdit,
+  onDelete,
+  onTogglePin
+}: {
   memory: MemoryEntry
   onClose: () => void
   onEdit: () => void
@@ -866,7 +866,7 @@ function MemoryDetailModal({
               ))}
             </div>
             <div className="text-xs text-[hsl(var(--command-text-muted))]">
-              Created: {new Date(memory.createdAt).toLocaleDateString()} • 
+              Created: {new Date(memory.createdAt).toLocaleDateString()} •
               Updated: {new Date(memory.updatedAt).toLocaleDateString()}
             </div>
           </div>

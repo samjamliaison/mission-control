@@ -93,7 +93,7 @@ export function Navigation() {
       const isMobile = window.innerWidth < 768
       setIsCollapsed(isMobile)
     }
-    
+
     checkMobile()
     window.addEventListener('resize', checkMobile)
     return () => window.removeEventListener('resize', checkMobile)
@@ -120,7 +120,7 @@ export function Navigation() {
     // Listen for localStorage changes
     const interval = setInterval(updateUnreadCount, 5000) // Check every 5 seconds
     window.addEventListener('storage', updateUnreadCount)
-    
+
     return () => {
       clearInterval(interval)
       window.removeEventListener('storage', updateUnreadCount)
@@ -131,15 +131,15 @@ export function Navigation() {
     <motion.aside
       className="relative h-screen z-50"
       initial={{ x: -20, opacity: 0 }}
-      animate={{ 
-        x: 0, 
+      animate={{
+        x: 0,
         opacity: 1,
         width: isCollapsed ? "64px" : "240px"
       }}
       transition={{ duration: 0.3, ease: "easeInOut" }}
     >
       <div className="h-full p-4">
-        <motion.nav 
+        <motion.nav
           className="h-full backdrop-blur-xl bg-white/[0.03] border border-white/[0.06] rounded-2xl p-5 flex flex-col"
           layout
         >
@@ -147,7 +147,7 @@ export function Navigation() {
           <div className="flex items-center justify-between mb-8">
             <AnimatePresence mode="wait">
               {!isCollapsed && (
-                <motion.div 
+                <motion.div
                   className="flex items-center gap-3"
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
@@ -166,7 +166,7 @@ export function Navigation() {
                 </motion.div>
               )}
             </AnimatePresence>
-            
+
             {/* Collapse Button */}
             <motion.button
               onClick={() => setIsCollapsed(!isCollapsed)}
@@ -189,7 +189,7 @@ export function Navigation() {
             {navigationItems.map((item, index) => {
               const isActive = pathname === item.href
               const IconComponent = item.icon
-              
+
               return (
                 <motion.div
                   key={item.name}
@@ -204,8 +204,8 @@ export function Navigation() {
                       // Ensure minimum 44px touch target on mobile
                       "min-h-[44px]",
                       isCollapsed ? "justify-center" : "gap-3",
-                      isActive 
-                        ? "text-[#06b6d4] bg-white/[0.05] border-white/[0.08]" 
+                      isActive
+                        ? "text-[#06b6d4] bg-white/[0.05] border-white/[0.08]"
                         : "text-white/50 hover:text-white/90 hover:bg-white/[0.03]"
                     )}
                     aria-label={`Navigate to ${item.name} - ${item.description}`}
@@ -219,7 +219,7 @@ export function Navigation() {
                         transition={{ type: "spring", stiffness: 400, damping: 30 }}
                       />
                     )}
-                    
+
                     <div className="flex items-center gap-3 relative z-10">
                       {/* Icon */}
                       <div className="relative">
@@ -240,7 +240,7 @@ export function Navigation() {
                           </motion.div>
                         )}
                       </div>
-                      
+
                       <AnimatePresence mode="wait">
                         {!isCollapsed && (
                           <motion.div
@@ -256,7 +256,7 @@ export function Navigation() {
                           </motion.div>
                         )}
                       </AnimatePresence>
-                      
+
                       {/* Tooltip for collapsed state */}
                       {isCollapsed && (
                         <div className="absolute left-full ml-3 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-50">
@@ -277,7 +277,7 @@ export function Navigation() {
           <div className="space-y-3 pt-4 border-t border-white/[0.06]">
             {/* Command Palette Hint */}
             {!isCollapsed && (
-              <CommandHint 
+              <CommandHint
                 onClick={() => {
                   // This will be handled by the global keyboard listener
                   const event = new KeyboardEvent('keydown', {
@@ -290,7 +290,7 @@ export function Navigation() {
               />
             )}
             {/* System Status */}
-            <motion.div 
+            <motion.div
               className={cn(
                 "flex items-center gap-3 p-3 rounded-xl backdrop-blur-xl bg-white/[0.02] border border-white/[0.04]",
                 isCollapsed && "justify-center"
@@ -355,7 +355,7 @@ export function Navigation() {
             </Link>
 
             {/* Keyboard Shortcuts Hint */}
-            <motion.button 
+            <motion.button
               className={cn(
                 "w-full flex items-center gap-3 p-2 rounded-lg bg-white/[0.02] border border-white/[0.04] cursor-pointer group transition-all duration-200 hover:bg-white/[0.03] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#06b6d4] focus-visible:ring-opacity-60",
                 isCollapsed && "justify-center"

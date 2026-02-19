@@ -78,13 +78,13 @@ export default function AnalyticsPage() {
       cumulative += item.percentage
       return `${item.color} ${start}% ${cumulative}%`
     }).join(', ')
-    
+
     return `conic-gradient(${stops})`
   }
 
   return (
     <div className="container mx-auto px-6 py-8 max-w-7xl">
-      <PageHeader 
+      <PageHeader
         title="Analytics"
         subtitle="Performance insights and data visualization"
         icon={BarChart3}
@@ -341,7 +341,7 @@ export default function AnalyticsPage() {
               <div className="relative">
                 <motion.div
                   className="w-48 h-48 rounded-full relative"
-                  style={{ 
+                  style={{
                     background: createDonutGradient(data.agentWorkload),
                   }}
                   initial={{ scale: 0, rotate: -90 }}
@@ -358,7 +358,7 @@ export default function AnalyticsPage() {
                 </motion.div>
               </div>
             </div>
-            
+
             {/* Legend */}
             <div className="mt-6 space-y-3">
               {data.agentWorkload.map((agent, index) => (

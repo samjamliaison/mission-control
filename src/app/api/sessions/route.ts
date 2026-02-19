@@ -37,7 +37,7 @@ async function getOpenClawProcesses(): Promise<ProcessInfo[]> {
     // Get OpenClaw-related processes
     const { stdout } = await exec('ps aux | grep -E "(openclaw|agent|claude)" | grep -v grep')
     const processes: ProcessInfo[] = []
-    
+
     const lines = stdout.trim().split('\n')
     for (const line of lines) {
       const parts = line.trim().split(/\s+/)
@@ -46,7 +46,7 @@ async function getOpenClawProcesses(): Promise<ProcessInfo[]> {
         const cpuUsage = parseFloat(parts[2])
         const memoryUsage = parseFloat(parts[3])
         const command = parts.slice(10).join(' ')
-        
+
         if (!isNaN(pid)) {
           processes.push({
             pid,
@@ -58,7 +58,7 @@ async function getOpenClawProcesses(): Promise<ProcessInfo[]> {
         }
       }
     }
-    
+
     return processes
   } catch (error) {
     console.warn('Failed to get process info:', error)
@@ -82,10 +82,10 @@ function generateSessionFromProcess(process: ProcessInfo, index: number): Sessio
     'Content creation',
     'Background processing'
   ]
-  
+
   const agentIndex = index % agentIds.length
   const isMainSession = process.command.includes('main') || index === 0
-  
+
   return {
     id: `session-${process.pid}-${Date.now().toString(36)}`,
     agentId: isMainSession ? 'main' : agentIds[agentIndex],
@@ -108,7 +108,7 @@ function generateSessionFromProcess(process: ProcessInfo, index: number): Sessio
 
 function generateSessionTags(command: string, isMainSession: boolean): string[] {
   const tags: string[] = []
-  
+
   if (isMainSession) tags.push('primary')
   if (command.includes('telegram')) tags.push('telegram')
   if (command.includes('discord')) tags.push('discord')
@@ -118,17 +118,17 @@ function generateSessionTags(command: string, isMainSession: boolean): string[] 
   if (command.includes('background')) tags.push('background')
   if (command.includes('cron')) tags.push('scheduled')
   if (Math.random() > 0.5) tags.push('interactive')
-  
+
   return tags.length > 0 ? tags : ['general']
 }
 
 export async function GET(request: NextRequest) {
   try {
     const processes = await getOpenClawProcesses()
-    
+
     // Generate session info from processes
     let sessions: SessionInfo[] = processes.map(generateSessionFromProcess)
-    
+
     // Add some example sessions if no processes found
     if (sessions.length === 0) {
       const exampleSessions: SessionInfo[] = [
@@ -187,24 +187,24 @@ export async function GET(request: NextRequest) {
           tags: ['system', 'monitoring', 'scheduled']
         }
       ]
-      
+
       sessions = exampleSessions
     }
-    
+
     // Sort by priority and activity
     sessions.sort((a, b) => {
       const priorityOrder = { critical: 0, high: 1, normal: 2, low: 3 }
       const statusOrder = { active: 0, idle: 1, paused: 2, ended: 3 }
-      
+
       const priorityDiff = priorityOrder[a.priority] - priorityOrder[b.priority]
       if (priorityDiff !== 0) return priorityDiff
-      
+
       const statusDiff = statusOrder[a.status] - statusOrder[b.status]
       if (statusDiff !== 0) return statusDiff
-      
+
       return b.lastActivity - a.lastActivity
     })
-    
+
     // Calculate summary statistics
     const summary = {
       total: sessions.length,
@@ -226,28 +226,28 @@ export async function GET(request: NextRequest) {
       }, {}),
       totalMessages: sessions.reduce((sum, s) => sum + s.messageCount, 0),
       totalToolCalls: sessions.reduce((sum, s) => sum + s.toolCalls, 0),
-      averageDuration: sessions.length > 0 ? 
+      averageDuration: sessions.length > 0 ?
         sessions.reduce((sum, s) => sum + s.duration, 0) / sessions.length : 0,
       totalMemoryUsage: sessions.reduce((sum, s) => sum + (s.memoryUsage || 0), 0),
-      oldestSession: sessions.length > 0 ? 
+      oldestSession: sessions.length > 0 ?
         Math.min(...sessions.map(s => s.startTime)) : null,
       mostActiveSession: sessions.length > 0 ?
         sessions.reduce((max, s) => s.messageCount > max.messageCount ? s : max).id : null
     }
-    
+
     const response = {
       sessions,
       summary,
       timestamp: new Date().toISOString()
     }
-    
+
     return NextResponse.json(response)
   } catch (error) {
     console.error('Sessions API Error:', error)
     return NextResponse.json(
-      { 
-        error: 'Failed to fetch session data', 
-        details: error instanceof Error ? error.message : 'Unknown error' 
+      {
+        error: 'Failed to fetch session data',
+        details: error instanceof Error ? error.message : 'Unknown error'
       },
       { status: 500 }
     )

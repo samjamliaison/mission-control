@@ -33,7 +33,7 @@ export function PageSkeleton() {
         <Skeleton className="h-8 w-64" />
         <Skeleton className="h-4 w-96" />
       </div>
-      
+
       {/* Stats grid skeleton */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {Array.from({ length: 4 }).map((_, i) => (
@@ -49,14 +49,14 @@ export function PageSkeleton() {
           </div>
         ))}
       </div>
-      
+
       {/* Content area skeleton */}
       <div className="space-y-4">
         <div className="flex justify-between items-center">
           <Skeleton className="h-6 w-32" />
           <Skeleton className="h-9 w-24 rounded-md" />
         </div>
-        
+
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {Array.from({ length: 6 }).map((_, i) => (
             <div key={i} className="glass-morphism border-[hsl(var(--command-border-bright))] p-4 rounded-lg">
@@ -93,7 +93,7 @@ export function DashboardSkeleton() {
           </div>
         </div>
       </div>
-      
+
       {/* Overview stats */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {Array.from({ length: 4 }).map((_, i) => (
@@ -109,7 +109,7 @@ export function DashboardSkeleton() {
           </div>
         ))}
       </div>
-      
+
       {/* Recent activity */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div className="glass-morphism border-[hsl(var(--command-border-bright))] p-6 rounded-lg">
@@ -128,7 +128,7 @@ export function DashboardSkeleton() {
             </div>
           </div>
         </div>
-        
+
         <div className="glass-morphism border-[hsl(var(--command-border-bright))] p-6 rounded-lg">
           <div className="space-y-4">
             <Skeleton className="h-5 w-28" />

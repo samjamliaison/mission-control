@@ -3,7 +3,7 @@
 import { motion } from "framer-motion"
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { 
+import {
   Calendar,
   BookOpen,
   Lightbulb,
@@ -31,7 +31,7 @@ const categoryConfig = {
   },
   "knowledge": {
     icon: BookOpen,
-    color: "text-green-400", 
+    color: "text-green-400",
     bg: "bg-green-500/10",
     border: "border-green-500/20",
     glow: "0 0 15px hsl(142 69% 58% / 0.3)",
@@ -40,7 +40,7 @@ const categoryConfig = {
   "lessons": {
     icon: Lightbulb,
     color: "text-yellow-400",
-    bg: "bg-yellow-500/10", 
+    bg: "bg-yellow-500/10",
     border: "border-yellow-500/20",
     glow: "0 0 15px hsl(45 100% 50% / 0.3)",
     label: "Lessons"
@@ -50,7 +50,7 @@ const categoryConfig = {
 export function MemoryCard({ memory, onClick }: MemoryCardProps) {
   const config = categoryConfig[memory.category]
   const IconComponent = config.icon
-  
+
   const formatDate = (timestamp: number) => {
     return new Date(timestamp).toLocaleDateString("en-US", {
       month: "short",
@@ -67,17 +67,17 @@ export function MemoryCard({ memory, onClick }: MemoryCardProps) {
       .replace(/\*(.*?)\*/g, '$1') // Remove italic
       .replace(/`(.*?)`/g, '$1') // Remove inline code
       .trim()
-    
+
     const firstParagraph = cleaned.split('\n\n')[0]
-    return firstParagraph.length > 200 
+    return firstParagraph.length > 200
       ? firstParagraph.slice(0, 200) + '...'
       : firstParagraph
   }
 
   const cardVariants = {
     hidden: { opacity: 0, y: 20 },
-    visible: { 
-      opacity: 1, 
+    visible: {
+      opacity: 1,
       y: 0,
       transition: {
         duration: 0.3,
@@ -104,7 +104,7 @@ export function MemoryCard({ memory, onClick }: MemoryCardProps) {
         }}
       >
         {/* Category glow overlay */}
-        <div 
+        <div
           className="absolute inset-0 opacity-5 pointer-events-none"
           style={{
             background: `radial-gradient(circle at 0% 50%, ${config.color.replace('text-', 'hsl(var(--command-')} 0%, transparent 50%)`
@@ -123,7 +123,7 @@ export function MemoryCard({ memory, onClick }: MemoryCardProps) {
           <div className="flex items-start justify-between gap-3">
             <div className="flex-1">
               <div className="flex items-center gap-2 mb-2">
-                <div 
+                <div
                   className={cn(
                     "p-1.5 rounded-lg glass-morphism",
                     config.bg,
@@ -133,8 +133,8 @@ export function MemoryCard({ memory, onClick }: MemoryCardProps) {
                 >
                   <IconComponent className={cn("h-3 w-3", config.color)} />
                 </div>
-                <Badge 
-                  variant="outline" 
+                <Badge
+                  variant="outline"
                   className={cn(
                     "text-xs px-2 py-0.5",
                     config.bg,
@@ -151,7 +151,7 @@ export function MemoryCard({ memory, onClick }: MemoryCardProps) {
             </div>
           </div>
         </CardHeader>
-        
+
         <CardContent className="pt-0 space-y-4 relative">
           {/* Content Preview */}
           <p className="text-xs text-[hsl(var(--command-text-muted))] line-clamp-4 leading-relaxed">
@@ -161,17 +161,17 @@ export function MemoryCard({ memory, onClick }: MemoryCardProps) {
           {/* Tags */}
           <div className="flex flex-wrap gap-1">
             {memory.tags.slice(0, 3).map((tag) => (
-              <Badge 
-                key={tag} 
-                variant="outline" 
+              <Badge
+                key={tag}
+                variant="outline"
                 className="text-xs px-2 py-0.5 bg-[hsl(var(--command-surface))]/50 border-[hsl(var(--command-border))]"
               >
                 #{tag}
               </Badge>
             ))}
             {memory.tags.length > 3 && (
-              <Badge 
-                variant="outline" 
+              <Badge
+                variant="outline"
                 className="text-xs px-2 py-0.5 bg-[hsl(var(--command-surface))]/50 border-[hsl(var(--command-border))] text-[hsl(var(--command-text-dim))]"
               >
                 +{memory.tags.length - 3}
@@ -191,7 +191,7 @@ export function MemoryCard({ memory, onClick }: MemoryCardProps) {
                 <span>{memory.wordCount}w</span>
               </div>
             </div>
-            
+
             <div className="flex items-center gap-1">
               <Tag className="h-3 w-3" />
               <span>{memory.tags.length}</span>

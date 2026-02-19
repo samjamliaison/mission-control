@@ -28,7 +28,7 @@ export const taskTemplates: TaskTemplate[] = [
 
 **Steps to Reproduce:**
 1. [Step 1]
-2. [Step 2] 
+2. [Step 2]
 3. [Step 3]
 
 **Expected Behavior:**
@@ -72,7 +72,7 @@ As a [user type], I want [functionality] so that [benefit].
 
 **Acceptance Criteria:**
 - [ ] Feature works as specified
-- [ ] UI/UX meets design requirements  
+- [ ] UI/UX meets design requirements
 - [ ] All edge cases handled
 - [ ] Tests written and passing
 - [ ] Documentation updated
@@ -105,7 +105,7 @@ As a [user type], I want [functionality] so that [benefit].
 
 **Methodology:**
 - [ ] Literature review
-- [ ] Competitor analysis  
+- [ ] Competitor analysis
 - [ ] Technical feasibility study
 - [ ] Proof of concept development
 - [ ] Expert interviews
@@ -142,7 +142,7 @@ As a [user type], I want [functionality] so that [benefit].
 
 **Content Goals:**
 - [ ] [Goal 1]
-- [ ] [Goal 2] 
+- [ ] [Goal 2]
 - [ ] [Goal 3]
 
 **Content Outline:**

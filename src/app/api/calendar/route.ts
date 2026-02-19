@@ -37,32 +37,32 @@ function parseNextRun(cronExpression: string): Date {
   // In production, you'd want to use a proper cron parser library
   const now = new Date();
   const nextRun = new Date(now.getTime() + 60 * 60 * 1000); // Default to 1 hour from now
-  
+
   try {
     const parts = cronExpression.split(' ');
     if (parts.length >= 5) {
       const [minute, hour, day, month, weekday] = parts;
-      
+
       // Handle specific hour/minute combinations
       if (hour !== '*' && minute !== '*') {
         const targetHour = parseInt(hour);
         const targetMinute = parseInt(minute);
-        
+
         const target = new Date();
         target.setHours(targetHour, targetMinute, 0, 0);
-        
+
         // If time has passed today, schedule for tomorrow
         if (target <= now) {
           target.setDate(target.getDate() + 1);
         }
-        
+
         return target;
       }
     }
   } catch (error) {
     console.warn('Failed to parse cron expression:', cronExpression);
   }
-  
+
   return nextRun;
 }
 
@@ -72,7 +72,7 @@ function cronToHuman(cronExpression: string): string {
     const parts = cronExpression.split(' ');
     if (parts.length >= 5) {
       const [minute, hour, day, month, weekday] = parts;
-      
+
       if (minute === '*' && hour === '*') return 'Every minute';
       if (minute !== '*' && hour !== '*' && day === '*' && month === '*' && weekday === '*') {
         return `Daily at ${hour.padStart(2, '0')}:${minute.padStart(2, '0')}`;
@@ -89,7 +89,7 @@ function cronToHuman(cronExpression: string): string {
   } catch (error) {
     console.warn('Failed to convert cron to human readable:', cronExpression);
   }
-  
+
   return cronExpression; // Fallback to raw expression
 }
 
@@ -105,17 +105,17 @@ async function readOpenClawConfig(): Promise<OpenClawConfig | null> {
 
 async function getCronEvents(): Promise<CalendarEvent[]> {
   const events: CalendarEvent[] = [];
-  
+
   try {
     const config = await readOpenClawConfig();
-    
+
     if (config?.cron?.jobs) {
       config.cron.jobs.forEach((job, index) => {
         const jobId = job.id || `job-${index}`;
         const schedule = job.schedule || '0 * * * *'; // Default hourly
         const nextRun = parseNextRun(schedule);
         const humanSchedule = cronToHuman(schedule);
-        
+
         events.push({
           id: `cron-${jobId}`,
           title: job.name || `Cron Job ${index + 1}`,
@@ -129,17 +129,17 @@ async function getCronEvents(): Promise<CalendarEvent[]> {
         });
       });
     }
-    
+
     // Add some known system events based on the MEMORY.md content
     const now = new Date();
-    
+
     // Daily email cron (from MEMORY.md: Daily cron: Email adam@bereceptive.ai re: Hamza's agreement, 9am Oslo, job ID ef307e3e)
     const dailyEmail = new Date();
     dailyEmail.setHours(9, 0, 0, 0); // 9 AM
     if (dailyEmail <= now) {
       dailyEmail.setDate(dailyEmail.getDate() + 1);
     }
-    
+
     events.push({
       id: 'daily-email-ef307e3e',
       title: 'Daily Agreement Email',
@@ -151,12 +151,12 @@ async function getCronEvents(): Promise<CalendarEvent[]> {
       priority: 'high',
       agent: 'main'
     });
-    
+
     // X/Twitter engagement tracking (from MEMORY.md: hourly browser check on tweets, job ID 7fdec22d)
     const nextTwitterCheck = new Date();
     nextTwitterCheck.setMinutes(0, 0, 0); // Top of the hour
     nextTwitterCheck.setHours(nextTwitterCheck.getHours() + 1);
-    
+
     events.push({
       id: 'twitter-engagement-7fdec22d',
       title: 'Twitter Engagement Check',
@@ -168,11 +168,11 @@ async function getCronEvents(): Promise<CalendarEvent[]> {
       priority: 'medium',
       agent: 'main'
     });
-    
+
   } catch (error) {
     console.error('Failed to read cron jobs:', error);
   }
-  
+
   return events;
 }
 
@@ -180,12 +180,12 @@ async function getCronEvents(): Promise<CalendarEvent[]> {
 function generateUpcomingEvents(): CalendarEvent[] {
   const events: CalendarEvent[] = [];
   const now = new Date();
-  
+
   // Weekly mission review
   const weeklyReview = new Date();
   weeklyReview.setDate(now.getDate() + (7 - now.getDay())); // Next Sunday
   weeklyReview.setHours(20, 0, 0, 0);
-  
+
   events.push({
     id: 'weekly-review',
     title: 'Weekly Mission Review',
@@ -196,12 +196,12 @@ function generateUpcomingEvents(): CalendarEvent[] {
     priority: 'high',
     agent: 'main'
   });
-  
+
   // System maintenance reminder
   const maintenance = new Date();
   maintenance.setDate(now.getDate() + 3);
   maintenance.setHours(2, 0, 0, 0); // 2 AM for low impact
-  
+
   events.push({
     id: 'system-maintenance',
     title: 'System Maintenance Window',
@@ -212,7 +212,7 @@ function generateUpcomingEvents(): CalendarEvent[] {
     priority: 'medium',
     agent: 'main'
   });
-  
+
   return events;
 }
 
@@ -222,12 +222,12 @@ export async function GET(request: NextRequest) {
       getCronEvents(),
       Promise.resolve(generateUpcomingEvents())
     ]);
-    
+
     const allEvents = [...cronEvents, ...upcomingEvents];
-    
+
     // Sort by start time
     allEvents.sort((a, b) => new Date(a.start).getTime() - new Date(b.start).getTime());
-    
+
     const response = {
       events: allEvents,
       meta: {
@@ -246,7 +246,7 @@ export async function GET(request: NextRequest) {
       },
       timestamp: new Date().toISOString()
     };
-    
+
     return NextResponse.json(response);
   } catch (error) {
     console.error('Calendar API Error:', error);

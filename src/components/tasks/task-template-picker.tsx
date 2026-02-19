@@ -13,12 +13,12 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { 
-  Search, 
-  X, 
-  Sparkles, 
-  Clock, 
-  User, 
+import {
+  Search,
+  X,
+  Sparkles,
+  Clock,
+  User,
   Tag,
   ChevronRight,
   FileText,
@@ -36,7 +36,7 @@ interface TaskTemplatePickerProps {
 const agentAvatars = {
   "Hamza": "👤",
   "Manus": "🤘",
-  "Monica": "✈️", 
+  "Monica": "✈️",
   "Jarvis": "🔍",
   "Luna": "🌙"
 }
@@ -50,7 +50,7 @@ export function TaskTemplatePicker({ open, onOpenChange, onSelectTemplate }: Tas
 
   // Filter templates based on search and category
   const filteredTemplates = taskTemplates.filter(template => {
-    const matchesSearch = !searchQuery || 
+    const matchesSearch = !searchQuery ||
       template.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       template.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
       template.tags?.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()))
@@ -98,13 +98,13 @@ export function TaskTemplatePicker({ open, onOpenChange, onSelectTemplate }: Tas
       <DialogContent className="sm:max-w-4xl max-h-[80vh] glass-morphism border-[hsl(var(--command-border-bright))] p-0 overflow-hidden">
         {/* Header with gradient */}
         <div className="relative p-6 pb-4 border-b border-[hsl(var(--command-border))]">
-          <div 
+          <div
             className="absolute inset-0 opacity-10"
             style={{
               background: "linear-gradient(135deg, hsl(var(--command-accent)) 0%, transparent 70%)"
             }}
           />
-          
+
           <DialogHeader className="relative">
             <div className="flex items-center gap-3 mb-2">
               <div className="p-2 glass-morphism rounded-lg">
@@ -160,7 +160,7 @@ export function TaskTemplatePicker({ open, onOpenChange, onSelectTemplate }: Tas
                   {category}
                 </Button>
               ))}
-              
+
               {(searchQuery || selectedCategory) && (
                 <Button
                   variant="ghost"
@@ -200,17 +200,17 @@ export function TaskTemplatePicker({ open, onOpenChange, onSelectTemplate }: Tas
                     hoveredTemplate === template.id && "border-[hsl(var(--command-accent))]/50 shadow-lg shadow-[hsl(var(--command-accent))]/10"
                   )}>
                     {/* Template Color Accent */}
-                    <div 
+                    <div
                       className="absolute top-0 left-0 right-0 h-1"
                       style={{ backgroundColor: template.color }}
                     />
-                    
+
                     <CardHeader className="pb-3">
                       <div className="flex items-start justify-between">
                         <div className="flex items-center gap-3">
-                          <div 
+                          <div
                             className="w-10 h-10 rounded-lg flex items-center justify-center text-lg backdrop-blur-sm border"
-                            style={{ 
+                            style={{
                               backgroundColor: `${template.color}15`,
                               borderColor: `${template.color}30`
                             }}
@@ -221,10 +221,10 @@ export function TaskTemplatePicker({ open, onOpenChange, onSelectTemplate }: Tas
                             <CardTitle className="text-base font-semibold">
                               {template.name}
                             </CardTitle>
-                            <Badge 
-                              variant="outline" 
+                            <Badge
+                              variant="outline"
                               className="text-xs mt-1"
-                              style={{ 
+                              style={{
                                 borderColor: `${template.color}50`,
                                 color: template.color
                               }}
@@ -241,12 +241,12 @@ export function TaskTemplatePicker({ open, onOpenChange, onSelectTemplate }: Tas
                         </motion.div>
                       </div>
                     </CardHeader>
-                    
+
                     <CardContent className="space-y-3">
                       <CardDescription className="text-sm text-[hsl(var(--command-text-muted))] leading-relaxed">
                         {template.description}
                       </CardDescription>
-                      
+
                       {/* Template Metadata */}
                       <div className="space-y-2">
                         {/* Priority & Duration */}
@@ -262,7 +262,7 @@ export function TaskTemplatePicker({ open, onOpenChange, onSelectTemplate }: Tas
                               {template.priority.charAt(0).toUpperCase() + template.priority.slice(1)} Priority
                             </span>
                           </div>
-                          
+
                           {template.estimatedDuration && (
                             <div className="flex items-center gap-1 text-[hsl(var(--command-text-muted))]">
                               <Clock className="h-3 w-3" />
@@ -270,7 +270,7 @@ export function TaskTemplatePicker({ open, onOpenChange, onSelectTemplate }: Tas
                             </div>
                           )}
                         </div>
-                        
+
                         {/* Suggested Assignee */}
                         {template.suggestedAssignee && (
                           <div className="flex items-center gap-2">
@@ -285,24 +285,24 @@ export function TaskTemplatePicker({ open, onOpenChange, onSelectTemplate }: Tas
                             </div>
                           </div>
                         )}
-                        
+
                         {/* Tags */}
                         {template.tags && template.tags.length > 0 && (
                           <div className="flex items-center gap-2 flex-wrap">
                             <Tag className="h-3 w-3 text-[hsl(var(--command-text-muted))]" />
                             <div className="flex gap-1 flex-wrap">
                               {template.tags.slice(0, 3).map((tag) => (
-                                <Badge 
-                                  key={tag} 
-                                  variant="outline" 
+                                <Badge
+                                  key={tag}
+                                  variant="outline"
                                   className="text-xs px-2 py-0 h-5 bg-[hsl(var(--command-surface))]/50"
                                 >
                                   {tag}
                                 </Badge>
                               ))}
                               {template.tags.length > 3 && (
-                                <Badge 
-                                  variant="outline" 
+                                <Badge
+                                  variant="outline"
                                   className="text-xs px-2 py-0 h-5 bg-[hsl(var(--command-surface))]/50 text-[hsl(var(--command-text-muted))]"
                                 >
                                   +{template.tags.length - 3}
@@ -345,8 +345,8 @@ export function TaskTemplatePicker({ open, onOpenChange, onSelectTemplate }: Tas
             <div className="text-sm text-[hsl(var(--command-text-muted))]">
               {filteredTemplates.length} template{filteredTemplates.length !== 1 ? 's' : ''} available
             </div>
-            <Button 
-              variant="ghost" 
+            <Button
+              variant="ghost"
               onClick={() => onOpenChange(false)}
               className="hover:bg-[hsl(var(--command-text-muted))]/10"
             >

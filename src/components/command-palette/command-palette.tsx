@@ -3,13 +3,13 @@
 import { useState, useEffect, useMemo } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { useRouter } from "next/navigation"
-import { 
+import {
   Dialog,
   DialogContent,
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
-import { 
+import {
   Command,
   Search,
   CheckSquare,
@@ -52,23 +52,23 @@ interface CommandPaletteProps {
 function fuzzyMatch(query: string, text: string): number {
   query = query.toLowerCase()
   text = text.toLowerCase()
-  
+
   if (text.includes(query)) return 100
-  
+
   let score = 0
   let queryIndex = 0
-  
+
   for (let i = 0; i < text.length && queryIndex < query.length; i++) {
     if (text[i] === query[queryIndex]) {
       score += (query.length - queryIndex) / query.length * 10
       queryIndex++
     }
   }
-  
+
   if (queryIndex === query.length) {
     score += 50
   }
-  
+
   return score
 }
 
@@ -339,9 +339,9 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
           item.subtitle || "",
           ...item.keywords
         ].join(" ")
-        
+
         const score = fuzzyMatch(query, searchText)
-        
+
         return { item, score }
       })
       .filter(({ score }) => score > 0)
@@ -436,15 +436,15 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
                 {filteredItems.map((item, index) => {
                   const IconComponent = item.icon
                   const isSelected = index === selectedIndex
-                  
+
                   return (
                     <motion.div
                       key={item.id}
                       id={item.id}
                       className={cn(
                         "flex items-center gap-3 p-3 rounded-lg cursor-pointer transition-colors",
-                        isSelected 
-                          ? "bg-[hsl(var(--command-accent))]/10 border border-[hsl(var(--command-accent))]/20" 
+                        isSelected
+                          ? "bg-[hsl(var(--command-accent))]/10 border border-[hsl(var(--command-accent))]/20"
                           : "hover:bg-[hsl(var(--command-surface))]/30"
                       )}
                       onClick={item.action}
@@ -461,7 +461,7 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
                       )}>
                         <IconComponent className="h-4 w-4" />
                       </div>
-                      
+
                       <div className="flex-1 min-w-0">
                         <div className="font-medium truncate">{item.title}</div>
                         {item.subtitle && (
@@ -470,7 +470,7 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
                           </div>
                         )}
                       </div>
-                      
+
                       <div className="flex items-center gap-2">
                         <Badge variant="outline" className="text-xs capitalize">
                           {item.type}

@@ -16,17 +16,17 @@ vi.mock('framer-motion', () => ({
 // Mock react-beautiful-dnd
 vi.mock('@hello-pangea/dnd', () => ({
   DragDropContext: ({ children }: any) => <div>{children}</div>,
-  Droppable: ({ children }: any) => 
-    children({ 
-      innerRef: vi.fn(), 
-      droppableProps: {}, 
-      placeholder: null 
+  Droppable: ({ children }: any) =>
+    children({
+      innerRef: vi.fn(),
+      droppableProps: {},
+      placeholder: null
     }),
-  Draggable: ({ children }: any) => 
-    children({ 
-      innerRef: vi.fn(), 
-      draggableProps: {}, 
-      dragHandleProps: {} 
+  Draggable: ({ children }: any) =>
+    children({
+      innerRef: vi.fn(),
+      draggableProps: {},
+      dragHandleProps: {}
     }, { isDragging: false }),
 }))
 
@@ -42,7 +42,7 @@ vi.mock('../task-column', () => ({
 
 // Mock add task dialog
 vi.mock('../add-task-dialog', () => ({
-  AddTaskDialog: ({ open, onSave }: any) => 
+  AddTaskDialog: ({ open, onSave }: any) =>
     open ? (
       <div data-testid="add-task-dialog">
         <button onClick={() => onSave({ title: 'New Task', assignee: 'Test', priority: 'low' })}>
@@ -55,14 +55,14 @@ vi.mock('../add-task-dialog', () => ({
 describe('TasksBoard', () => {
   it('renders mission control header', () => {
     render(<TasksBoard />)
-    
+
     expect(screen.getByText('Mission Control')).toBeInTheDocument()
     expect(screen.getByText(/Advanced task orchestration system/)).toBeInTheDocument()
   })
 
   it('renders all three task columns', () => {
     render(<TasksBoard />)
-    
+
     expect(screen.getByTestId('column-todo')).toBeInTheDocument()
     expect(screen.getByTestId('column-in-progress')).toBeInTheDocument()
     expect(screen.getByTestId('column-done')).toBeInTheDocument()
@@ -70,17 +70,17 @@ describe('TasksBoard', () => {
 
   it('shows deploy task button', () => {
     render(<TasksBoard />)
-    
+
     const deployButton = screen.getByText('Deploy Task')
     expect(deployButton).toBeInTheDocument()
   })
 
   it('opens add task dialog when deploy button is clicked', async () => {
     render(<TasksBoard />)
-    
+
     const deployButton = screen.getByText('Deploy Task')
     fireEvent.click(deployButton)
-    
+
     await waitFor(() => {
       expect(screen.getByTestId('add-task-dialog')).toBeInTheDocument()
     })
@@ -88,11 +88,11 @@ describe('TasksBoard', () => {
 
   it('displays mission progress statistics', () => {
     render(<TasksBoard />)
-    
+
     // Check for progress percentage (should be visible)
     const progressElements = screen.getAllByText(/\d+%/)
     expect(progressElements.length).toBeGreaterThan(0)
-    
+
     // Check for completion stats
     const completeElements = screen.getAllByText(/Complete/)
     expect(completeElements.length).toBeGreaterThan(0)
@@ -102,7 +102,7 @@ describe('TasksBoard', () => {
 
   it('filters tasks by assignee', async () => {
     render(<TasksBoard />)
-    
+
     // Find the assignee filter dropdown
     const filterSelect = screen.getByRole('combobox')
     expect(filterSelect).toBeInTheDocument()
@@ -110,7 +110,7 @@ describe('TasksBoard', () => {
 
   it('shows agent status indicators', () => {
     render(<TasksBoard />)
-    
+
     // Check for agent avatars
     expect(screen.getByText('👤')).toBeInTheDocument() // Hamza
     expect(screen.getByText('🤘')).toBeInTheDocument() // Manus
@@ -121,7 +121,7 @@ describe('TasksBoard', () => {
 
   it('calculates completion rate correctly', () => {
     render(<TasksBoard />)
-    
+
     // Should show a percentage for completion rate
     const percentageElements = screen.getAllByText(/\d+%/)
     expect(percentageElements.length).toBeGreaterThan(0)

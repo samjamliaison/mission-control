@@ -1,21 +1,21 @@
 "use client"
 
 import { motion, AnimatePresence } from "framer-motion"
-import { 
-  Dialog, 
-  DialogContent, 
-  DialogDescription, 
-  DialogHeader, 
-  DialogTitle 
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle
 } from "@/components/ui/dialog"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { 
-  Keyboard, 
-  Zap, 
-  Navigation, 
-  Command, 
-  X, 
+import {
+  Keyboard,
+  Zap,
+  Navigation,
+  Command,
+  X,
   Hash,
   ArrowRight,
   Search,
@@ -67,19 +67,19 @@ const itemVariants = {
   }
 }
 
-function KeyBadge({ 
-  keyStr, 
-  modifier, 
-  sequence = false, 
-  isPending = false 
-}: { 
+function KeyBadge({
+  keyStr,
+  modifier,
+  sequence = false,
+  isPending = false
+}: {
   keyStr: string | string[]
   modifier?: string
   sequence?: boolean
   isPending?: boolean
 }) {
   const keys = Array.isArray(keyStr) ? keyStr : [keyStr]
-  
+
   const formatKey = (key: string) => {
     const keyMap: Record<string, string> = {
       'cmd': '⌘',
@@ -100,8 +100,8 @@ function KeyBadge({
     <div className="flex items-center gap-1">
       {modifier && (
         <>
-          <Badge 
-            variant="outline" 
+          <Badge
+            variant="outline"
             className="px-2 py-1 text-xs font-mono bg-[hsl(var(--command-surface))] border-[hsl(var(--command-border))]"
           >
             {formatKey(modifier)}
@@ -109,14 +109,14 @@ function KeyBadge({
           <span className="text-[hsl(var(--command-text-muted))] text-sm">+</span>
         </>
       )}
-      
+
       {sequence && keys.length > 1 ? (
         <div className="flex items-center gap-1">
-          <Badge 
-            variant="outline" 
+          <Badge
+            variant="outline"
             className={cn(
               "px-2 py-1 text-xs font-mono",
-              isPending && keys[0] === 'g' 
+              isPending && keys[0] === 'g'
                 ? "bg-[hsl(var(--command-accent))]/20 border-[hsl(var(--command-accent))]/40 text-[hsl(var(--command-accent))]"
                 : "bg-[hsl(var(--command-surface))] border-[hsl(var(--command-border))]"
             )}
@@ -124,8 +124,8 @@ function KeyBadge({
             {formatKey(keys[0])}
           </Badge>
           <ArrowRight className="h-3 w-3 text-[hsl(var(--command-text-muted))]" />
-          <Badge 
-            variant="outline" 
+          <Badge
+            variant="outline"
             className="px-2 py-1 text-xs font-mono bg-[hsl(var(--command-surface))] border-[hsl(var(--command-border))]"
           >
             {formatKey(keys[1])}
@@ -133,9 +133,9 @@ function KeyBadge({
         </div>
       ) : (
         keys.map((key, index) => (
-          <Badge 
+          <Badge
             key={index}
-            variant="outline" 
+            variant="outline"
             className="px-2 py-1 text-xs font-mono bg-[hsl(var(--command-surface))] border-[hsl(var(--command-border))]"
           >
             {formatKey(key)}
@@ -146,13 +146,13 @@ function KeyBadge({
   )
 }
 
-export function ShortcutsHelpModal({ 
-  open, 
-  onOpenChange, 
-  shortcuts, 
-  pendingSequence 
+export function ShortcutsHelpModal({
+  open,
+  onOpenChange,
+  shortcuts,
+  pendingSequence
 }: ShortcutsHelpModalProps) {
-  
+
   const categorizedShortcuts = shortcuts.reduce((acc, shortcut) => {
     if (!acc[shortcut.category]) {
       acc[shortcut.category] = []
@@ -168,13 +168,13 @@ export function ShortcutsHelpModal({
       <DialogContent className="max-w-4xl max-h-[80vh] overflow-hidden glass-morphism border-[hsl(var(--command-border-bright))] p-0">
         {/* Header */}
         <div className="relative p-6 pb-4 border-b border-[hsl(var(--command-border))]">
-          <div 
+          <div
             className="absolute inset-0 opacity-10"
             style={{
               background: "linear-gradient(135deg, hsl(var(--command-accent)) 0%, transparent 50%)"
             }}
           />
-          
+
           <DialogHeader className="relative">
             <div className="flex items-center gap-3 mb-2">
               <div className="p-2 glass-morphism rounded-lg">
@@ -187,7 +187,7 @@ export function ShortcutsHelpModal({
             <DialogDescription className="text-[hsl(var(--command-text-muted))]">
               Master Mission Control with these keyboard shortcuts. Press <Badge variant="outline" className="px-1 py-0.5 text-xs">?</Badge> anytime to open this help.
             </DialogDescription>
-            
+
             {/* Pending sequence indicator */}
             <AnimatePresence>
               {pendingSequence && (
@@ -223,10 +223,10 @@ export function ShortcutsHelpModal({
             {categoryOrder.map((categoryKey) => {
               const category = categorizedShortcuts[categoryKey]
               if (!category) return null
-              
+
               const Icon = categoryIcons[categoryKey]
               const colorClass = categoryColors[categoryKey]
-              
+
               return (
                 <motion.div key={categoryKey} variants={itemVariants}>
                   <Card className="glass-morphism border-[hsl(var(--command-border))] h-full">
@@ -236,7 +236,7 @@ export function ShortcutsHelpModal({
                           <Icon className="h-4 w-4" />
                         </div>
                         <span className="capitalize font-semibold">
-                          {categoryKey === 'global' ? 'Global' : 
+                          {categoryKey === 'global' ? 'Global' :
                            categoryKey === 'navigation' ? 'Navigation' :
                            categoryKey === 'actions' ? 'Actions' : 'Modals'}
                         </span>
@@ -257,13 +257,13 @@ export function ShortcutsHelpModal({
                               {shortcut.description}
                             </p>
                           </div>
-                          <KeyBadge 
+                          <KeyBadge
                             keyStr={shortcut.key}
                             modifier={shortcut.modifier}
                             sequence={shortcut.sequence}
                             isPending={
-                              shortcut.sequence && 
-                              Array.isArray(shortcut.key) && 
+                              shortcut.sequence &&
+                              Array.isArray(shortcut.key) &&
                               shortcut.key[0] === pendingSequence
                             }
                           />

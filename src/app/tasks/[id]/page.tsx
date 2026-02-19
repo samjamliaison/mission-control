@@ -48,11 +48,11 @@ export default function TaskDetailPage() {
     try {
       const storedComments = localStorage.getItem(`task-comments-${taskId}`)
       const storedSubtasks = localStorage.getItem(`task-subtasks-${taskId}`)
-      
+
       if (storedComments) {
         setComments(JSON.parse(storedComments))
       }
-      
+
       if (storedSubtasks) {
         setSubtasks(JSON.parse(storedSubtasks))
       }
@@ -75,26 +75,26 @@ export default function TaskDetailPage() {
 
   const handleAddComment = () => {
     if (!newComment.trim()) return
-    
+
     const comment: Comment = {
       id: `comment-${Date.now()}`,
       text: newComment.trim(),
       timestamp: Date.now()
     }
-    
+
     saveComments([...comments, comment])
     setNewComment("")
   }
 
   const handleAddSubtask = () => {
     if (!newSubtask.trim()) return
-    
+
     const subtask: Subtask = {
       id: `subtask-${Date.now()}`,
       text: newSubtask.trim(),
       completed: false
     }
-    
+
     saveSubtasks([...subtasks, subtask])
     setNewSubtask("")
   }
@@ -158,7 +158,7 @@ export default function TaskDetailPage() {
                     {task.status || 'Unknown'}
                   </p>
                 </div>
-                
+
                 <div>
                   <label className="text-body-small font-semibold text-white/70">Priority</label>
                   <p className="text-body text-white/90 mt-1 capitalize">
@@ -207,7 +207,7 @@ export default function TaskDetailPage() {
             {comments.length}
           </span>
         </div>
-        
+
         {/* Add Comment */}
         <div className="space-y-3 mb-6">
           <Textarea
@@ -304,8 +304,8 @@ export default function TaskDetailPage() {
                   className="h-4 w-4"
                 />
                 <span className={`flex-1 text-body ${
-                  subtask.completed 
-                    ? 'text-white/60 line-through' 
+                  subtask.completed
+                    ? 'text-white/60 line-through'
                     : 'text-white/90'
                 }`}>
                   {subtask.text}
@@ -334,8 +334,8 @@ export default function TaskDetailPage() {
               <motion.div
                 className="h-full bg-gradient-to-r from-[hsl(var(--command-accent))] to-[hsl(var(--command-success))]"
                 initial={{ width: 0 }}
-                animate={{ 
-                  width: `${(subtasks.filter(st => st.completed).length / subtasks.length) * 100}%` 
+                animate={{
+                  width: `${(subtasks.filter(st => st.completed).length / subtasks.length) * 100}%`
                 }}
                 transition={{ duration: 0.5 }}
               />

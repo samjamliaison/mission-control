@@ -55,7 +55,7 @@ export function useKeyboardShortcuts() {
       key: 'Escape',
       bubbles: true
     })
-    
+
     // Try to close via close buttons first
     if (closeButtons.length > 0) {
       ;(closeButtons[0] as HTMLElement).click()
@@ -63,7 +63,7 @@ export function useKeyboardShortcuts() {
       // If no close buttons, dispatch escape event to document
       document.dispatchEvent(escapeEvent)
     }
-    
+
     logActivity({
       actionType: 'command_executed',
       details: 'Closed modals via Escape key',
@@ -281,10 +281,10 @@ export function useKeyboardShortcuts() {
       }
 
       // Find matching sequence
-      const sequenceShortcut = shortcuts.find(s => 
-        s.sequence && 
-        Array.isArray(s.key) && 
-        s.key[0] === pendingSequence && 
+      const sequenceShortcut = shortcuts.find(s =>
+        s.sequence &&
+        Array.isArray(s.key) &&
+        s.key[0] === pendingSequence &&
         s.key[1] === key
       )
 
@@ -303,7 +303,7 @@ export function useKeyboardShortcuts() {
     if (key === 'g' && !isCmd && !isShift && !isAlt) {
       event.preventDefault()
       setPendingSequence('g')
-      
+
       // Clear sequence after 2 seconds
       const timeout = setTimeout(() => {
         setPendingSequence(null)
@@ -317,7 +317,7 @@ export function useKeyboardShortcuts() {
       if (shortcut.sequence) continue // Skip sequence shortcuts
 
       const shortcutKey = Array.isArray(shortcut.key) ? shortcut.key[0] : shortcut.key
-      
+
       // Check key match
       if (shortcutKey !== key) continue
 

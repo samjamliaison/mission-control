@@ -29,10 +29,10 @@ interface ToastProviderProps {
   maxToasts?: number
 }
 
-export function ToastProvider({ 
-  children, 
-  defaultDuration = 3000, 
-  maxToasts = 5 
+export function ToastProvider({
+  children,
+  defaultDuration = 3000,
+  maxToasts = 5
 }: ToastProviderProps) {
   const [toasts, setToasts] = useState<Toast[]>([])
 

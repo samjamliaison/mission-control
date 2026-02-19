@@ -9,11 +9,11 @@ interface MiniSparklineProps {
   animate?: boolean
 }
 
-export function MiniSparkline({ 
-  data, 
-  className, 
+export function MiniSparkline({
+  data,
+  className,
   color = "currentColor",
-  animate = true 
+  animate = true
 }: MiniSparklineProps) {
   if (!data || data.length === 0) return null
 
@@ -51,13 +51,13 @@ export function generateTrendData(baseValue: number, variance = 0.3): number[] {
   const days = 7
   const data: number[] = []
   let current = baseValue
-  
+
   for (let i = 0; i < days; i++) {
     // Add some random variation
     const change = (Math.random() - 0.5) * 2 * variance * baseValue
     current = Math.max(0, current + change)
     data.push(Math.round(current))
   }
-  
+
   return data
 }

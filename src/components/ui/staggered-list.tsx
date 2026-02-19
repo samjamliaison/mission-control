@@ -10,8 +10,8 @@ interface StaggeredListProps {
   direction?: "up" | "down" | "left" | "right"
 }
 
-export function StaggeredList({ 
-  children, 
+export function StaggeredList({
+  children,
   className = "",
   staggerDelay = 0.05,
   direction = "up"

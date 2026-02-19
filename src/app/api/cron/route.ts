@@ -41,14 +41,14 @@ function getNextRunTime(schedule: string): number {
   const minute = 60 * 1000
   const hour = 60 * minute
   const day = 24 * hour
-  
+
   // Handle common patterns
   if (schedule.includes('*/5 * * * *')) return now + (5 * minute) // Every 5 minutes
   if (schedule.includes('0 * * * *')) return now + hour // Every hour
   if (schedule.includes('0 0 * * *')) return now + day // Daily at midnight
   if (schedule.includes('*/15 * * * *')) return now + (15 * minute) // Every 15 minutes
   if (schedule.includes('*/30 * * * *')) return now + (30 * minute) // Every 30 minutes
-  
+
   // Default to next hour if we can't parse
   return now + hour
 }
@@ -66,9 +66,9 @@ async function readOpenClawConfig(): Promise<OpenClawConfig | null> {
 export async function GET(request: NextRequest) {
   try {
     const config = await readOpenClawConfig()
-    
+
     const jobs: CronJob[] = []
-    
+
     if (config?.cron?.jobs) {
       config.cron.jobs.forEach((jobConfig, index) => {
         const job: CronJob = {
@@ -86,11 +86,11 @@ export async function GET(request: NextRequest) {
           lastRun: Date.now() - (Math.random() * 24 * 60 * 60 * 1000), // Random time within last 24 hours
           nextRun: getNextRunTime(jobConfig.schedule)
         }
-        
+
         jobs.push(job)
       })
     }
-    
+
     // Add some example system cron jobs if none are configured
     if (jobs.length === 0) {
       const exampleJobs: CronJob[] = [
@@ -140,13 +140,13 @@ export async function GET(request: NextRequest) {
           nextRun: Date.now() + (7 * 24 * 60 * 60 * 1000)
         }
       ]
-      
+
       jobs.push(...exampleJobs)
     }
-    
+
     // Sort by next run time
     jobs.sort((a, b) => (a.nextRun || 0) - (b.nextRun || 0))
-    
+
     const response = {
       jobs,
       meta: {
@@ -161,14 +161,14 @@ export async function GET(request: NextRequest) {
       },
       timestamp: new Date().toISOString()
     }
-    
+
     return NextResponse.json(response)
   } catch (error) {
     console.error('Cron API Error:', error)
     return NextResponse.json(
-      { 
-        error: 'Failed to fetch cron jobs', 
-        details: error instanceof Error ? error.message : 'Unknown error' 
+      {
+        error: 'Failed to fetch cron jobs',
+        details: error instanceof Error ? error.message : 'Unknown error'
       },
       { status: 500 }
     )

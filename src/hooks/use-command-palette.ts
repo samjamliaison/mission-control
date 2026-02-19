@@ -12,7 +12,7 @@ export function useCommandPalette() {
         e.preventDefault()
         setOpen((open) => !open)
       }
-      
+
       // Escape to close
       if (e.key === "Escape" && open) {
         setOpen(false)

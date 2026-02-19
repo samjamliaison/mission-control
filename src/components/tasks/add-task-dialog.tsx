@@ -44,14 +44,14 @@ const priorityOptions = [
 const agentAvatars = {
   "Hamza": "👤",
   "Manus": "🤘",
-  "Monica": "✈️", 
+  "Monica": "✈️",
   "Jarvis": "🔍",
   "Luna": "🌙"
 }
 
 const agentDescriptions = {
   "Hamza": "Mission Commander",
-  "Manus": "Systems Engineer", 
+  "Manus": "Systems Engineer",
   "Monica": "Flight Operations",
   "Jarvis": "Intelligence Analytics",
   "Luna": "Navigation Specialist"
@@ -101,10 +101,10 @@ export function AddTaskDialog({ open, onOpenChange, onSave, editingTask }: AddTa
       }
     }
   }, [open, editingTask])
-  
+
   const handleSave = () => {
     if (!title.trim() || !assignee) return
-    
+
     const taskData = {
       ...(editingTask && { _id: editingTask._id }),
       title: title.trim(),
@@ -113,7 +113,7 @@ export function AddTaskDialog({ open, onOpenChange, onSave, editingTask }: AddTa
       priority,
       ...(dueDate && { dueDate: new Date(dueDate).getTime() }),
     }
-    
+
     // Log the activity
     const action = editingTask ? 'updated' : 'created'
     logTaskAction(
@@ -121,38 +121,38 @@ export function AddTaskDialog({ open, onOpenChange, onSave, editingTask }: AddTa
       title.trim(),
       assignee,
       editingTask?._id || 'new',
-      { 
-        priority, 
+      {
+        priority,
         hasDescription: !!description.trim(),
-        editedFields: editingTask ? Object.keys(taskData).filter(key => 
+        editedFields: editingTask ? Object.keys(taskData).filter(key =>
           editingTask[key as keyof Task] !== taskData[key as keyof typeof taskData]
         ) : undefined
       }
     )
-    
+
     onSave(taskData)
     onOpenChange(false)
   }
-  
+
   const handleCancel = () => {
     onOpenChange(false)
   }
 
   const isFormValid = title.trim() && assignee
   const selectedPriority = priorityOptions.find(p => p.value === priority)
-  
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[500px] glass-morphism border-[hsl(var(--command-border-bright))] p-0 overflow-hidden">
         {/* Header with gradient */}
         <div className="relative p-6 pb-4">
-          <div 
+          <div
             className="absolute inset-0 opacity-10"
             style={{
               background: "linear-gradient(135deg, hsl(var(--command-accent)) 0%, transparent 50%)"
             }}
           />
-          
+
           <DialogHeader className="relative">
             <div className="flex items-center gap-3 mb-2">
               <div className="p-2 glass-morphism rounded-lg">
@@ -163,18 +163,18 @@ export function AddTaskDialog({ open, onOpenChange, onSave, editingTask }: AddTa
               </DialogTitle>
             </div>
             <DialogDescription className="text-[hsl(var(--command-text-muted))]">
-              {editingTask 
-                ? "Update the mission parameters and agent assignments." 
+              {editingTask
+                ? "Update the mission parameters and agent assignments."
                 : "Configure a new operation for the command center."
               }
             </DialogDescription>
           </DialogHeader>
         </div>
-        
+
         <div className="px-6 pb-6 space-y-6">
           {/* Template Selection */}
           {!editingTask && (
-            <motion.div 
+            <motion.div
               className="space-y-3"
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
@@ -205,9 +205,9 @@ export function AddTaskDialog({ open, onOpenChange, onSave, editingTask }: AddTa
                 >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
-                      <div 
+                      <div
                         className="w-8 h-8 rounded-lg flex items-center justify-center text-sm"
-                        style={{ 
+                        style={{
                           backgroundColor: `${selectedTemplate?.color}15`,
                           border: `1px solid ${selectedTemplate?.color}30`
                         }}
@@ -252,7 +252,7 @@ export function AddTaskDialog({ open, onOpenChange, onSave, editingTask }: AddTa
               )}
             </motion.div>
           )}
-          
+
           {/* Divider */}
           {!editingTask && templateUsed && (
             <div className="flex items-center gap-4">
@@ -264,7 +264,7 @@ export function AddTaskDialog({ open, onOpenChange, onSave, editingTask }: AddTa
             </div>
           )}
           {/* Mission Title */}
-          <motion.div 
+          <motion.div
             className="space-y-2"
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
@@ -282,9 +282,9 @@ export function AddTaskDialog({ open, onOpenChange, onSave, editingTask }: AddTa
               className="glass-morphism border-[hsl(var(--command-border))] focus:ring-1 focus:ring-[hsl(var(--command-accent))] font-medium"
             />
           </motion.div>
-          
+
           {/* Mission Brief */}
-          <motion.div 
+          <motion.div
             className="space-y-2"
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
@@ -302,10 +302,10 @@ export function AddTaskDialog({ open, onOpenChange, onSave, editingTask }: AddTa
               className="glass-morphism border-[hsl(var(--command-border))] focus:ring-1 focus:ring-[hsl(var(--command-accent))] resize-none"
             />
           </motion.div>
-          
+
           <div className="grid grid-cols-3 gap-4">
             {/* Agent Assignment */}
-            <motion.div 
+            <motion.div
               className="space-y-2"
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
@@ -343,9 +343,9 @@ export function AddTaskDialog({ open, onOpenChange, onSave, editingTask }: AddTa
                 </SelectContent>
               </Select>
             </motion.div>
-            
+
             {/* Priority Level */}
-            <motion.div 
+            <motion.div
               className="space-y-2"
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
@@ -378,9 +378,9 @@ export function AddTaskDialog({ open, onOpenChange, onSave, editingTask }: AddTa
                 </SelectContent>
               </Select>
             </motion.div>
-            
+
             {/* Due Date */}
-            <motion.div 
+            <motion.div
               className="space-y-2"
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
@@ -398,7 +398,7 @@ export function AddTaskDialog({ open, onOpenChange, onSave, editingTask }: AddTa
               />
             </motion.div>
           </div>
-          
+
           {/* Preview Badge */}
           {assignee && (
             <motion.div
@@ -409,8 +409,8 @@ export function AddTaskDialog({ open, onOpenChange, onSave, editingTask }: AddTa
             >
               <div className="text-center space-y-2">
                 <div className="text-xs text-[hsl(var(--command-text-muted))] font-medium">Mission Preview</div>
-                <Badge 
-                  variant="outline" 
+                <Badge
+                  variant="outline"
                   className="bg-[hsl(var(--command-accent))]/10 text-[hsl(var(--command-accent))] border-[hsl(var(--command-accent))]/20 text-sm px-3 py-1"
                 >
                   {agentAvatars[assignee as keyof typeof agentAvatars]} {assignee} • {priority.toUpperCase()}
@@ -419,12 +419,12 @@ export function AddTaskDialog({ open, onOpenChange, onSave, editingTask }: AddTa
             </motion.div>
           )}
         </div>
-        
+
         {/* Action Buttons */}
         <div className="px-6 py-4 bg-[hsl(var(--command-surface))]/50 backdrop-blur border-t border-[hsl(var(--command-border))]">
           <div className="flex justify-end gap-3">
-            <Button 
-              variant="ghost" 
+            <Button
+              variant="ghost"
               onClick={handleCancel}
               className="hover:bg-[hsl(var(--command-text-muted))]/10"
             >
@@ -435,13 +435,13 @@ export function AddTaskDialog({ open, onOpenChange, onSave, editingTask }: AddTa
               whileHover={{ scale: isFormValid ? 1.02 : 1 }}
               whileTap={{ scale: isFormValid ? 0.98 : 1 }}
             >
-              <Button 
+              <Button
                 onClick={handleSave}
                 disabled={!isFormValid}
                 className={cn(
                   "font-semibold px-6",
-                  isFormValid 
-                    ? "bg-gradient-to-r from-[hsl(var(--command-accent))] to-[hsl(199_89%_38%)] hover:from-[hsl(199_89%_58%)] hover:to-[hsl(var(--command-accent))] shadow-lg shadow-[hsl(var(--command-accent))]/20" 
+                  isFormValid
+                    ? "bg-gradient-to-r from-[hsl(var(--command-accent))] to-[hsl(199_89%_38%)] hover:from-[hsl(199_89%_58%)] hover:to-[hsl(var(--command-accent))] shadow-lg shadow-[hsl(var(--command-accent))]/20"
                     : "opacity-50 cursor-not-allowed"
                 )}
               >
@@ -451,7 +451,7 @@ export function AddTaskDialog({ open, onOpenChange, onSave, editingTask }: AddTa
             </motion.div>
           </div>
         </div>
-        
+
         {/* Template Picker Modal */}
         <TaskTemplatePicker
           open={showTemplatePicker}

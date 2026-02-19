@@ -10,7 +10,7 @@ export function exportTasksAsCSV(tasks: Task[]): string {
   const headers = [
     'ID',
     'Title',
-    'Description', 
+    'Description',
     'Assignee',
     'Status',
     'Priority',
@@ -20,7 +20,7 @@ export function exportTasksAsCSV(tasks: Task[]): string {
   ]
 
   const csvRows = [headers.join(',')]
-  
+
   tasks.forEach(task => {
     const row = [
       task._id,
@@ -35,7 +35,7 @@ export function exportTasksAsCSV(tasks: Task[]): string {
     ]
     csvRows.push(row.join(','))
   })
-  
+
   return csvRows.join('\n')
 }
 
@@ -52,7 +52,7 @@ export function exportTasksAsJSON(tasks: Task[]): string {
       dueDate: task.dueDate ? new Date(task.dueDate).toISOString() : null
     }))
   }
-  
+
   return JSON.stringify(exportData, null, 2)
 }
 
@@ -72,7 +72,7 @@ export function exportPipelineAsJSON(content: ContentItem[]): string {
       updatedAt: new Date(item.updatedAt).toISOString()
     }))
   }
-  
+
   return JSON.stringify(exportData, null, 2)
 }
 
@@ -80,13 +80,13 @@ export function exportPipelineAsJSON(content: ContentItem[]): string {
 export function downloadFile(content: string, filename: string, mimeType: string = 'text/plain') {
   const blob = new Blob([content], { type: mimeType })
   const url = URL.createObjectURL(blob)
-  
+
   const link = document.createElement('a')
   link.href = url
   link.download = filename
   document.body.appendChild(link)
   link.click()
-  
+
   // Cleanup
   document.body.removeChild(link)
   URL.revokeObjectURL(url)

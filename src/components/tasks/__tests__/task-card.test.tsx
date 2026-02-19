@@ -11,11 +11,11 @@ vi.mock('framer-motion', () => ({
 
 // Mock react-beautiful-dnd
 vi.mock('@hello-pangea/dnd', () => ({
-  Draggable: ({ children }: { children: any }) => 
-    children({ 
-      innerRef: vi.fn(), 
-      draggableProps: {}, 
-      dragHandleProps: {} 
+  Draggable: ({ children }: { children: any }) =>
+    children({
+      innerRef: vi.fn(),
+      draggableProps: {},
+      dragHandleProps: {}
     }, { isDragging: false }),
 }))
 
@@ -36,11 +36,11 @@ describe('TaskCard', () => {
     const onDelete = vi.fn()
 
     render(
-      <TaskCard 
-        task={mockTask} 
-        index={0} 
-        onEdit={onEdit} 
-        onDelete={onDelete} 
+      <TaskCard
+        task={mockTask}
+        index={0}
+        onEdit={onEdit}
+        onDelete={onDelete}
       />
     )
 
@@ -55,25 +55,25 @@ describe('TaskCard', () => {
     const onDelete = vi.fn()
 
     render(
-      <TaskCard 
-        task={mockTask} 
-        index={0} 
-        onEdit={onEdit} 
-        onDelete={onDelete} 
+      <TaskCard
+        task={mockTask}
+        index={0}
+        onEdit={onEdit}
+        onDelete={onDelete}
       />
     )
 
     // Hover over card to show buttons
-    const card = screen.getByText('Test Task').closest('[data-testid="task-card"]') || 
+    const card = screen.getByText('Test Task').closest('[data-testid="task-card"]') ||
                 screen.getByText('Test Task').closest('div')
-    
+
     if (card) {
       fireEvent.mouseEnter(card)
     }
 
     // Find and click edit button
     const editButtons = screen.getAllByRole('button')
-    const editButton = editButtons.find(button => 
+    const editButton = editButtons.find(button =>
       button.querySelector('svg') !== null
     )
 
@@ -88,11 +88,11 @@ describe('TaskCard', () => {
     const onDelete = vi.fn()
 
     render(
-      <TaskCard 
-        task={mockTask} 
-        index={0} 
-        onEdit={onEdit} 
-        onDelete={onDelete} 
+      <TaskCard
+        task={mockTask}
+        index={0}
+        onEdit={onEdit}
+        onDelete={onDelete}
       />
     )
 
@@ -105,11 +105,11 @@ describe('TaskCard', () => {
     const onDelete = vi.fn()
 
     render(
-      <TaskCard 
-        task={mockTask} 
-        index={0} 
-        onEdit={onEdit} 
-        onDelete={onDelete} 
+      <TaskCard
+        task={mockTask}
+        index={0}
+        onEdit={onEdit}
+        onDelete={onDelete}
       />
     )
 
@@ -123,11 +123,11 @@ describe('TaskCard', () => {
     const onDelete = vi.fn()
 
     render(
-      <TaskCard 
-        task={completedTask} 
-        index={0} 
-        onEdit={onEdit} 
-        onDelete={onDelete} 
+      <TaskCard
+        task={completedTask}
+        index={0}
+        onEdit={onEdit}
+        onDelete={onDelete}
       />
     )
 
@@ -139,11 +139,11 @@ describe('TaskCard', () => {
     const onDelete = vi.fn()
 
     render(
-      <TaskCard 
-        task={mockTask} 
-        index={0} 
-        onEdit={onEdit} 
-        onDelete={onDelete} 
+      <TaskCard
+        task={mockTask}
+        index={0}
+        onEdit={onEdit}
+        onDelete={onDelete}
       />
     )
 

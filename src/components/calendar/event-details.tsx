@@ -9,9 +9,9 @@ import {
 } from "@/components/ui/dialog"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { 
+import {
   Calendar,
-  Clock, 
+  Clock,
   User,
   Repeat,
   CheckCircle,
@@ -51,7 +51,7 @@ const agentAvatars = {
   "Hamza": "👤",
   "Manus": "🤘",
   "Monica": "✈️",
-  "Jarvis": "🔍", 
+  "Jarvis": "🔍",
   "Luna": "🌙"
 }
 
@@ -64,7 +64,7 @@ const agentColors = {
   },
   "Manus": {
     bg: "bg-purple-500/10",
-    text: "text-purple-400", 
+    text: "text-purple-400",
     border: "border-purple-500/20",
     glow: "0 0 15px hsl(270 70% 50% / 0.3)"
   },
@@ -77,7 +77,7 @@ const agentColors = {
   "Jarvis": {
     bg: "bg-indigo-500/10",
     text: "text-indigo-400",
-    border: "border-indigo-500/20", 
+    border: "border-indigo-500/20",
     glow: "0 0 15px hsl(240 70% 60% / 0.3)"
   },
   "Luna": {
@@ -106,11 +106,11 @@ const statusConfig = {
     description: "Successfully executed"
   },
   "failed": {
-    color: "text-[hsl(var(--command-danger))]", 
+    color: "text-[hsl(var(--command-danger))]",
     bg: "bg-[hsl(var(--command-danger))]/10",
     border: "border-[hsl(var(--command-danger))]/20",
     icon: XCircle,
-    label: "Failed", 
+    label: "Failed",
     description: "Execution encountered errors"
   },
   "scheduled": {
@@ -181,9 +181,9 @@ export function EventDetails({ event, onClose }: EventDetailsProps) {
   const formatDateTime = (timestamp: number) => {
     const date = new Date(timestamp)
     return {
-      date: date.toLocaleDateString('en-US', { 
+      date: date.toLocaleDateString('en-US', {
         weekday: 'long',
-        month: 'long', 
+        month: 'long',
         day: 'numeric',
         year: 'numeric'
       }),
@@ -196,19 +196,19 @@ export function EventDetails({ event, onClose }: EventDetailsProps) {
   }
 
   const { date, time } = formatDateTime(event.scheduledTime)
-  
+
   return (
     <Dialog open={true} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-[500px] glass-morphism border-[hsl(var(--command-border-bright))] p-0 overflow-hidden">
         {/* Header with gradient */}
         <div className="relative p-6 pb-4">
-          <div 
+          <div
             className="absolute inset-0 opacity-10"
             style={{
               background: `linear-gradient(135deg, ${statusStyle.color.replace('text-', 'hsl(var(--command-')} 0%, transparent 50%)`
             }}
           />
-          
+
           <DialogHeader className="relative">
             <div className="flex items-start justify-between">
               <div className="flex items-center gap-3">
@@ -224,10 +224,10 @@ export function EventDetails({ event, onClose }: EventDetailsProps) {
                   </p>
                 </div>
               </div>
-              
+
               <Button
                 variant="ghost"
-                size="icon" 
+                size="icon"
                 onClick={onClose}
                 className="hover:bg-[hsl(var(--command-danger))]/10 hover:text-[hsl(var(--command-danger))]"
               >
@@ -236,7 +236,7 @@ export function EventDetails({ event, onClose }: EventDetailsProps) {
             </div>
           </DialogHeader>
         </div>
-        
+
         <div className="px-6 pb-6 space-y-6">
           {/* Status & Type */}
           <div className="flex items-center gap-4">
@@ -278,7 +278,7 @@ export function EventDetails({ event, onClose }: EventDetailsProps) {
           </div>
 
           {/* Event Details */}
-          <motion.div 
+          <motion.div
             className="space-y-4"
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
@@ -313,7 +313,7 @@ export function EventDetails({ event, onClose }: EventDetailsProps) {
                 <span className="font-heading font-semibold">Assigned Agent</span>
               </div>
               <div className="pl-6">
-                <div 
+                <div
                   className={cn(
                     "flex items-center gap-3 px-3 py-2 rounded-lg glass-morphism w-fit",
                     agentStyle.bg,
@@ -352,7 +352,7 @@ export function EventDetails({ event, onClose }: EventDetailsProps) {
           </motion.div>
 
           {/* Action Buttons */}
-          <motion.div 
+          <motion.div
             className="flex justify-end gap-3"
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
@@ -370,15 +370,15 @@ export function EventDetails({ event, onClose }: EventDetailsProps) {
                 </Button>
               </>
             )}
-            
+
             {event.status === "failed" && (
               <Button variant="outline" className="hover:bg-[hsl(var(--command-accent))]/10">
                 <RefreshCw className="h-4 w-4 mr-2" />
                 Retry
               </Button>
             )}
-            
-            <Button 
+
+            <Button
               variant="ghost"
               onClick={onClose}
               className="hover:bg-[hsl(var(--command-text-muted))]/10"

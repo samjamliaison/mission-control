@@ -57,7 +57,7 @@ const eventTypeConfig = {
 
 export function CalendarEvent({ event, onClick, compact = false }: CalendarEventProps) {
   const typeStyle = eventTypeConfig[event.type]
-  
+
   const formatTime = (timestamp: number) => {
     return new Date(timestamp).toLocaleTimeString("en-US", {
       hour: "numeric",
@@ -102,21 +102,21 @@ export function CalendarEvent({ event, onClick, compact = false }: CalendarEvent
               {event.title}
             </div>
           </div>
-          
+
           <div className="flex items-center gap-1.5 text-xs text-[hsl(var(--command-text-dim))]">
             <Clock className="h-3 w-3" />
             <span>
               {formatTime(event.startTime)} - {formatTime(event.endTime)}
             </span>
           </div>
-          
+
           {event.attendees?.length > 0 && (
             <div className="flex items-center gap-1.5 text-xs text-[hsl(var(--command-text-dim))]">
               <Users className="h-3 w-3" />
               <span>{event.attendees.length} attendees</span>
             </div>
           )}
-          
+
           {event.location && (
             <div className="flex items-center gap-1.5 text-xs text-[hsl(var(--command-text-dim))]">
               <MapPin className="h-3 w-3" />

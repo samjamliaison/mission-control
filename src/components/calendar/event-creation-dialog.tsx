@@ -20,7 +20,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Badge } from "@/components/ui/badge"
-import { 
+import {
   Calendar,
   Clock,
   User,
@@ -79,7 +79,7 @@ const agentColors = {
   },
   "Manus": {
     bg: "bg-purple-500/10",
-    text: "text-purple-400", 
+    text: "text-purple-400",
     border: "border-purple-500/20",
     color: "#8b5cf6"
   },
@@ -120,7 +120,7 @@ export function EventCreationDialog({ open, onOpenChange, selectedDate, onSave }
       const month = String(selectedDate.getMonth() + 1).padStart(2, '0')
       const day = String(selectedDate.getDate()).padStart(2, '0')
       setDate(`${year}-${month}-${day}`)
-      
+
       // Default to 9 AM if no time set
       if (!time) {
         setTime("09:00")
@@ -179,7 +179,7 @@ export function EventCreationDialog({ open, onOpenChange, selectedDate, onSave }
     return selectedDate.toLocaleDateString("en-US", {
       weekday: "long",
       year: "numeric",
-      month: "long", 
+      month: "long",
       day: "numeric"
     })
   }
@@ -189,15 +189,15 @@ export function EventCreationDialog({ open, onOpenChange, selectedDate, onSave }
       <DialogContent className="sm:max-w-[600px] glass-morphism border-[hsl(var(--command-border-bright))] p-0 overflow-hidden">
         {/* Header with gradient */}
         <div className="relative p-6 pb-4">
-          <div 
+          <div
             className="absolute inset-0 opacity-10"
             style={{
-              background: selectedEventType 
+              background: selectedEventType
                 ? `linear-gradient(135deg, ${selectedEventType.color.replace('text-', 'hsl(var(--command-')} 0%, transparent 50%)`
                 : "linear-gradient(135deg, hsl(var(--command-accent)) 0%, transparent 50%)"
             }}
           />
-          
+
           <DialogHeader className="relative">
             <div className="flex items-center gap-3 mb-2">
               <div className="p-2 glass-morphism rounded-lg">
@@ -208,17 +208,17 @@ export function EventCreationDialog({ open, onOpenChange, selectedDate, onSave }
               </DialogTitle>
             </div>
             <DialogDescription className="text-[hsl(var(--command-text-muted))]">
-              {selectedDate 
+              {selectedDate
                 ? `Creating event for ${formatSelectedDate()}`
                 : "Configure a new calendar event with agent assignments and scheduling options."
               }
             </DialogDescription>
           </DialogHeader>
         </div>
-        
+
         <div className="px-6 pb-6 space-y-6">
           {/* Event Title */}
-          <motion.div 
+          <motion.div
             className="space-y-2"
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
@@ -236,9 +236,9 @@ export function EventCreationDialog({ open, onOpenChange, selectedDate, onSave }
               className="glass-morphism border-[hsl(var(--command-border))] focus:ring-1 focus:ring-[hsl(var(--command-accent))] font-medium"
             />
           </motion.div>
-          
+
           {/* Event Description */}
-          <motion.div 
+          <motion.div
             className="space-y-2"
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
@@ -256,10 +256,10 @@ export function EventCreationDialog({ open, onOpenChange, selectedDate, onSave }
               className="glass-morphism border-[hsl(var(--command-border))] focus:ring-1 focus:ring-[hsl(var(--command-accent))] resize-none"
             />
           </motion.div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Event Type */}
-            <motion.div 
+            <motion.div
               className="space-y-2"
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
@@ -292,9 +292,9 @@ export function EventCreationDialog({ open, onOpenChange, selectedDate, onSave }
                 </SelectContent>
               </Select>
             </motion.div>
-            
+
             {/* Agent Assignment */}
-            <motion.div 
+            <motion.div
               className="space-y-2"
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
@@ -333,10 +333,10 @@ export function EventCreationDialog({ open, onOpenChange, selectedDate, onSave }
               </Select>
             </motion.div>
           </div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {/* Date */}
-            <motion.div 
+            <motion.div
               className="space-y-2"
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
@@ -353,9 +353,9 @@ export function EventCreationDialog({ open, onOpenChange, selectedDate, onSave }
                 className="glass-morphism border-[hsl(var(--command-border))] focus:ring-1 focus:ring-[hsl(var(--command-accent))]"
               />
             </motion.div>
-            
+
             {/* Time */}
-            <motion.div 
+            <motion.div
               className="space-y-2"
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
@@ -372,9 +372,9 @@ export function EventCreationDialog({ open, onOpenChange, selectedDate, onSave }
                 className="glass-morphism border-[hsl(var(--command-border))] focus:ring-1 focus:ring-[hsl(var(--command-accent))]"
               />
             </motion.div>
-            
+
             {/* Duration */}
-            <motion.div 
+            <motion.div
               className="space-y-2"
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
@@ -395,9 +395,9 @@ export function EventCreationDialog({ open, onOpenChange, selectedDate, onSave }
               />
             </motion.div>
           </div>
-          
+
           {/* Recurrence */}
-          <motion.div 
+          <motion.div
             className="space-y-2"
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
@@ -429,7 +429,7 @@ export function EventCreationDialog({ open, onOpenChange, selectedDate, onSave }
                 ))}
               </SelectContent>
             </Select>
-            
+
             {recurrence !== "none" && (
               <motion.div
                 initial={{ opacity: 0, height: 0 }}
@@ -440,7 +440,7 @@ export function EventCreationDialog({ open, onOpenChange, selectedDate, onSave }
               </motion.div>
             )}
           </motion.div>
-          
+
           {/* Preview */}
           {agent && (
             <motion.div
@@ -453,8 +453,8 @@ export function EventCreationDialog({ open, onOpenChange, selectedDate, onSave }
                 <div className="text-xs text-[hsl(var(--command-text-muted))] font-medium">Event Preview</div>
                 <div className="flex items-center gap-2">
                   {agentStyle && (
-                    <Badge 
-                      variant="outline" 
+                    <Badge
+                      variant="outline"
                       className={cn(
                         "text-sm px-3 py-1 border",
                         agentStyle.bg,
@@ -468,17 +468,17 @@ export function EventCreationDialog({ open, onOpenChange, selectedDate, onSave }
                       {agent}
                     </Badge>
                   )}
-                  
+
                   {selectedEventType && (
-                    <Badge 
-                      variant="outline" 
+                    <Badge
+                      variant="outline"
                       className={cn("text-sm px-3 py-1", selectedEventType.color, "border-current/20")}
                     >
                       <span className="mr-1">{selectedEventType.emoji}</span>
                       {selectedEventType.label}
                     </Badge>
                   )}
-                  
+
                   {selectedRecurrence && recurrence !== "none" && (
                     <Badge variant="outline" className="text-xs px-2 py-1 border-[hsl(var(--command-accent))]/20 text-[hsl(var(--command-accent))]">
                       <Repeat className="h-3 w-3 mr-1" />
@@ -490,12 +490,12 @@ export function EventCreationDialog({ open, onOpenChange, selectedDate, onSave }
             </motion.div>
           )}
         </div>
-        
+
         {/* Action Buttons */}
         <div className="px-6 py-4 bg-[hsl(var(--command-surface))]/50 backdrop-blur border-t border-[hsl(var(--command-border))]">
           <div className="flex justify-end gap-3">
-            <Button 
-              variant="ghost" 
+            <Button
+              variant="ghost"
               onClick={handleCancel}
               className="hover:bg-[hsl(var(--command-text-muted))]/10"
             >
@@ -506,13 +506,13 @@ export function EventCreationDialog({ open, onOpenChange, selectedDate, onSave }
               whileHover={{ scale: isFormValid ? 1.02 : 1 }}
               whileTap={{ scale: isFormValid ? 0.98 : 1 }}
             >
-              <Button 
+              <Button
                 onClick={handleSave}
                 disabled={!isFormValid}
                 className={cn(
                   "font-semibold px-6",
-                  isFormValid 
-                    ? "bg-gradient-to-r from-[hsl(var(--command-accent))] to-[hsl(199_89%_38%)] hover:from-[hsl(199_89%_58%)] hover:to-[hsl(var(--command-accent))] shadow-lg shadow-[hsl(var(--command-accent))]/20" 
+                  isFormValid
+                    ? "bg-gradient-to-r from-[hsl(var(--command-accent))] to-[hsl(199_89%_38%)] hover:from-[hsl(199_89%_58%)] hover:to-[hsl(var(--command-accent))] shadow-lg shadow-[hsl(var(--command-accent))]/20"
                     : "opacity-50 cursor-not-allowed"
                 )}
               >

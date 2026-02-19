@@ -5,22 +5,22 @@ import { motion } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { 
-  Download, 
-  Upload, 
-  Trash2, 
-  Database, 
+import {
+  Download,
+  Upload,
+  Trash2,
+  Database,
   FileText,
   AlertTriangle,
   CheckCircle,
   X
 } from "lucide-react"
-import { 
-  exportAllData, 
-  importAllData, 
-  clearAllData, 
+import {
+  exportAllData,
+  importAllData,
+  clearAllData,
   getStorageStats,
-  PersistedData 
+  PersistedData
 } from "@/lib/data-persistence"
 import {
   Dialog,
@@ -44,8 +44,8 @@ export function DataManagement() {
   const handleExport = () => {
     try {
       const data = exportAllData()
-      const blob = new Blob([JSON.stringify(data, null, 2)], { 
-        type: 'application/json' 
+      const blob = new Blob([JSON.stringify(data, null, 2)], {
+        type: 'application/json'
       })
       const url = URL.createObjectURL(blob)
       const link = document.createElement('a')
@@ -55,7 +55,7 @@ export function DataManagement() {
       link.click()
       document.body.removeChild(link)
       URL.revokeObjectURL(url)
-      
+
       setExportStatus('success')
       toast.success('Data Exported', `Backup file downloaded with ${data.tasks.length} tasks and ${data.content.length} content items.`)
       setTimeout(() => setExportStatus('idle'), 3000)
@@ -76,7 +76,7 @@ export function DataManagement() {
       try {
         const data = JSON.parse(e.target?.result as string) as PersistedData
         const success = importAllData(data)
-        
+
         if (success) {
           setImportStatus('success')
           toast.success('Data Imported', `Successfully imported ${data.tasks.length} tasks and ${data.content.length} content items.`)
@@ -86,7 +86,7 @@ export function DataManagement() {
           setImportStatus('error')
           toast.error('Import Failed', 'Invalid data format or corrupted file.')
         }
-        
+
         setTimeout(() => setImportStatus('idle'), 3000)
       } catch (error) {
         console.error('Import failed:', error)
@@ -160,7 +160,7 @@ export function DataManagement() {
               <div className="text-xs text-[hsl(var(--command-text-muted))]">Usage</div>
             </div>
           </div>
-          
+
           {/* Usage Bar */}
           <div className="space-y-2">
             <div className="flex justify-between text-sm">
@@ -283,7 +283,7 @@ export function DataManagement() {
                     Confirm Data Deletion
                   </DialogTitle>
                   <DialogDescription className="text-[hsl(var(--command-text-muted))]">
-                    This action will permanently delete all your tasks, content, events, and memories. 
+                    This action will permanently delete all your tasks, content, events, and memories.
                     This cannot be undone. Make sure to export your data first if you want to keep a backup.
                   </DialogDescription>
                 </DialogHeader>

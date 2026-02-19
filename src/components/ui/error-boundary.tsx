@@ -42,7 +42,7 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
       error,
       errorInfo
     })
-    
+
     // Log error to console for debugging
     console.error('ErrorBoundary caught an error:', error, errorInfo)
   }
@@ -53,7 +53,7 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
       error: null,
       errorInfo: null
     })
-    
+
     // Call custom reset handler if provided
     this.props.onReset?.()
   }
@@ -80,8 +80,8 @@ interface ErrorFallbackProps {
   error?: Error | null
 }
 
-function ErrorFallback({ 
-  onRetry, 
+function ErrorFallback({
+  onRetry,
   title = "Something went wrong",
   description = "An unexpected error occurred. Please try again or return to the dashboard.",
   error
@@ -171,19 +171,19 @@ export function withErrorBoundary<P extends object>(
       <Component {...props} />
     </ErrorBoundary>
   )
-  
+
   WrappedComponent.displayName = `withErrorBoundary(${Component.displayName || Component.name})`
-  
+
   return WrappedComponent
 }
 
 // Simplified error boundary for specific sections
-export function SectionErrorBoundary({ 
-  children, 
-  sectionName 
-}: { 
+export function SectionErrorBoundary({
+  children,
+  sectionName
+}: {
   children: ReactNode
-  sectionName: string 
+  sectionName: string
 }) {
   return (
     <ErrorBoundary

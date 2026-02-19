@@ -44,13 +44,13 @@ export function ThemeSettings() {
 
   const handleThemeChange = (newTheme: typeof theme) => {
     if (newTheme === theme) return
-    
+
     const previousTheme = theme
     const newThemeName = themes.find(t => t.id === newTheme)?.name || newTheme
     const previousThemeName = themes.find(t => t.id === previousTheme)?.name || previousTheme
-    
+
     setIsTransitioning(true)
-    
+
     // Log the theme change activity
     logActivity({
       actionType: 'settings_changed',
@@ -64,17 +64,17 @@ export function ThemeSettings() {
       importance: 'low',
       tags: ['theme', 'settings', 'ui']
     })
-    
+
     // Add transition overlay
     const overlay = document.createElement('div')
     overlay.className = 'theme-transition-overlay active'
     document.body.appendChild(overlay)
-    
+
     // Change theme after short delay
     setTimeout(() => {
       setTheme(newTheme)
     }, 150)
-    
+
     // Remove overlay after transition
     setTimeout(() => {
       document.body.removeChild(overlay)
@@ -133,7 +133,7 @@ export function ThemeSettings() {
                 {themes.map((themeOption) => {
                   const Icon = themeIcons[themeOption.id]
                   const isActive = theme === themeOption.id
-                  
+
                   return (
                     <motion.div
                       key={themeOption.id}
@@ -169,11 +169,11 @@ export function ThemeSettings() {
                             <CheckCircle className="h-4 w-4 text-white" />
                           </motion.div>
                         )}
-                        
+
                         <CardContent className="p-6">
                           <div className="text-center space-y-4">
                             {/* Theme Preview */}
-                            <div 
+                            <div
                               className="w-full h-16 rounded-lg border-2 border-dashed border-[hsl(var(--command-border))] relative overflow-hidden"
                               style={{
                                 background: `linear-gradient(135deg, ${themeOption.preview.background} 0%, ${themeOption.preview.primary} 100%)`
@@ -181,36 +181,36 @@ export function ThemeSettings() {
                             >
                               <div className="absolute inset-0 flex items-center justify-center">
                                 <div className="flex gap-1">
-                                  <div 
+                                  <div
                                     className="w-3 h-3 rounded-full"
                                     style={{ backgroundColor: themeOption.preview.accent }}
                                   />
-                                  <div 
+                                  <div
                                     className="w-2 h-2 rounded-full mt-0.5"
                                     style={{ backgroundColor: `${themeOption.preview.accent}80` }}
                                   />
-                                  <div 
+                                  <div
                                     className="w-1 h-1 rounded-full mt-1"
                                     style={{ backgroundColor: `${themeOption.preview.accent}60` }}
                                   />
                                 </div>
                               </div>
                             </div>
-                            
+
                             {/* Theme Icon */}
                             <div className="flex justify-center">
                               <div className="p-3 glass-morphism rounded-xl">
-                                <Icon 
+                                <Icon
                                   className="h-6 w-6"
                                   style={{
-                                    color: isActive 
-                                      ? 'hsl(var(--command-accent))' 
+                                    color: isActive
+                                      ? 'hsl(var(--command-accent))'
                                       : 'hsl(var(--command-text-muted))'
                                   }}
                                 />
                               </div>
                             </div>
-                            
+
                             {/* Theme Info */}
                             <div>
                               <h5 className="font-semibold text-[hsl(var(--command-text))]">
@@ -240,7 +240,7 @@ export function ThemeSettings() {
                     Theme Preferences
                   </p>
                   <p className="text-[hsl(var(--command-text-muted))] mt-1">
-                    Your theme preference is automatically saved and will persist across browser sessions. 
+                    Your theme preference is automatically saved and will persist across browser sessions.
                     Theme changes apply instantly with smooth transitions.
                   </p>
                 </div>

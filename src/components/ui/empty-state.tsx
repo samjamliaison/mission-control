@@ -30,7 +30,7 @@ export function EmptyState({
     >
       {/* Background decoration */}
       <div className="absolute inset-0 bg-gradient-radial from-[hsl(var(--command-accent))]/5 via-transparent to-transparent opacity-50 pointer-events-none" />
-      
+
       {/* Icon or Illustration */}
       <motion.div
         initial={{ scale: 0.8, opacity: 0 }}
@@ -82,11 +82,11 @@ export function EmptyState({
       </motion.div>
 
       {/* Subtle animation elements */}
-      <div className="absolute top-20 left-1/4 w-2 h-2 bg-[hsl(var(--command-accent))]/30 rounded-full animate-pulse" 
+      <div className="absolute top-20 left-1/4 w-2 h-2 bg-[hsl(var(--command-accent))]/30 rounded-full animate-pulse"
            style={{ animationDelay: "0s", animationDuration: "3s" }} />
-      <div className="absolute bottom-32 right-1/3 w-1.5 h-1.5 bg-[hsl(var(--command-accent))]/20 rounded-full animate-pulse" 
+      <div className="absolute bottom-32 right-1/3 w-1.5 h-1.5 bg-[hsl(var(--command-accent))]/20 rounded-full animate-pulse"
            style={{ animationDelay: "1.5s", animationDuration: "3s" }} />
-      <div className="absolute top-1/3 right-1/4 w-1 h-1 bg-[hsl(var(--command-accent))]/40 rounded-full animate-pulse" 
+      <div className="absolute top-1/3 right-1/4 w-1 h-1 bg-[hsl(var(--command-accent))]/40 rounded-full animate-pulse"
            style={{ animationDelay: "0.8s", animationDuration: "3s" }} />
     </motion.div>
   )

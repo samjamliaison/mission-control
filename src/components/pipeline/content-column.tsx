@@ -103,7 +103,7 @@ const contentVariants = {
 export function ContentColumn({ title, stage, content, config, onViewContent, onEditContent, onDeleteContent }: ContentColumnProps) {
   const stageStyle = stageConfig[stage]
   const IconComponent = stageIcons[stage]
-  
+
   return (
     <motion.div
       variants={columnVariants}
@@ -113,18 +113,18 @@ export function ContentColumn({ title, stage, content, config, onViewContent, on
     >
       <Card className="backdrop-blur-xl bg-gradient-to-br from-[hsl(var(--command-surface-elevated))]/95 to-[hsl(var(--command-surface))]/90 border border-white/5 rounded-xl min-h-[600px] relative overflow-hidden">
         {/* Column glow effect */}
-        <div 
+        <div
           className="absolute inset-0 opacity-3 pointer-events-none"
           style={{
             background: `radial-gradient(circle at 50% 0%, ${stageStyle.accentColor} 0%, transparent 50%)`
           }}
         />
-        
+
         <CardHeader className="pb-4 pt-5 px-5 relative">
           {/* Premium header with count and color coding */}
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div 
+              <div
                 className="p-2.5 rounded-xl backdrop-blur-md border"
                 style={{
                   backgroundColor: `${stageStyle.accentColor}15`,
@@ -132,8 +132,8 @@ export function ContentColumn({ title, stage, content, config, onViewContent, on
                   boxShadow: `0 0 12px ${stageStyle.accentColor}20`
                 }}
               >
-                <IconComponent 
-                  className="h-5 w-5" 
+                <IconComponent
+                  className="h-5 w-5"
                   style={{ color: stageStyle.accentColor }}
                 />
               </div>
@@ -150,7 +150,7 @@ export function ContentColumn({ title, stage, content, config, onViewContent, on
                 </div>
               </div>
             </div>
-            
+
             {/* Enhanced count badge */}
             <motion.div
               initial={{ scale: 0 }}
@@ -158,7 +158,7 @@ export function ContentColumn({ title, stage, content, config, onViewContent, on
               transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
               className="flex items-center gap-2"
             >
-              <div 
+              <div
                 className="px-3 py-1.5 rounded-lg backdrop-blur-md border text-sm font-bold"
                 style={{
                   backgroundColor: `${stageStyle.accentColor}15`,
@@ -171,7 +171,7 @@ export function ContentColumn({ title, stage, content, config, onViewContent, on
               </div>
             </motion.div>
           </div>
-          
+
           {/* Enhanced progress indicator for active stages */}
           {(stage === "filming" || stage === "thumbnail") && content.length > 0 && (
             <motion.div
@@ -189,7 +189,7 @@ export function ContentColumn({ title, stage, content, config, onViewContent, on
             />
           )}
         </CardHeader>
-        
+
         <CardContent className="pt-0 pb-5 px-5 relative">
           <Droppable droppableId={stage}>
             {(provided, snapshot) => (
@@ -202,10 +202,10 @@ export function ContentColumn({ title, stage, content, config, onViewContent, on
                 )}
                 style={{
                   borderColor: snapshot.isDraggingOver ? `${stageStyle.accentColor}40` : undefined,
-                  background: snapshot.isDraggingOver 
+                  background: snapshot.isDraggingOver
                     ? `radial-gradient(circle at center, ${stageStyle.accentColor}12 0%, ${stageStyle.accentColor}04 50%, transparent 70%)`
                     : undefined,
-                  boxShadow: snapshot.isDraggingOver 
+                  boxShadow: snapshot.isDraggingOver
                     ? `0 0 0 2px ${stageStyle.accentColor}30, 0 0 20px ${stageStyle.accentColor}20, inset 0 0 20px ${stageStyle.accentColor}08`
                     : undefined
                 }}
@@ -213,27 +213,27 @@ export function ContentColumn({ title, stage, content, config, onViewContent, on
                   scale: snapshot.isDraggingOver ? 1.02 : 1,
                   borderRadius: snapshot.isDraggingOver ? "16px" : "12px"
                 }}
-                transition={{ 
-                  duration: 0.2, 
-                  ease: "easeOut" 
+                transition={{
+                  duration: 0.2,
+                  ease: "easeOut"
                 }}
               >
                 {/* Enhanced Drop zone indicator */}
                 {snapshot.isDraggingOver && (
                   <motion.div
                     initial={{ opacity: 0, scale: 0.5, y: 20 }}
-                    animate={{ 
-                      opacity: 1, 
-                      scale: 1, 
+                    animate={{
+                      opacity: 1,
+                      scale: 1,
                       y: 0,
                     }}
                     exit={{ opacity: 0, scale: 0.5, y: -20 }}
                     transition={{ type: "spring", stiffness: 300, damping: 20 }}
                     className="absolute inset-0 flex items-center justify-center pointer-events-none z-10"
                   >
-                    <motion.div 
+                    <motion.div
                       className="backdrop-blur-xl bg-white/10 p-6 rounded-2xl border-2 border-dashed"
-                      style={{ 
+                      style={{
                         borderColor: `${stageStyle.accentColor}60`,
                         backgroundColor: `${stageStyle.accentColor}15`,
                         boxShadow: `0 0 32px ${stageStyle.accentColor}30`
@@ -249,7 +249,7 @@ export function ContentColumn({ title, stage, content, config, onViewContent, on
                       }}
                     >
                       <motion.div
-                        animate={{ 
+                        animate={{
                           rotate: 360,
                         }}
                         transition={{
@@ -259,8 +259,8 @@ export function ContentColumn({ title, stage, content, config, onViewContent, on
                         }}
                         className="relative"
                       >
-                        <IconComponent 
-                          className="h-12 w-12" 
+                        <IconComponent
+                          className="h-12 w-12"
                           style={{ color: stageStyle.accentColor }}
                           strokeWidth={1.5}
                         />
@@ -277,7 +277,7 @@ export function ContentColumn({ title, stage, content, config, onViewContent, on
                           }}
                         />
                       </motion.div>
-                      <motion.p 
+                      <motion.p
                         className="text-sm font-semibold mt-2 text-center"
                         style={{ color: stageStyle.accentColor }}
                         animate={{ opacity: [0.7, 1, 0.7] }}
@@ -288,7 +288,7 @@ export function ContentColumn({ title, stage, content, config, onViewContent, on
                     </motion.div>
                   </motion.div>
                 )}
-                
+
                 {content.length > 0 && (
                   <StaggeredList staggerDelay={0.05}>
                     {content.map((item, index) => (
@@ -297,20 +297,20 @@ export function ContentColumn({ title, stage, content, config, onViewContent, on
                         layout
                         layoutId={`content-${item._id}`}
                         initial={{ opacity: 0, y: 20, scale: 0.8 }}
-                        animate={{ 
-                          opacity: 1, 
-                          y: 0, 
+                        animate={{
+                          opacity: 1,
+                          y: 0,
                           scale: 1,
                         }}
-                        exit={{ 
-                          opacity: 0, 
-                          y: -20, 
+                        exit={{
+                          opacity: 0,
+                          y: -20,
                           scale: 0.8,
                           transition: { duration: 0.2 }
                         }}
                         transition={{
-                          layout: { 
-                            duration: 0.4, 
+                          layout: {
+                            duration: 0.4,
                             ease: [0.4, 0, 0.2, 1],
                             type: "spring",
                             stiffness: 350,
@@ -334,9 +334,9 @@ export function ContentColumn({ title, stage, content, config, onViewContent, on
                     ))}
                   </StaggeredList>
                 )}
-                
+
                 {provided.placeholder}
-                
+
                 {content.length === 0 && !snapshot.isDraggingOver && (
                   <motion.div
                     initial={{ opacity: 0 }}
@@ -345,15 +345,15 @@ export function ContentColumn({ title, stage, content, config, onViewContent, on
                     className="text-center py-12"
                   >
                     <div className="space-y-4">
-                      <div 
+                      <div
                         className="w-12 h-12 mx-auto rounded-xl flex items-center justify-center backdrop-blur-md border"
                         style={{
                           backgroundColor: `${stageStyle.accentColor}15`,
                           borderColor: `${stageStyle.accentColor}30`
                         }}
                       >
-                        <IconComponent 
-                          className="h-5 w-5" 
+                        <IconComponent
+                          className="h-5 w-5"
                           style={{ color: stageStyle.accentColor }}
                         />
                       </div>

@@ -48,7 +48,7 @@ export function GlobalSearch() {
   // Mock search function - replace with real search logic
   const performSearch = (searchQuery: string): SearchResult[] => {
     if (!searchQuery.trim()) return []
-    
+
     const mockResults: SearchResult[] = [
       {
         id: "1",
@@ -58,7 +58,7 @@ export function GlobalSearch() {
         url: "/tasks/1"
       },
       {
-        id: "2", 
+        id: "2",
         title: "Project Meeting Notes",
         type: "memory",
         description: "Weekly sync discussion points",
@@ -67,7 +67,7 @@ export function GlobalSearch() {
       {
         id: "3",
         title: "Sprint Planning",
-        type: "calendar", 
+        type: "calendar",
         description: "Plan upcoming development cycle",
         url: "/calendar/3"
       },
@@ -75,12 +75,12 @@ export function GlobalSearch() {
         id: "4",
         title: "Hamza",
         type: "agent",
-        description: "Primary agent - Development Lead", 
+        description: "Primary agent - Development Lead",
         url: "/team"
       }
     ]
-    
-    return mockResults.filter(r => 
+
+    return mockResults.filter(r =>
       r.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       r.description?.toLowerCase().includes(searchQuery.toLowerCase())
     )

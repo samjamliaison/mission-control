@@ -1,23 +1,23 @@
 export interface ActivityEntry {
   id: string
   timestamp: number
-  actionType: 
-    | 'task_created' 
-    | 'task_updated' 
-    | 'task_completed' 
+  actionType:
+    | 'task_created'
+    | 'task_updated'
+    | 'task_completed'
     | 'task_deleted'
-    | 'content_created' 
-    | 'content_updated' 
-    | 'content_published' 
+    | 'content_created'
+    | 'content_updated'
+    | 'content_published'
     | 'content_deleted'
-    | 'event_created' 
-    | 'event_updated' 
+    | 'event_created'
+    | 'event_updated'
     | 'event_deleted'
-    | 'memory_created' 
-    | 'memory_updated' 
+    | 'memory_created'
+    | 'memory_updated'
     | 'memory_deleted'
-    | 'navigation' 
-    | 'search' 
+    | 'navigation'
+    | 'search'
     | 'filter_applied'
     | 'export_data'
     | 'import_data'
@@ -56,14 +56,14 @@ export class ActivityLogger {
 
   private loadFromStorage(): void {
     if (typeof window === 'undefined') return
-    
+
     try {
       const stored = localStorage.getItem(ACTIVITY_LOG_KEY)
       if (stored) {
         this.entries = JSON.parse(stored)
         // Sort by timestamp descending (most recent first)
         this.entries.sort((a, b) => b.timestamp - a.timestamp)
-        
+
         // Trim to max entries if needed
         if (this.entries.length > MAX_ENTRIES) {
           this.entries = this.entries.slice(0, MAX_ENTRIES)
@@ -78,7 +78,7 @@ export class ActivityLogger {
 
   private saveToStorage(): void {
     if (typeof window === 'undefined') return
-    
+
     try {
       localStorage.setItem(ACTIVITY_LOG_KEY, JSON.stringify(this.entries))
     } catch (error) {
@@ -99,14 +99,14 @@ export class ActivityLogger {
 
     // Add to beginning of array (most recent first)
     this.entries.unshift(newEntry)
-    
+
     // Trim if needed
     if (this.entries.length > MAX_ENTRIES) {
       this.entries = this.entries.slice(0, MAX_ENTRIES)
     }
-    
+
     this.saveToStorage()
-    
+
     // Dispatch event for real-time updates
     if (typeof window !== 'undefined') {
       window.dispatchEvent(new CustomEvent('activityLogUpdated', {
@@ -133,34 +133,34 @@ export class ActivityLogger {
       if (filters.actionType?.length) {
         filtered = filtered.filter(entry => filters.actionType!.includes(entry.actionType))
       }
-      
+
       if (filters.agent?.length) {
         filtered = filtered.filter(entry => filters.agent!.includes(entry.agent))
       }
-      
+
       if (filters.entityType?.length) {
-        filtered = filtered.filter(entry => 
+        filtered = filtered.filter(entry =>
           entry.entityType && filters.entityType!.includes(entry.entityType)
         )
       }
-      
+
       if (filters.importance?.length) {
         filtered = filtered.filter(entry => filters.importance!.includes(entry.importance))
       }
-      
+
       if (filters.dateRange) {
-        filtered = filtered.filter(entry => 
-          entry.timestamp >= filters.dateRange!.start && 
+        filtered = filtered.filter(entry =>
+          entry.timestamp >= filters.dateRange!.start &&
           entry.timestamp <= filters.dateRange!.end
         )
       }
-      
+
       if (filters.tags?.length) {
-        filtered = filtered.filter(entry => 
+        filtered = filtered.filter(entry =>
           filters.tags!.some(tag => entry.tags.includes(tag))
         )
       }
-      
+
       if (filters.search) {
         const searchLower = filters.search.toLowerCase()
         filtered = filtered.filter(entry =>
@@ -210,7 +210,7 @@ export class ActivityLogger {
   clear(): void {
     this.entries = []
     this.saveToStorage()
-    
+
     if (typeof window !== 'undefined') {
       window.dispatchEvent(new CustomEvent('activityLogCleared'))
     }
@@ -227,34 +227,34 @@ export class ActivityLogger {
   importData(jsonData: string): { success: boolean, imported: number, error?: string } {
     try {
       const data = JSON.parse(jsonData)
-      
+
       if (!data.entries || !Array.isArray(data.entries)) {
         throw new Error('Invalid data format')
       }
-      
+
       // Validate entries
-      const validEntries = data.entries.filter((entry: any) => 
-        entry.id && 
-        entry.timestamp && 
-        entry.actionType && 
-        entry.details && 
+      const validEntries = data.entries.filter((entry: any) =>
+        entry.id &&
+        entry.timestamp &&
+        entry.actionType &&
+        entry.details &&
         entry.agent
       )
-      
+
       // Merge with existing entries, avoiding duplicates
       const existingIds = new Set(this.entries.map(e => e.id))
       const newEntries = validEntries.filter((entry: ActivityEntry) => !existingIds.has(entry.id))
-      
+
       this.entries = [...this.entries, ...newEntries]
       this.entries.sort((a, b) => b.timestamp - a.timestamp)
-      
+
       // Trim to max entries
       if (this.entries.length > MAX_ENTRIES) {
         this.entries = this.entries.slice(0, MAX_ENTRIES)
       }
-      
+
       this.saveToStorage()
-      
+
       return {
         success: true,
         imported: newEntries.length

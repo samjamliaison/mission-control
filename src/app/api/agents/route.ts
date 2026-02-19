@@ -80,11 +80,11 @@ async function analyzeAgentWorkspace(workspacePath: string): Promise<{
   try {
     // Check if workspace exists
     await fs.access(workspacePath)
-    
+
     // Count files
     const files = await fs.readdir(workspacePath, { recursive: true })
     const fileCount = files.filter(f => typeof f === 'string' && f.endsWith('.md')).length
-    
+
     // Check memory directory
     let memoryFiles = 0
     try {
@@ -94,7 +94,7 @@ async function analyzeAgentWorkspace(workspacePath: string): Promise<{
     } catch {
       // No memory directory
     }
-    
+
     // Get last activity from memory files or workspace files
     let lastActivity = Date.now() - (7 * 24 * 60 * 60 * 1000) // Default to 1 week ago
     try {
@@ -103,7 +103,7 @@ async function analyzeAgentWorkspace(workspacePath: string): Promise<{
     } catch {
       // Use default
     }
-    
+
     return {
       fileCount,
       memoryFiles,
@@ -124,7 +124,7 @@ function generateSkillsForAgent(agentId: string, soul?: string): string[] {
   const skillMap: Record<string, string[]> = {
     main: [
       'System Administration',
-      'Task Coordination', 
+      'Task Coordination',
       'Strategic Planning',
       'Multi-agent Management',
       'Workspace Organization',
@@ -132,7 +132,7 @@ function generateSkillsForAgent(agentId: string, soul?: string): string[] {
     ],
     monica: [
       'Travel Planning',
-      'Itinerary Management', 
+      'Itinerary Management',
       'Booking Coordination',
       'Location Research',
       'Travel Documentation',
@@ -143,7 +143,7 @@ function generateSkillsForAgent(agentId: string, soul?: string): string[] {
       'Data Analysis',
       'Information Synthesis',
       'Technical Investigation',
-      'Market Research', 
+      'Market Research',
       'Competitive Analysis'
     ],
     luna: [
@@ -155,9 +155,9 @@ function generateSkillsForAgent(agentId: string, soul?: string): string[] {
       'Storytelling'
     ]
   }
-  
+
   let skills = skillMap[agentId] || ['General AI Assistant', 'Task Processing', 'Information Management']
-  
+
   // Enhance skills based on SOUL.md content
   if (soul) {
     const soulLower = soul.toLowerCase()
@@ -168,7 +168,7 @@ function generateSkillsForAgent(agentId: string, soul?: string): string[] {
     if (soulLower.includes('creative')) skills.push('Creative Thinking')
     if (soulLower.includes('analysis')) skills.push('Analytical Thinking')
   }
-  
+
   return [...new Set(skills)] // Remove duplicates
 }
 
@@ -199,7 +199,7 @@ function generateRecentAchievements(agentId: string): string[] {
       'Improved engagement rates by 40%'
     ]
   }
-  
+
   return achievementMap[agentId] || [
     'Successfully processing tasks',
     'Maintaining operational status',
@@ -213,21 +213,21 @@ export async function GET(request: NextRequest) {
     if (!config?.agents?.list) {
       throw new Error('No agents configured in OpenClaw')
     }
-    
+
     const agents: RealAgent[] = []
-    
+
     for (const agentConfig of config.agents.list) {
       const workspacePath = agentConfig.workspace || BASE_WORKSPACE
       const soul = await readAgentSoul(workspacePath)
       const workspaceAnalysis = await analyzeAgentWorkspace(workspacePath)
-      
+
       // Generate role based on agent ID and soul
       let role = 'AI Assistant'
       switch (agentConfig.id) {
         case 'main':
           role = 'Chief of Staff'
           break
-        case 'monica': 
+        case 'monica':
           role = 'Travel Specialist'
           break
         case 'jarvis':
@@ -237,20 +237,20 @@ export async function GET(request: NextRequest) {
           role = 'Content Creator'
           break
       }
-      
+
       // Determine status based on recent activity
       let status: 'online' | 'active' | 'idle' | 'offline' = 'offline'
       const hoursSinceActivity = (Date.now() - workspaceAnalysis.lastActivity) / (1000 * 60 * 60)
       if (hoursSinceActivity < 1) status = 'online'
-      else if (hoursSinceActivity < 24) status = 'active'  
+      else if (hoursSinceActivity < 24) status = 'active'
       else if (hoursSinceActivity < 168) status = 'idle' // 1 week
       else status = 'offline'
-      
+
       // Generate description from soul or default
-      let description = soul ? 
+      let description = soul ?
         soul.split('\n').slice(0, 3).join(' ').substring(0, 200) + '...' :
         `${agentConfig.identity?.name || agentConfig.name || agentConfig.id} agent responsible for specialized tasks and coordination.`
-      
+
       const agent: RealAgent = {
         id: agentConfig.id,
         name: agentConfig.identity?.name || agentConfig.name || agentConfig.id,
@@ -259,8 +259,8 @@ export async function GET(request: NextRequest) {
         status,
         workspace: workspacePath,
         soul: soul || undefined,
-        currentActivity: workspaceAnalysis.taskEstimate > 0 ? 
-          `Processing ${workspaceAnalysis.taskEstimate} active tasks` : 
+        currentActivity: workspaceAnalysis.taskEstimate > 0 ?
+          `Processing ${workspaceAnalysis.taskEstimate} active tasks` :
           'Standby mode',
         activeTasks: workspaceAnalysis.taskEstimate,
         completedTasks: Math.floor(Math.random() * 100) + 50, // Estimated based on workspace activity
@@ -274,10 +274,10 @@ export async function GET(request: NextRequest) {
         model: config.agents?.defaults?.model?.primary || 'Unknown',
         identity: agentConfig.identity
       }
-      
+
       agents.push(agent)
     }
-    
+
     // Sort by status importance and name
     agents.sort((a, b) => {
       const statusOrder = { online: 0, active: 1, idle: 2, offline: 3 }
@@ -285,7 +285,7 @@ export async function GET(request: NextRequest) {
       if (statusDiff !== 0) return statusDiff
       return a.name.localeCompare(b.name)
     })
-    
+
     const response = {
       agents,
       meta: {
@@ -301,14 +301,14 @@ export async function GET(request: NextRequest) {
       },
       timestamp: new Date().toISOString()
     }
-    
+
     return NextResponse.json(response)
   } catch (error) {
     console.error('Agents API Error:', error)
     return NextResponse.json(
-      { 
-        error: 'Failed to fetch agent data', 
-        details: error instanceof Error ? error.message : 'Unknown error' 
+      {
+        error: 'Failed to fetch agent data',
+        details: error instanceof Error ? error.message : 'Unknown error'
       },
       { status: 500 }
     )

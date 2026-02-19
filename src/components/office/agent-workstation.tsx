@@ -18,7 +18,7 @@ const statusConfig = {
     glow: "0 0 20px rgba(16, 185, 129, 0.4)",
     label: "Online"
   },
-  "active": { 
+  "active": {
     color: "#06b6d4", // cyan-400
     bg: "bg-cyan-500/20",
     pulse: true,
@@ -27,7 +27,7 @@ const statusConfig = {
   },
   "idle": {
     color: "#f59e0b", // amber-500
-    bg: "bg-amber-500/20", 
+    bg: "bg-amber-500/20",
     pulse: false,
     glow: "0 0 20px rgba(245, 158, 11, 0.2)",
     label: "Idle"
@@ -47,18 +47,18 @@ export function AgentWorkstation({ agent, onClick }: AgentWorkstationProps) {
       }}
       initial={{ scale: 0, opacity: 0 }}
       animate={{ scale: 1, opacity: 1 }}
-      transition={{ 
+      transition={{
         delay: Math.random() * 0.8,
-        type: "spring", 
-        stiffness: 200, 
-        damping: 15 
+        type: "spring",
+        stiffness: 200,
+        damping: 15
       }}
       whileHover={{ scale: 1.1 }}
       whileTap={{ scale: 0.95 }}
       onClick={onClick}
     >
       {/* Workstation Base */}
-      <div 
+      <div
         className={cn(
           "relative p-4 glass-morphism rounded-xl border-2 min-w-[100px] transition-all duration-300",
           statusStyle.bg,
@@ -103,7 +103,7 @@ export function AgentWorkstation({ agent, onClick }: AgentWorkstationProps) {
 
         <div className="relative z-10 text-center space-y-2">
           {/* Agent Avatar */}
-          <motion.div 
+          <motion.div
             className="text-3xl"
             animate={agent.status === "active" ? {
               rotate: [-1, 1, -1]
@@ -156,7 +156,7 @@ export function AgentWorkstation({ agent, onClick }: AgentWorkstationProps) {
             <div className="text-center space-y-1">
               <div className="font-medium text-sm">{agent.name}</div>
               <div className="text-xs text-[hsl(var(--command-text-muted))]">
-                {agent.currentTask.length > 40 
+                {agent.currentTask.length > 40
                   ? agent.currentTask.substring(0, 40) + "..."
                   : agent.currentTask
                 }

@@ -36,7 +36,7 @@ export interface PersistedData {
 // Storage keys
 const STORAGE_KEYS = {
   TASKS: 'mission-control-tasks',
-  CONTENT: 'mission-control-content', 
+  CONTENT: 'mission-control-content',
   EVENTS: 'mission-control-events',
   MEMORIES: 'mission-control-memories',
   FULL_BACKUP: 'mission-control-backup'
@@ -55,7 +55,7 @@ const DEFAULT_TASKS: Task[] = [
     updatedAt: Date.now() - 3600000,
   },
   {
-    _id: "demo-2", 
+    _id: "demo-2",
     title: "Explore the Content Pipeline",
     description: "Check out the content creation workflow in the Pipeline section. Perfect for managing your creative projects.",
     assignee: "Monica",
@@ -235,7 +235,7 @@ export function importAllData(data: PersistedData): boolean {
       saveEvents(data.events || []),
       saveMemories(data.memories || [])
     ]
-    
+
     return success.every(Boolean)
   } catch (error) {
     console.error('Failed to import data:', error)
@@ -249,11 +249,11 @@ export function importAllData(data: PersistedData): boolean {
 export function clearAllData(): boolean {
   try {
     if (typeof window === 'undefined') return false
-    
+
     Object.values(STORAGE_KEYS).forEach(key => {
       localStorage.removeItem(key)
     })
-    
+
     return true
   } catch (error) {
     console.error('Failed to clear data:', error)
@@ -268,7 +268,7 @@ export function getStorageStats() {
   if (typeof window === 'undefined') {
     return { used: 0, available: 0, total: 0 }
   }
-  
+
   try {
     let used = 0
     Object.values(STORAGE_KEYS).forEach(key => {
@@ -277,11 +277,11 @@ export function getStorageStats() {
         used += item.length
       }
     })
-    
+
     // Rough estimate of localStorage limit (usually 5-10MB)
     const total = 5 * 1024 * 1024 // 5MB
     const available = total - used
-    
+
     return {
       used,
       available,

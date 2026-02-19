@@ -34,7 +34,7 @@ export function PageHeader({ icon: Icon, title, subtitle, children, className = 
   )
 
   return (
-    <ParallaxHeader 
+    <ParallaxHeader
       className={`space-y-6 mb-8 ${className}`}
       parallaxStrength={0.2}
       backgroundElement={backgroundElement}
@@ -54,7 +54,7 @@ export function PageHeader({ icon: Icon, title, subtitle, children, className = 
               {subtitle}
             </p>
           </div>
-          
+
           {/* Stats Card */}
           {children && (
             <div className="flex items-center gap-4">

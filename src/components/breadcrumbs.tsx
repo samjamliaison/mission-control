@@ -16,7 +16,7 @@ const routeNames: Record<string, string> = {
   "": "Home",
   "tasks": "Tasks",
   "pipeline": "Pipeline",
-  "calendar": "Calendar", 
+  "calendar": "Calendar",
   "memory": "Memory",
   "activity": "Activity",
   "analytics": "Analytics",
@@ -28,7 +28,7 @@ const routeNames: Record<string, string> = {
 
 export function Breadcrumbs() {
   const pathname = usePathname()
-  
+
   // Build breadcrumb items from current path
   const buildBreadcrumbs = (): BreadcrumbItem[] => {
     const paths = pathname.split('/').filter(Boolean)
@@ -40,10 +40,10 @@ export function Breadcrumbs() {
     paths.forEach((path, index) => {
       currentPath += `/${path}`
       const isLast = index === paths.length - 1
-      
+
       // Check if it's a dynamic route (like task ID)
       let displayName = routeNames[path] || path
-      
+
       // For dynamic routes like /tasks/[id], show a more user-friendly name
       if (paths[index - 1] === 'tasks' && !routeNames[path]) {
         // Try to get task name from localStorage or show "Task Details"
@@ -55,7 +55,7 @@ export function Breadcrumbs() {
           displayName = "Task Details"
         }
       }
-      
+
       breadcrumbs.push({
         name: displayName,
         href: currentPath,
@@ -95,7 +95,7 @@ export function Breadcrumbs() {
             ) : (
               <ChevronRight className="h-3 w-3 text-white/30" />
             )}
-            
+
             {item.isLast ? (
               <span className="text-white/90 font-medium">
                 {item.name}

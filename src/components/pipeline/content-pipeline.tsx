@@ -36,7 +36,7 @@ const platformOptions = ["All", "YouTube", "Blog", "X"]
 
 const agentAvatars = {
   "Hamza": "👤",
-  "Manus": "🤘", 
+  "Manus": "🤘",
   "Monica": "✈️",
   "Jarvis": "🔍",
   "Luna": "🌙"
@@ -114,48 +114,48 @@ export function ContentPipeline() {
     }
 
     const newStatus = destination.droppableId as "idea" | "script" | "thumbnail" | "filming" | "published"
-    
+
     setContent(prevContent => {
       // Create a new array of content
       const newContent = [...prevContent]
-      
+
       // Find the dragged item
       const draggedItemIndex = newContent.findIndex(item => item._id === draggableId)
       const draggedItem = newContent[draggedItemIndex]
-      
+
       if (!draggedItem) return prevContent
-      
+
       // Remove the item from its original position
       newContent.splice(draggedItemIndex, 1)
-      
+
       // Update the item's status
       const updatedItem = { ...draggedItem, status: newStatus, updatedAt: Date.now() }
-      
+
       // If moving to a different column, add at the specified index within that column
       if (source.droppableId !== destination.droppableId) {
         // Find all items in the destination column
         const destColumnItems = newContent.filter(item => item.status === newStatus)
-        
+
         // Calculate the correct insertion position in the overall array
-        const insertIndex = destination.index === 0 
+        const insertIndex = destination.index === 0
           ? newContent.findIndex(item => item.status === newStatus)
           : Math.min(
               newContent.findIndex(item => item.status === newStatus) + destination.index,
               newContent.length
             )
-        
+
         // Insert the item at the calculated position
         newContent.splice(Math.max(0, insertIndex), 0, updatedItem)
       } else {
         // Moving within the same column - handle reordering
         const sourceColumnItems = newContent.filter(item => item.status === newStatus)
         const firstColumnIndex = newContent.findIndex(item => item.status === newStatus)
-        
+
         // Insert at the new position within the same column
         const insertIndex = firstColumnIndex + destination.index
         newContent.splice(insertIndex, 0, updatedItem)
       }
-      
+
       return newContent
     })
   }
@@ -234,8 +234,8 @@ export function ContentPipeline() {
     <div className="min-h-[calc(100vh-5rem)] relative" data-testid="content-pipeline">
       {/* Command Center Background Effects */}
       <div className="fixed inset-0 bg-gradient-to-br from-[hsl(var(--command-background))] via-[hsl(220_13%_3%)] to-[hsl(var(--command-background))] pointer-events-none" />
-      
-      <motion.div 
+
+      <motion.div
         className="relative z-10"
         variants={containerVariants}
         initial="hidden"
@@ -282,7 +282,7 @@ export function ContentPipeline() {
                       </SelectContent>
                     </Select>
                   </div>
-                  
+
                   {selectedPlatform !== "All" && (
                     <motion.div
                       initial={{ opacity: 0, scale: 0.8 }}
@@ -336,7 +336,7 @@ export function ContentPipeline() {
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-                      <Button 
+                      <Button
                         variant="outline"
                         className="glass-morphism border-[hsl(var(--command-accent))]/30 text-[hsl(var(--command-accent))] hover:bg-[hsl(var(--command-accent))]/10 font-semibold px-4"
                         title="Export pipeline data"
@@ -355,8 +355,8 @@ export function ContentPipeline() {
                 </DropdownMenu>
 
                 <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-                  <Button 
-                    onClick={handleAddNewContent} 
+                  <Button
+                    onClick={handleAddNewContent}
                     className="btn-premium font-semibold px-6"
                   >
                     <Plus className="h-4 w-4 mr-2" />

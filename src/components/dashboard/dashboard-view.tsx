@@ -9,7 +9,7 @@ import { PageHeader } from "@/components/ui/page-header"
 import { StatsCard } from "@/components/ui/stats-card"
 import { StaggeredList } from "@/components/ui/staggered-list"
 import Link from "next/link"
-import { 
+import {
   Command,
   CheckSquare,
   Film,
@@ -87,7 +87,7 @@ interface SessionInfo {
 // Agent avatars for quick reference
 const agentAvatars = {
   "Hamza": "👤",
-  "Manus": "🤘", 
+  "Manus": "🤘",
   "Monica": "✈️",
   "Jarvis": "🔍",
   "Luna": "🌙"
@@ -126,21 +126,21 @@ const formatTimeSince = (timestamp: number, currentTime: number) => {
 }
 
 // Live update indicator component
-const LiveUpdateIndicator = ({ lastUpdated, isLoading, hasNewData, currentTime }: { 
-  lastUpdated: number, 
-  isLoading: boolean, 
+const LiveUpdateIndicator = ({ lastUpdated, isLoading, hasNewData, currentTime }: {
+  lastUpdated: number,
+  isLoading: boolean,
   hasNewData: boolean,
   currentTime: number
 }) => (
-  <motion.div 
+  <motion.div
     className="flex items-center gap-2 text-xs text-[hsl(var(--command-text-muted))]"
     animate={hasNewData ? { scale: [1, 1.05, 1] } : {}}
     transition={{ duration: 0.3 }}
   >
     <div className={cn(
       "w-2 h-2 rounded-full",
-      isLoading ? "bg-orange-400 animate-pulse" : 
-      hasNewData ? "bg-green-400 animate-ping" : 
+      isLoading ? "bg-orange-400 animate-pulse" :
+      hasNewData ? "bg-green-400 animate-ping" :
       "bg-[hsl(var(--command-accent))]"
     )} />
     <span>
@@ -169,10 +169,10 @@ export function DashboardView() {
     try {
       setLiveDataLoading(true)
       const previousDataHash = JSON.stringify({ agents: agentStatuses, cron: cronJobs, sessions })
-      
+
       // Add cache-busting timestamp to prevent stale data
       const cacheBuster = `?t=${Date.now()}`
-      
+
       const [agentsRes, cronRes, sessionsRes] = await Promise.allSettled([
         fetch(`/api/agents/status${cacheBuster}`),
         fetch(`/api/cron${cacheBuster}`),
@@ -229,16 +229,16 @@ export function DashboardView() {
   useEffect(() => {
     setMounted(true)
     refreshActivityData()
-    
+
     // Fetch live data immediately
     fetchLiveData()
-    
+
     // Set up auto-refresh for live data every 10 seconds
     const liveDataInterval = setInterval(fetchLiveData, 10000)
-    
+
     // Set up auto-refresh for activity feed every 30 seconds
     const activityInterval = setInterval(refreshActivityData, 30000)
-    
+
     return () => {
       clearInterval(liveDataInterval)
       clearInterval(activityInterval)
@@ -263,22 +263,22 @@ export function DashboardView() {
     const totalMemories = memories.length
 
     return {
-      tasks: { 
-        total: totalTasks, 
+      tasks: {
+        total: totalTasks,
         completed: completedTasks,
         trend: generateTrendData(totalTasks, 0.2)
       },
-      content: { 
-        total: totalContent, 
+      content: {
+        total: totalContent,
         published: publishedContent,
         trend: generateTrendData(totalContent, 0.3)
       },
-      events: { 
-        upcoming: upcomingEvents, 
+      events: {
+        upcoming: upcomingEvents,
         total: events.length,
         trend: generateTrendData(upcomingEvents, 0.4)
       },
-      memories: { 
+      memories: {
         total: totalMemories,
         trend: generateTrendData(totalMemories, 0.1)
       }
@@ -290,7 +290,7 @@ export function DashboardView() {
     const activeSessions = sessions.filter(s => s.status === 'active').length
     const activeCronJobs = cronJobs.filter(j => j.status === 'active').length
     const onlineAgents = agentStatuses.filter(a => a.status === 'online').length
-    
+
     return {
       sessions: { active: activeSessions, total: sessions.length },
       cronJobs: { active: activeCronJobs, total: cronJobs.length },
@@ -301,40 +301,40 @@ export function DashboardView() {
   // Recent activity - last 5 items based on updated time
   const recentActivity = useMemo(() => {
     const allItems = [
-      ...tasks.map(t => ({ 
-        type: 'task', 
-        title: t.title, 
-        time: t.updatedAt, 
+      ...tasks.map(t => ({
+        type: 'task',
+        title: t.title,
+        time: t.updatedAt,
         status: t.status,
         assignee: t.assignee,
         action: t.status === 'done' ? 'completed' : 'updated'
       })),
-      ...content.map(c => ({ 
-        type: 'content', 
-        title: c.title, 
-        time: c.updatedAt, 
+      ...content.map(c => ({
+        type: 'content',
+        title: c.title,
+        time: c.updatedAt,
         status: c.status,
         assignee: c.assignee,
         action: c.status === 'published' ? 'published' : 'updated'
       })),
-      ...events.map(e => ({ 
-        type: 'event', 
-        title: e.title, 
-        time: e.updatedAt || e.createdAt || e.scheduledTime, 
+      ...events.map(e => ({
+        type: 'event',
+        title: e.title,
+        time: e.updatedAt || e.createdAt || e.scheduledTime,
         status: e.status,
         assignee: e.agent,
         action: 'scheduled'
       })),
-      ...memories.map(m => ({ 
-        type: 'memory', 
-        title: m.title, 
-        time: m.updatedAt, 
+      ...memories.map(m => ({
+        type: 'memory',
+        title: m.title,
+        time: m.updatedAt,
         status: 'active',
         assignee: m.author,
         action: 'saved'
       }))
     ]
-    
+
     return allItems
       .sort((a, b) => b.time - a.time)
       .slice(0, 5)
@@ -343,13 +343,13 @@ export function DashboardView() {
   // Team efficiency based on live agent data
   const teamEfficiency = useMemo(() => {
     if (agentStatuses.length === 0) return 95 // Default
-    
+
     // Calculate efficiency based on status and activity
     const statusWeights = { online: 100, active: 90, idle: 60, offline: 0 }
-    const totalWeight = agentStatuses.reduce((sum, agent) => 
+    const totalWeight = agentStatuses.reduce((sum, agent) =>
       sum + statusWeights[agent.status], 0
     )
-    
+
     return Math.round(totalWeight / agentStatuses.length)
   }, [agentStatuses])
 
@@ -359,8 +359,8 @@ export function DashboardView() {
     <div className="min-h-[calc(100vh-5rem)] relative" data-testid="dashboard-view">
       {/* Command Center Background */}
       <div className="fixed inset-0 bg-gradient-to-br from-[hsl(var(--command-background))] via-[hsl(220_13%_3%)] to-[hsl(var(--command-background))] pointer-events-none" />
-      
-      <motion.div 
+
+      <motion.div
         className="relative z-10 p-6"
         variants={containerVariants}
         initial="hidden"
@@ -403,8 +403,8 @@ export function DashboardView() {
                         </div>
                       </div>
                     </div>
-                    <MiniSparkline 
-                      data={stats.tasks.trend} 
+                    <MiniSparkline
+                      data={stats.tasks.trend}
                       color="hsl(var(--command-accent))"
                       className="w-16"
                     />
@@ -429,8 +429,8 @@ export function DashboardView() {
                         </div>
                       </div>
                     </div>
-                    <MiniSparkline 
-                      data={stats.content.trend} 
+                    <MiniSparkline
+                      data={stats.content.trend}
                       color="#a855f7"
                       className="w-16"
                     />
@@ -455,8 +455,8 @@ export function DashboardView() {
                         </div>
                       </div>
                     </div>
-                    <MiniSparkline 
-                      data={stats.events.trend} 
+                    <MiniSparkline
+                      data={stats.events.trend}
                       color="#60a5fa"
                       className="w-16"
                     />
@@ -481,8 +481,8 @@ export function DashboardView() {
                         </div>
                       </div>
                     </div>
-                    <MiniSparkline 
-                      data={stats.memories.trend} 
+                    <MiniSparkline
+                      data={stats.memories.trend}
                       color="#4ade80"
                       className="w-16"
                     />
@@ -509,17 +509,17 @@ export function DashboardView() {
                   Auto-refresh: 10s
                 </Badge>
               </h2>
-              <LiveUpdateIndicator 
-                lastUpdated={lastUpdated} 
-                isLoading={liveDataLoading} 
+              <LiveUpdateIndicator
+                lastUpdated={lastUpdated}
+                isLoading={liveDataLoading}
                 hasNewData={hasNewData}
                 currentTime={currentTime}
               />
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <motion.div
-                animate={hasNewData ? { 
-                  boxShadow: ["0 0 0 0 rgba(var(--command-accent-rgb), 0)", "0 0 0 10px rgba(var(--command-accent-rgb), 0.3)", "0 0 0 0 rgba(var(--command-accent-rgb), 0)"] 
+                animate={hasNewData ? {
+                  boxShadow: ["0 0 0 0 rgba(var(--command-accent-rgb), 0)", "0 0 0 10px rgba(var(--command-accent-rgb), 0.3)", "0 0 0 0 rgba(var(--command-accent-rgb), 0)"]
                 } : {}}
                 transition={{ duration: 1 }}
               >
@@ -547,8 +547,8 @@ export function DashboardView() {
               </motion.div>
 
               <motion.div
-                animate={hasNewData ? { 
-                  boxShadow: ["0 0 0 0 rgba(34, 197, 94, 0)", "0 0 0 10px rgba(34, 197, 94, 0.3)", "0 0 0 0 rgba(34, 197, 94, 0)"] 
+                animate={hasNewData ? {
+                  boxShadow: ["0 0 0 0 rgba(34, 197, 94, 0)", "0 0 0 10px rgba(34, 197, 94, 0.3)", "0 0 0 0 rgba(34, 197, 94, 0)"]
                 } : {}}
                 transition={{ duration: 1 }}
               >
@@ -571,8 +571,8 @@ export function DashboardView() {
               </motion.div>
 
               <motion.div
-                animate={hasNewData ? { 
-                  boxShadow: ["0 0 0 0 rgba(251, 146, 60, 0)", "0 0 0 10px rgba(251, 146, 60, 0.3)", "0 0 0 0 rgba(251, 146, 60, 0)"] 
+                animate={hasNewData ? {
+                  boxShadow: ["0 0 0 0 rgba(251, 146, 60, 0)", "0 0 0 10px rgba(251, 146, 60, 0.3)", "0 0 0 0 rgba(251, 146, 60, 0)"]
                 } : {}}
                 transition={{ duration: 1 }}
               >
@@ -615,9 +615,9 @@ export function DashboardView() {
                       Recent Activity
                     </div>
                     <div className="flex items-center gap-2">
-                      <LiveUpdateIndicator 
-                        lastUpdated={lastUpdated} 
-                        isLoading={liveDataLoading} 
+                      <LiveUpdateIndicator
+                        lastUpdated={lastUpdated}
+                        isLoading={liveDataLoading}
                         hasNewData={hasNewData}
                         currentTime={currentTime}
                       />
@@ -641,19 +641,19 @@ export function DashboardView() {
                             {item.type === 'content' && <Film className="h-4 w-4 text-purple-400" />}
                             {item.type === 'event' && <Calendar className="h-4 w-4 text-blue-400" />}
                             {item.type === 'memory' && <Brain className="h-4 w-4 text-green-400" />}
-                            
+
                             <div className="text-lg">
                               {agentAvatars[item.assignee as keyof typeof agentAvatars] || "👤"}
                             </div>
                           </div>
-                          
+
                           <div className="flex-1 min-w-0">
                             <div className="font-medium truncate">{item.title}</div>
                             <div className="text-sm text-[hsl(var(--command-text-muted))]">
                               {item.assignee} {item.action} • {new Date(item.time).toLocaleDateString()}
                             </div>
                           </div>
-                          
+
                           <Badge variant="outline" className="text-xs">
                             {item.status}
                           </Badge>
@@ -764,7 +764,7 @@ export function DashboardView() {
                           </div>
                         </div>
                       ))}
-                      
+
                       {agentStatuses.length > 5 && (
                         <div className="text-xs text-[hsl(var(--command-text-muted))] text-center pt-2">
                           +{agentStatuses.length - 5} more agents
@@ -778,7 +778,7 @@ export function DashboardView() {
                       </div>
                     </div>
                   )}
-                  
+
                   <Link href="/team">
                     <Button variant="ghost" className="w-full justify-start text-sm">
                       <Building2 className="h-4 w-4 mr-2" />
@@ -798,9 +798,9 @@ export function DashboardView() {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               {/* Active Sessions */}
               <motion.div
-                animate={hasNewData ? { 
+                animate={hasNewData ? {
                   scale: [1, 1.02, 1],
-                  boxShadow: ["0 0 0 0 rgba(34, 197, 94, 0)", "0 0 0 5px rgba(34, 197, 94, 0.2)", "0 0 0 0 rgba(34, 197, 94, 0)"] 
+                  boxShadow: ["0 0 0 0 rgba(34, 197, 94, 0)", "0 0 0 5px rgba(34, 197, 94, 0.2)", "0 0 0 0 rgba(34, 197, 94, 0)"]
                 } : {}}
                 transition={{ duration: 0.8 }}
               >
@@ -860,9 +860,9 @@ export function DashboardView() {
 
               {/* Scheduled Tasks */}
               <motion.div
-                animate={hasNewData ? { 
+                animate={hasNewData ? {
                   scale: [1, 1.02, 1],
-                  boxShadow: ["0 0 0 0 rgba(251, 146, 60, 0)", "0 0 0 5px rgba(251, 146, 60, 0.2)", "0 0 0 0 rgba(251, 146, 60, 0)"] 
+                  boxShadow: ["0 0 0 0 rgba(251, 146, 60, 0)", "0 0 0 5px rgba(251, 146, 60, 0.2)", "0 0 0 0 rgba(251, 146, 60, 0)"]
                 } : {}}
                 transition={{ duration: 0.8 }}
               >
@@ -888,7 +888,7 @@ export function DashboardView() {
                               "p-1 rounded",
                               job.enabled ? "bg-green-500/10" : "bg-gray-500/10"
                             )}>
-                              {job.enabled ? 
+                              {job.enabled ?
                                 <PlayCircle className="h-3 w-3 text-green-400" /> :
                                 <PauseCircle className="h-3 w-3 text-gray-400" />
                               }
@@ -936,7 +936,7 @@ export function DashboardView() {
                 </CardHeader>
                 <CardContent>
                   <div className="text-3xl font-display font-bold text-[hsl(var(--command-success))]">
-                    {stats.tasks.total > 0 
+                    {stats.tasks.total > 0
                       ? Math.round((stats.tasks.completed / stats.tasks.total) * 100)
                       : 0}%
                   </div>
@@ -955,7 +955,7 @@ export function DashboardView() {
                 </CardHeader>
                 <CardContent>
                   <div className="text-3xl font-display font-bold text-purple-400">
-                    {stats.content.total > 0 
+                    {stats.content.total > 0
                       ? Math.round((stats.content.published / stats.content.total) * 100)
                       : 0}%
                   </div>

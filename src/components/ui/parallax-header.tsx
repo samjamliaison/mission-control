@@ -11,8 +11,8 @@ interface ParallaxHeaderProps {
   backgroundElement?: ReactNode
 }
 
-export function ParallaxHeader({ 
-  children, 
+export function ParallaxHeader({
+  children,
   className = "",
   parallaxStrength = 0.3,
   backgroundElement
@@ -29,7 +29,7 @@ export function ParallaxHeader({
   return (
     <div ref={containerRef} className={`relative overflow-hidden ${className}`}>
       {backgroundElement && (
-        <motion.div 
+        <motion.div
           style={{ y }}
           className="absolute inset-0 -z-10"
         >

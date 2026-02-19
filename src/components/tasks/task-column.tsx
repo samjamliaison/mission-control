@@ -74,7 +74,7 @@ const taskVariants = {
 export function TaskColumn({ title, status, tasks, onEditTask, onDeleteTask, selectedTasks, onTaskSelect, showSelection }: TaskColumnProps) {
   const config = statusConfig[status]
   const IconComponent = config.icon
-  
+
   return (
     <motion.div
       variants={columnVariants}
@@ -84,13 +84,13 @@ export function TaskColumn({ title, status, tasks, onEditTask, onDeleteTask, sel
     >
       <Card className="glass-morphism border-[hsl(var(--command-border-bright))] min-h-[500px] relative overflow-hidden">
         {/* Column glow effect */}
-        <div 
+        <div
           className="absolute inset-0 opacity-5 pointer-events-none"
           style={{
             background: `radial-gradient(circle at 50% 0%, ${config.accent} 0%, transparent 50%)`
           }}
         />
-        
+
         <CardHeader className="pb-4 relative">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
@@ -106,8 +106,8 @@ export function TaskColumn({ title, status, tasks, onEditTask, onDeleteTask, sel
               animate={{ scale: 1 }}
               transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
             >
-              <Badge 
-                variant="outline" 
+              <Badge
+                variant="outline"
                 className={cn("text-xs font-bold", config.badgeColor)}
                 style={{
                   boxShadow: tasks.length > 0 ? `0 0 10px ${config.glowColor}20` : undefined
@@ -117,7 +117,7 @@ export function TaskColumn({ title, status, tasks, onEditTask, onDeleteTask, sel
               </Badge>
             </motion.div>
           </div>
-          
+
           {/* Progress indicator for in-progress column */}
           {status === "in-progress" && tasks.length > 0 && (
             <motion.div
@@ -128,7 +128,7 @@ export function TaskColumn({ title, status, tasks, onEditTask, onDeleteTask, sel
             />
           )}
         </CardHeader>
-        
+
         <CardContent className="pt-0 relative">
           <Droppable droppableId={status}>
             {(provided, snapshot) => (
@@ -140,11 +140,11 @@ export function TaskColumn({ title, status, tasks, onEditTask, onDeleteTask, sel
                   snapshot.isDraggingOver && "ring-2 ring-dashed animate-pulse"
                 )}
                 style={{
-                  background: snapshot.isDraggingOver 
+                  background: snapshot.isDraggingOver
                     ? `radial-gradient(circle at center, ${config.accent}12 0%, ${config.accent}04 50%, transparent 70%)`
                     : undefined,
                   borderColor: snapshot.isDraggingOver ? config.accent : undefined,
-                  boxShadow: snapshot.isDraggingOver 
+                  boxShadow: snapshot.isDraggingOver
                     ? `0 0 0 2px ${config.accent}30, 0 0 20px ${config.accent}20, inset 0 0 20px ${config.accent}08`
                     : undefined
                 }}
@@ -152,27 +152,27 @@ export function TaskColumn({ title, status, tasks, onEditTask, onDeleteTask, sel
                   scale: snapshot.isDraggingOver ? 1.02 : 1,
                   borderRadius: snapshot.isDraggingOver ? "16px" : "12px"
                 }}
-                transition={{ 
-                  duration: 0.2, 
-                  ease: "easeOut" 
+                transition={{
+                  duration: 0.2,
+                  ease: "easeOut"
                 }}
               >
                 {/* Enhanced Drop zone indicator */}
                 {snapshot.isDraggingOver && (
                   <motion.div
                     initial={{ opacity: 0, scale: 0.5, y: 20 }}
-                    animate={{ 
-                      opacity: 1, 
-                      scale: 1, 
+                    animate={{
+                      opacity: 1,
+                      scale: 1,
                       y: 0,
                     }}
                     exit={{ opacity: 0, scale: 0.5, y: -20 }}
                     transition={{ type: "spring", stiffness: 300, damping: 20 }}
                     className="absolute inset-0 flex items-center justify-center pointer-events-none z-10"
                   >
-                    <motion.div 
+                    <motion.div
                       className="glass-morphism p-6 rounded-2xl border-2 border-dashed"
-                      style={{ 
+                      style={{
                         borderColor: config.accent,
                         background: `${config.accent}15`,
                         boxShadow: `0 0 32px ${config.accent}30`
@@ -188,7 +188,7 @@ export function TaskColumn({ title, status, tasks, onEditTask, onDeleteTask, sel
                       }}
                     >
                       <motion.div
-                        animate={{ 
+                        animate={{
                           rotate: 360,
                         }}
                         transition={{
@@ -198,8 +198,8 @@ export function TaskColumn({ title, status, tasks, onEditTask, onDeleteTask, sel
                         }}
                         className="relative"
                       >
-                        <IconComponent 
-                          className={cn("h-12 w-12", config.color)} 
+                        <IconComponent
+                          className={cn("h-12 w-12", config.color)}
                           strokeWidth={1.5}
                         />
                         <motion.div
@@ -215,7 +215,7 @@ export function TaskColumn({ title, status, tasks, onEditTask, onDeleteTask, sel
                           }}
                         />
                       </motion.div>
-                      <motion.p 
+                      <motion.p
                         className={cn("text-sm font-semibold mt-2 text-center", config.color)}
                         animate={{ opacity: [0.7, 1, 0.7] }}
                         transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
@@ -225,7 +225,7 @@ export function TaskColumn({ title, status, tasks, onEditTask, onDeleteTask, sel
                     </motion.div>
                   </motion.div>
                 )}
-                
+
                 {tasks.length > 0 && (
                   <StaggeredList staggerDelay={0.05}>
                     {tasks.map((task, index) => (
@@ -234,20 +234,20 @@ export function TaskColumn({ title, status, tasks, onEditTask, onDeleteTask, sel
                         layout
                         layoutId={`task-${task._id}`}
                         initial={{ opacity: 0, y: 20, scale: 0.8 }}
-                        animate={{ 
-                          opacity: 1, 
-                          y: 0, 
+                        animate={{
+                          opacity: 1,
+                          y: 0,
                           scale: 1,
                         }}
-                        exit={{ 
-                          opacity: 0, 
-                          y: -20, 
+                        exit={{
+                          opacity: 0,
+                          y: -20,
                           scale: 0.8,
                           transition: { duration: 0.2 }
                         }}
                         transition={{
-                          layout: { 
-                            duration: 0.4, 
+                          layout: {
+                            duration: 0.4,
                             ease: [0.4, 0, 0.2, 1],
                             type: "spring",
                             stiffness: 350,
@@ -273,9 +273,9 @@ export function TaskColumn({ title, status, tasks, onEditTask, onDeleteTask, sel
                     ))}
                   </StaggeredList>
                 )}
-                
+
                 {provided.placeholder}
-                
+
                 {tasks.length === 0 && !snapshot.isDraggingOver && (
                   <motion.div
                     initial={{ opacity: 0 }}
@@ -289,7 +289,7 @@ export function TaskColumn({ title, status, tasks, onEditTask, onDeleteTask, sel
                         <div key={i} className="glass-morphism rounded-xl p-4 loading-skeleton h-24" />
                       ))}
                     </div>
-                    
+
                     {/* Empty state message */}
                     <div className="text-center py-8">
                       <div className="space-y-3">

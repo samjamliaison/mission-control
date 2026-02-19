@@ -22,7 +22,7 @@ export function ColorSystem() {
       ]
     },
     {
-      category: "Borders", 
+      category: "Borders",
       colors: [
         { name: "Border Default", value: "rgba(255,255,255,0.06)", class: "border-white/[0.06]", description: "Card borders" },
         { name: "Border Bright", value: "rgba(255,255,255,0.12)", class: "border-white/[0.12]", description: "Hover borders" }
@@ -69,7 +69,7 @@ export function ColorSystem() {
                   className="backdrop-blur-xl bg-white/[0.03] border border-white/[0.06] rounded-lg p-4 hover:scale-[1.02] transition-all duration-200"
                 >
                   <div className="flex items-center gap-3 mb-3">
-                    <div 
+                    <div
                       className={`w-8 h-8 rounded-lg border border-white/[0.12] ${color.class}`}
                     />
                     <div>

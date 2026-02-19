@@ -13,7 +13,7 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Textarea } from "@/components/ui/textarea"
-import { 
+import {
   X,
   Edit,
   Eye,
@@ -68,7 +68,7 @@ const agentColors = {
   },
   "Manus": {
     bg: "bg-purple-500/10",
-    text: "text-purple-400", 
+    text: "text-purple-400",
     border: "border-purple-500/20"
   },
   "Monica": {
@@ -97,7 +97,7 @@ const contentTypeConfig = {
   },
   "article": {
     icon: FileText,
-    emoji: "📝", 
+    emoji: "📝",
     color: "#10b981",
     label: "Article/Blog"
   },
@@ -123,21 +123,21 @@ const statusConfig = {
     description: "Initial concept and brainstorming phase"
   },
   "script": {
-    label: "Scripting", 
+    label: "Scripting",
     color: "#f59e0b",
     bg: "bg-amber-500/10",
     description: "Content writing and script development"
   },
   "thumbnail": {
     label: "Design",
-    color: "#8b5cf6", 
+    color: "#8b5cf6",
     bg: "bg-purple-500/10",
     description: "Visual design and thumbnail creation"
   },
   "filming": {
     label: "Production",
     color: "#ef4444",
-    bg: "bg-red-500/10", 
+    bg: "bg-red-500/10",
     description: "Active filming or content creation"
   },
   "published": {
@@ -196,13 +196,13 @@ const estimateVideoDuration = (wordCount: number): string => {
 
 export function ContentDetailPanel({ open, onOpenChange, content, onEdit }: ContentDetailPanelProps) {
   const [activeTab, setActiveTab] = useState<'overview' | 'script' | 'analytics' | 'timeline'>('overview')
-  
+
   if (!content) return null
 
   const formatDate = (timestamp: number) => {
     return new Date(timestamp).toLocaleString("en-US", {
       weekday: "short",
-      year: "numeric", 
+      year: "numeric",
       month: "short",
       day: "numeric",
       hour: "2-digit",
@@ -212,17 +212,17 @@ export function ContentDetailPanel({ open, onOpenChange, content, onEdit }: Cont
 
   const platformToType: Record<string, keyof typeof contentTypeConfig> = {
     "YouTube": "video",
-    "Blog": "article", 
+    "Blog": "article",
     "X": "social",
     "Podcast": "podcast"
   }
-  
+
   const contentType = (content.type as keyof typeof contentTypeConfig) || platformToType[content.platform] || "article"
   const typeConfig = contentTypeConfig[contentType]
   const agentColor = agentColors[content.assignee as keyof typeof agentColors] || agentColors["Hamza"]
   const statusData = statusConfig[content.status as keyof typeof statusConfig] || statusConfig["idea"]
   const priorityData = priorityConfig[content.priority as keyof typeof priorityConfig] || priorityConfig["medium"]
-  
+
   // Content analytics
   const scriptWordCount = countWords(content.scriptText || "")
   const scriptCharCount = countCharacters(content.scriptText || "")
@@ -239,8 +239,8 @@ export function ContentDetailPanel({ open, onOpenChange, content, onEdit }: Cont
 
   const panelVariants = {
     hidden: { opacity: 0, x: '100%' },
-    visible: { 
-      opacity: 1, 
+    visible: {
+      opacity: 1,
       x: 0,
       transition: {
         type: "spring" as any,
@@ -248,8 +248,8 @@ export function ContentDetailPanel({ open, onOpenChange, content, onEdit }: Cont
         stiffness: 300
       }
     },
-    exit: { 
-      opacity: 0, 
+    exit: {
+      opacity: 0,
       x: '100%',
       transition: {
         duration: 0.2
@@ -259,8 +259,8 @@ export function ContentDetailPanel({ open, onOpenChange, content, onEdit }: Cont
 
   const contentVariants = {
     hidden: { opacity: 0, y: 20 },
-    visible: { 
-      opacity: 1, 
+    visible: {
+      opacity: 1,
       y: 0,
       transition: {
         staggerChildren: 0.1,
@@ -278,7 +278,7 @@ export function ContentDetailPanel({ open, onOpenChange, content, onEdit }: Cont
     <AnimatePresence>
       {open && (
         <Dialog open={open} onOpenChange={onOpenChange}>
-          <DialogContent 
+          <DialogContent
             className="sm:max-w-[90vw] lg:max-w-[70vw] max-h-[95vh] glass-morphism border-[hsl(var(--command-border-bright))] p-0 overflow-hidden"
             style={{ margin: "0", right: "0", top: "0", transform: "none", height: "100vh", maxHeight: "100vh", borderRadius: "0" }}
           >
@@ -291,18 +291,18 @@ export function ContentDetailPanel({ open, onOpenChange, content, onEdit }: Cont
             >
               {/* Header */}
               <div className="relative p-6 pb-4 border-b border-[hsl(var(--command-border))]">
-                <div 
+                <div
                   className="absolute inset-0 opacity-5"
                   style={{
                     background: `linear-gradient(135deg, ${typeConfig.color} 0%, transparent 70%)`
                   }}
                 />
-                
+
                 <DialogHeader className="relative">
                   <div className="flex items-start justify-between gap-4">
                     <div className="flex-1">
                       <div className="flex items-center gap-3 mb-3">
-                        <div 
+                        <div
                           className="w-12 h-12 rounded-xl flex items-center justify-center text-xl backdrop-blur-sm border"
                           style={{
                             backgroundColor: `${typeConfig.color}15`,
@@ -311,17 +311,17 @@ export function ContentDetailPanel({ open, onOpenChange, content, onEdit }: Cont
                         >
                           <span>{typeConfig.emoji}</span>
                         </div>
-                        
+
                         <div className="flex-1">
                           <DialogTitle className="text-lg md:text-2xl font-semibold tracking-tight leading-tight">
                             {content.title}
                           </DialogTitle>
-                          
+
                           <div className="flex items-center gap-2 mt-2">
-                            <Badge 
+                            <Badge
                               variant="outline"
                               className="text-xs px-2 py-1"
-                              style={{ 
+                              style={{
                                 backgroundColor: `${typeConfig.color}10`,
                                 borderColor: `${typeConfig.color}30`,
                                 color: typeConfig.color
@@ -329,8 +329,8 @@ export function ContentDetailPanel({ open, onOpenChange, content, onEdit }: Cont
                             >
                               {typeConfig.label}
                             </Badge>
-                            
-                            <Badge 
+
+                            <Badge
                               variant="outline"
                               className="text-xs px-2 py-1"
                               style={{
@@ -341,8 +341,8 @@ export function ContentDetailPanel({ open, onOpenChange, content, onEdit }: Cont
                             >
                               {statusData.label}
                             </Badge>
-                            
-                            <Badge 
+
+                            <Badge
                               variant="outline"
                               className="text-xs px-2 py-1"
                               style={{
@@ -356,12 +356,12 @@ export function ContentDetailPanel({ open, onOpenChange, content, onEdit }: Cont
                           </div>
                         </div>
                       </div>
-                      
+
                       <DialogDescription className="text-[hsl(var(--command-text-muted))] leading-relaxed">
                         {content.description || "No description provided for this content item."}
                       </DialogDescription>
                     </div>
-                    
+
                     <div className="flex items-center gap-2">
                       <Button
                         variant="ghost"
@@ -371,7 +371,7 @@ export function ContentDetailPanel({ open, onOpenChange, content, onEdit }: Cont
                       >
                         <Edit className="h-4 w-4" />
                       </Button>
-                      
+
                       <Button
                         variant="ghost"
                         size="icon"
@@ -383,13 +383,13 @@ export function ContentDetailPanel({ open, onOpenChange, content, onEdit }: Cont
                     </div>
                   </div>
                 </DialogHeader>
-                
+
                 {/* Tab Navigation */}
                 <div className="flex items-center gap-1 mt-6">
                   {tabs.map((tab) => {
                     const Icon = tab.icon
                     const isActive = activeTab === tab.id
-                    
+
                     return (
                       <Button
                         key={tab.id}
@@ -398,8 +398,8 @@ export function ContentDetailPanel({ open, onOpenChange, content, onEdit }: Cont
                         onClick={() => setActiveTab(tab.id as any)}
                         className={cn(
                           "h-9 px-4 rounded-lg transition-all duration-200",
-                          isActive 
-                            ? "bg-[hsl(var(--command-accent))] text-white shadow-lg" 
+                          isActive
+                            ? "bg-[hsl(var(--command-accent))] text-white shadow-lg"
                             : "glass-morphism hover:bg-[hsl(var(--command-surface))]/60"
                         )}
                       >
@@ -433,7 +433,7 @@ export function ContentDetailPanel({ open, onOpenChange, content, onEdit }: Cont
                           </CardHeader>
                           <CardContent className="space-y-4">
                             <div className="flex items-center gap-3">
-                              <div 
+                              <div
                                 className="w-4 h-4 rounded-full"
                                 style={{ backgroundColor: statusData.color }}
                               />
@@ -444,7 +444,7 @@ export function ContentDetailPanel({ open, onOpenChange, content, onEdit }: Cont
                                 </div>
                               </div>
                             </div>
-                            
+
                             {content.platform && (
                               <div className="flex items-center gap-3">
                                 <Globe className="h-4 w-4 text-[hsl(var(--command-text-muted))]" />
@@ -478,7 +478,7 @@ export function ContentDetailPanel({ open, onOpenChange, content, onEdit }: Cont
                                     Words
                                   </div>
                                 </div>
-                                
+
                                 <div className="text-center p-3 glass-morphism rounded-lg">
                                   <div className="text-2xl font-bold text-[hsl(var(--command-accent))]">
                                     {scriptCharCount.toLocaleString()}
@@ -487,7 +487,7 @@ export function ContentDetailPanel({ open, onOpenChange, content, onEdit }: Cont
                                     Characters
                                   </div>
                                 </div>
-                                
+
                                 <div className="text-center p-3 glass-morphism rounded-lg">
                                   <div className="text-2xl font-bold text-green-400">
                                     {contentType === "video" ? videoDuration : readingTime}
@@ -496,7 +496,7 @@ export function ContentDetailPanel({ open, onOpenChange, content, onEdit }: Cont
                                     {contentType === "video" ? "Est. Duration" : "Read Time"}
                                   </div>
                                 </div>
-                                
+
                                 <div className="text-center p-3 glass-morphism rounded-lg">
                                   <div className="text-2xl font-bold text-purple-400">
                                     {Math.ceil(scriptWordCount / 100)}
@@ -523,7 +523,7 @@ export function ContentDetailPanel({ open, onOpenChange, content, onEdit }: Cont
                           </CardHeader>
                           <CardContent>
                             <div className="flex items-center gap-3">
-                              <div 
+                              <div
                                 className={cn(
                                   "w-12 h-12 rounded-full flex items-center justify-center text-lg",
                                   agentColor.bg,
@@ -563,7 +563,7 @@ export function ContentDetailPanel({ open, onOpenChange, content, onEdit }: Cont
                                 </div>
                               </div>
                             </div>
-                            
+
                             <div className="flex items-center gap-3">
                               <Timer className="h-4 w-4 text-[hsl(var(--command-text-muted))]" />
                               <div>
@@ -609,7 +609,7 @@ export function ContentDetailPanel({ open, onOpenChange, content, onEdit }: Cont
                                   </span>
                                 </div>
                               )}
-                              
+
                               {content.engagement && (
                                 <div className="flex items-center justify-between">
                                   <div className="flex items-center gap-2">
@@ -621,7 +621,7 @@ export function ContentDetailPanel({ open, onOpenChange, content, onEdit }: Cont
                                   </span>
                                 </div>
                               )}
-                              
+
                               {/* Shares analytics would go here */}
                             </CardContent>
                           </Card>
@@ -639,7 +639,7 @@ export function ContentDetailPanel({ open, onOpenChange, content, onEdit }: Cont
                               <AlignLeft className="h-5 w-5 text-[hsl(var(--command-accent))]" />
                               Script Content
                             </CardTitle>
-                            
+
                             {content.scriptText && (
                               <div className="flex items-center gap-4 text-sm text-[hsl(var(--command-text-muted))]">
                                 <div className="flex items-center gap-1">
@@ -662,7 +662,7 @@ export function ContentDetailPanel({ open, onOpenChange, content, onEdit }: Cont
                                   {content.scriptText}
                                 </pre>
                               </div>
-                              
+
                               {/* Content Analysis */}
                               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                                 <div className="p-3 glass-morphism rounded-lg text-center">
@@ -671,21 +671,21 @@ export function ContentDetailPanel({ open, onOpenChange, content, onEdit }: Cont
                                   </div>
                                   <div className="text-xs text-[hsl(var(--command-text-muted))]">Total Words</div>
                                 </div>
-                                
+
                                 <div className="p-3 glass-morphism rounded-lg text-center">
                                   <div className="text-xl font-bold text-green-400">
                                     {scriptCharCount}
                                   </div>
                                   <div className="text-xs text-[hsl(var(--command-text-muted))]">Characters</div>
                                 </div>
-                                
+
                                 <div className="p-3 glass-morphism rounded-lg text-center">
                                   <div className="text-xl font-bold text-purple-400">
                                     {content.scriptText.split('\n').filter(line => line.trim()).length}
                                   </div>
                                   <div className="text-xs text-[hsl(var(--command-text-muted))]">Lines</div>
                                 </div>
-                                
+
                                 <div className="p-3 glass-morphism rounded-lg text-center">
                                   <div className="text-xl font-bold text-orange-400">
                                     {Math.ceil(scriptWordCount / 100)}
@@ -800,7 +800,7 @@ export function ContentDetailPanel({ open, onOpenChange, content, onEdit }: Cont
                                 </div>
                               </div>
                             </div>
-                            
+
                             <div className="flex items-center gap-4">
                               <div className="w-3 h-3 bg-green-400 rounded-full" />
                               <div>

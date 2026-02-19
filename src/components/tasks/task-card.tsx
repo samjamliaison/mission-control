@@ -110,7 +110,7 @@ export function TaskCard({ task, index, onEdit, onDelete, isSelected = false, on
     const due = new Date(dueDate)
     const today = new Date(now.getFullYear(), now.getMonth(), now.getDate())
     const dueDay = new Date(due.getFullYear(), due.getMonth(), due.getDate())
-    
+
     if (dueDay < today) return 'overdue'
     if (dueDay.getTime() === today.getTime()) return 'due-today'
     return 'upcoming'
@@ -125,8 +125,8 @@ export function TaskCard({ task, index, onEdit, onDelete, isSelected = false, on
 
   const cardVariants = {
     hidden: { opacity: 0, y: 20 },
-    visible: { 
-      opacity: 1, 
+    visible: {
+      opacity: 1,
       y: 0,
       transition: {
         duration: 0.3,
@@ -156,8 +156,8 @@ export function TaskCard({ task, index, onEdit, onDelete, isSelected = false, on
           whileHover={!snapshot.isDragging ? { y: -2, scale: 1.01 } : {}}
           whileTap={!snapshot.isDragging ? { scale: 0.98 } : {}}
           layout="position"
-          transition={{ 
-            duration: snapshot.isDragging ? 0.15 : 0.4, 
+          transition={{
+            duration: snapshot.isDragging ? 0.15 : 0.4,
             ease: snapshot.isDragging ? [0.2, 0, 0.2, 1] : [0.23, 1, 0.32, 1],
             type: snapshot.isDragging ? "tween" : "spring",
             stiffness: snapshot.isDragging ? undefined : 120,
@@ -180,9 +180,9 @@ export function TaskCard({ task, index, onEdit, onDelete, isSelected = false, on
               isActive && !snapshot.isDragging && "ring-1 ring-[hsl(var(--command-accent))]/30"
             )}
             style={{
-              boxShadow: snapshot.isDragging 
+              boxShadow: snapshot.isDragging
                 ? `0 32px 64px rgba(0,0,0,0.6), 0 16px 32px rgba(0,0,0,0.4), 0 0 32px ${priorityStyle.color}60, 0 0 16px ${priorityStyle.color}40`
-                : isActive 
+                : isActive
                   ? `0 8px 32px rgba(0,0,0,0.2), 0 0 10px ${priorityStyle.color}30`
                   : "0 6px 24px rgba(0,0,0,0.15)",
               filter: snapshot.isDragging ? "brightness(1.1) contrast(1.05)" : undefined,
@@ -190,15 +190,15 @@ export function TaskCard({ task, index, onEdit, onDelete, isSelected = false, on
             }}
           >
             {/* Priority left border indicator */}
-            <div 
+            <div
               className="absolute left-0 top-0 bottom-0 w-1 rounded-l-xl"
               style={{
                 background: `linear-gradient(180deg, ${priorityStyle.color}, ${priorityStyle.color}80)`
               }}
             />
-            
+
             {/* Priority glow overlay */}
-            <div 
+            <div
               className="absolute inset-0 opacity-3 pointer-events-none rounded-xl"
               style={{
                 background: `radial-gradient(circle at 0% 50%, ${priorityStyle.color} 0%, transparent 50%)`
@@ -272,7 +272,7 @@ export function TaskCard({ task, index, onEdit, onDelete, isSelected = false, on
                 </div>
               </div>
             </CardHeader>
-            
+
             <CardContent className="pt-0 pb-5 px-5 space-y-3">
               {task.description && (
                 <p className={cn(
@@ -282,12 +282,12 @@ export function TaskCard({ task, index, onEdit, onDelete, isSelected = false, on
                   {task.description}
                 </p>
               )}
-              
+
               {/* Agent Assignment */}
               <div className="flex items-center gap-3">
                 <div className="flex items-center gap-2">
                   {/* Agent Avatar Circle */}
-                  <div 
+                  <div
                     className={cn(
                       "w-8 h-8 rounded-full flex items-center justify-center text-sm",
                       "backdrop-blur-md border",
@@ -309,7 +309,7 @@ export function TaskCard({ task, index, onEdit, onDelete, isSelected = false, on
                     </span>
                   </div>
                 </div>
-                
+
                 {isActive && (
                   <motion.div
                     animate={{ rotate: 360 }}
@@ -320,7 +320,7 @@ export function TaskCard({ task, index, onEdit, onDelete, isSelected = false, on
                   </motion.div>
                 )}
               </div>
-              
+
               {/* Priority & Metadata */}
               <div className="flex items-center justify-between text-xs">
                 <div className="flex items-center gap-2">
@@ -330,7 +330,7 @@ export function TaskCard({ task, index, onEdit, onDelete, isSelected = false, on
                       className="w-2.5 h-2.5 rounded-full"
                       style={{ backgroundColor: priorityStyle.color }}
                       animate={{
-                        boxShadow: isActive 
+                        boxShadow: isActive
                           ? [`0 0 0px ${priorityStyle.color}`, `0 0 8px ${priorityStyle.color}`, `0 0 0px ${priorityStyle.color}`]
                           : `0 0 4px ${priorityStyle.color}`
                       }}
@@ -347,7 +347,7 @@ export function TaskCard({ task, index, onEdit, onDelete, isSelected = false, on
                     </span>
                   </div>
                 </div>
-                
+
                 <div className="flex items-center gap-1 text-muted text-body-small">
                   <Calendar className="h-3 w-3" />
                   <span>{formatDate(task.createdAt)}</span>
@@ -379,7 +379,7 @@ export function TaskCard({ task, index, onEdit, onDelete, isSelected = false, on
                   <Clock className="h-3 w-3" />
                   <span>Updated {formatDate(task.updatedAt)}</span>
                 </div>
-                
+
                 {isCompleted && (
                   <div className="flex items-center gap-1 text-[hsl(var(--command-success))]">
                     <div className="w-2 h-2 bg-[hsl(var(--command-success))] rounded-full animate-pulse" />

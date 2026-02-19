@@ -17,12 +17,12 @@ export interface UndoAction {
     taskId?: string
     previousTask?: Task
     currentTask?: Task
-    
+
     // For content actions
     contentId?: string
     previousContent?: ContentItem
     currentContent?: ContentItem
-    
+
     // For bulk actions
     items?: Array<{ id: string, before: any, after: any }>
   }
@@ -65,7 +65,7 @@ class UndoSystemManager {
     }
 
     this.actions.unshift(undoAction)
-    
+
     // Keep only the last N actions
     if (this.actions.length > this.maxActions) {
       this.actions = this.actions.slice(0, this.maxActions)

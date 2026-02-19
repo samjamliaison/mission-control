@@ -7,7 +7,7 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { PageHeader } from "@/components/ui/page-header"
 import { StatsCard } from "@/components/ui/stats-card"
-import { 
+import {
   Building2,
   Monitor,
   Coffee,
@@ -32,7 +32,7 @@ const mockOfficeAgents: OfficeAgent[] = [
     _id: "1",
     name: "Hamza",
     avatar: "👤",
-    role: "Mission Commander", 
+    role: "Mission Commander",
     status: "online",
     currentTask: "Strategic Planning Session - Q1 2024 Roadmap",
     position: { x: 50, y: 30 },
@@ -42,11 +42,11 @@ const mockOfficeAgents: OfficeAgent[] = [
     timeInCurrentTask: 45 // minutes
   },
   {
-    _id: "2", 
+    _id: "2",
     name: "Manus",
     avatar: "🤘",
     role: "Chief of Staff",
-    status: "active", 
+    status: "active",
     currentTask: "System Health Monitoring - Infrastructure Check",
     position: { x: 20, y: 60 },
     workstation: "Operations Center",
@@ -56,7 +56,7 @@ const mockOfficeAgents: OfficeAgent[] = [
   },
   {
     _id: "3",
-    name: "Monica", 
+    name: "Monica",
     avatar: "✈️",
     role: "Creative Director",
     status: "active",
@@ -64,13 +64,13 @@ const mockOfficeAgents: OfficeAgent[] = [
     position: { x: 75, y: 70 },
     workstation: "Creative Studio",
     activityLevel: 78,
-    lastAction: "Designing video thumbnails", 
+    lastAction: "Designing video thumbnails",
     timeInCurrentTask: 67
   },
   {
     _id: "4",
     name: "Jarvis",
-    avatar: "🔍", 
+    avatar: "🔍",
     role: "Intelligence Analyst",
     status: "online",
     currentTask: "Market Research Analysis - Competitive Intelligence",
@@ -84,7 +84,7 @@ const mockOfficeAgents: OfficeAgent[] = [
     _id: "5",
     name: "Luna",
     avatar: "🌙",
-    role: "Versatility Specialist", 
+    role: "Versatility Specialist",
     status: "idle",
     currentTask: "Available for Assignment",
     position: { x: 70, y: 40 },
@@ -102,7 +102,7 @@ const statusConfig = {
     pulse: true,
     label: "Online"
   },
-  "active": { 
+  "active": {
     color: "#06b6d4", // cyan-400
     bg: "bg-cyan-500/20",
     pulse: true,
@@ -110,7 +110,7 @@ const statusConfig = {
   },
   "idle": {
     color: "#f59e0b", // amber-500
-    bg: "bg-amber-500/20", 
+    bg: "bg-amber-500/20",
     pulse: false,
     label: "Idle"
   }
@@ -171,8 +171,8 @@ export function OfficeView() {
     <div className="min-h-[calc(100vh-5rem)] relative overflow-hidden">
       {/* Background */}
       <div className="fixed inset-0 bg-gradient-to-br from-[hsl(var(--command-background))] via-[hsl(220_13%_3%)] to-[hsl(var(--command-background))] pointer-events-none" />
-      
-      <motion.div 
+
+      <motion.div
         className="relative z-10 p-6"
         variants={containerVariants}
         initial="hidden"
@@ -208,7 +208,7 @@ export function OfficeView() {
                     />
                     <span className="text-sm font-medium">Systems Online</span>
                   </div>
-                  
+
                   <div className="flex items-center gap-2 glass-morphism px-3 py-2 rounded-lg">
                     <Wifi className="h-4 w-4 text-[hsl(var(--command-accent))]" />
                     <span className="text-sm text-[hsl(var(--command-text-muted))]">
@@ -254,7 +254,7 @@ export function OfficeView() {
                   </Badge>
                 </CardTitle>
               </CardHeader>
-              
+
               <CardContent className="p-0">
                 {/* Office Map */}
                 <div className="relative h-[600px] bg-gradient-to-br from-[hsl(var(--command-surface))] to-[hsl(var(--command-surface))/50] overflow-hidden">
@@ -265,7 +265,7 @@ export function OfficeView() {
                         <pattern
                           id="office-grid"
                           width="40"
-                          height="40" 
+                          height="40"
                           patternUnits="userSpaceOnUse"
                         >
                           <path
@@ -288,11 +288,11 @@ export function OfficeView() {
                     transition={{ delay: 0.5, duration: 1 }}
                   >
                     {/* Meeting Room */}
-                    <div 
+                    <div
                       className="absolute glass-morphism border-2 border-[hsl(var(--command-border-bright))] rounded-lg"
                       style={{
                         left: "10%",
-                        top: "10%", 
+                        top: "10%",
                         width: "25%",
                         height: "30%"
                       }}
@@ -305,12 +305,12 @@ export function OfficeView() {
                     </div>
 
                     {/* Kitchen/Break Area */}
-                    <div 
+                    <div
                       className="absolute glass-morphism border-2 border-[hsl(var(--command-border-bright))] rounded-lg"
                       style={{
                         right: "10%",
                         top: "15%",
-                        width: "15%", 
+                        width: "15%",
                         height: "20%"
                       }}
                     >
@@ -323,7 +323,7 @@ export function OfficeView() {
                     </div>
 
                     {/* Server Room */}
-                    <div 
+                    <div
                       className="absolute glass-morphism border-2 border-[hsl(var(--command-accent))]/30 rounded-lg"
                       style={{
                         left: "5%",
@@ -371,7 +371,7 @@ export function OfficeView() {
               </CardHeader>
               <CardContent className="space-y-3">
                 {agents.filter(a => a.status !== "idle").map((agent) => (
-                  <motion.div 
+                  <motion.div
                     key={agent._id}
                     className="flex items-center gap-4 p-3 glass-morphism rounded-lg cursor-pointer"
                     whileHover={{ scale: 1.01, x: 4 }}
@@ -423,7 +423,7 @@ export function OfficeView() {
                 {agents.map((agent) => {
                   const WorkstationIcon = workstationIcons[agent.workstation as keyof typeof workstationIcons] || Monitor
                   return (
-                    <motion.div 
+                    <motion.div
                       key={agent._id}
                       className="flex items-center justify-between p-3 glass-morphism rounded-lg"
                       whileHover={{ scale: 1.01 }}

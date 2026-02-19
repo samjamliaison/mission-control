@@ -27,7 +27,7 @@ export default function SettingsPage() {
       <div className="min-h-[calc(100vh-5rem)] relative">
         {/* Command Center Background */}
         <div className="fixed inset-0 bg-gradient-to-br from-[hsl(var(--command-background))] via-[hsl(220_13%_3%)] to-[hsl(var(--command-background))] pointer-events-none" />
-        
+
         <div className="relative z-10 p-6">
           <div className="max-w-4xl mx-auto space-y-8">
             {/* Page Header */}

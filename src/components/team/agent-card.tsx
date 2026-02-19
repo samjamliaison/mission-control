@@ -3,7 +3,7 @@
 import { motion } from "framer-motion"
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { 
+import {
   CheckCircle,
   Clock,
   Zap,
@@ -24,7 +24,7 @@ const statusConfig = {
   "online": {
     color: "text-[hsl(var(--command-success))]",
     bg: "bg-[hsl(var(--command-success))]/10",
-    border: "border-[hsl(var(--command-success))]/20", 
+    border: "border-[hsl(var(--command-success))]/20",
     icon: CheckCircle,
     label: "Online",
     glow: "0 0 15px hsl(var(--command-success) / 0.3)"
@@ -65,8 +65,8 @@ export function AgentCard({ agent, onClick }: AgentCardProps) {
 
   const cardVariants = {
     hidden: { opacity: 0, y: 20 },
-    visible: { 
-      opacity: 1, 
+    visible: {
+      opacity: 1,
       y: 0,
       transition: {
         duration: 0.3,
@@ -93,7 +93,7 @@ export function AgentCard({ agent, onClick }: AgentCardProps) {
         }}
       >
         {/* Status glow overlay */}
-        <div 
+        <div
           className="absolute inset-0 opacity-5 pointer-events-none"
           style={{
             background: `radial-gradient(circle at 0% 50%, ${statusStyle.color.replace('text-', 'hsl(var(--command-')} 0%, transparent 50%)`
@@ -120,14 +120,14 @@ export function AgentCard({ agent, onClick }: AgentCardProps) {
           <div className="flex items-start justify-between">
             <div className="flex items-center gap-4">
               {/* Avatar */}
-              <motion.div 
+              <motion.div
                 className="text-4xl"
                 whileHover={{ scale: 1.1, rotate: 5 }}
                 transition={{ duration: 0.2 }}
               >
                 {agent.avatar}
               </motion.div>
-              
+
               <div>
                 <h3 className="text-lg font-semibold tracking-tight group-hover:text-[hsl(var(--command-accent))] transition-colors">
                   {agent.name}
@@ -139,7 +139,7 @@ export function AgentCard({ agent, onClick }: AgentCardProps) {
             </div>
 
             {/* Status Badge */}
-            <Badge 
+            <Badge
               variant="outline"
               className={cn(
                 "flex items-center gap-1 text-xs font-bold",
@@ -154,7 +154,7 @@ export function AgentCard({ agent, onClick }: AgentCardProps) {
             </Badge>
           </div>
         </CardHeader>
-        
+
         <CardContent className="space-y-4 relative">
           {/* Current Activity */}
           <div className="space-y-2">
@@ -197,9 +197,9 @@ export function AgentCard({ agent, onClick }: AgentCardProps) {
             </div>
             <div className="flex flex-wrap gap-1 pl-6">
               {agent.expertise.slice(0, 3).map((skill) => (
-                <Badge 
-                  key={skill} 
-                  variant="outline" 
+                <Badge
+                  key={skill}
+                  variant="outline"
                   className="text-xs px-2 py-0.5 bg-[hsl(var(--command-surface))]/50 border-[hsl(var(--command-border))]"
                 >
                   {skill}

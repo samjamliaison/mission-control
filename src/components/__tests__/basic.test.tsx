@@ -16,10 +16,10 @@ describe('Basic Component Tests', () => {
         {show && <span data-testid="conditional">Shown</span>}
       </div>
     )
-    
+
     const { rerender } = render(<ConditionalComponent show={false} />)
     expect(screen.queryByTestId('conditional')).not.toBeInTheDocument()
-    
+
     rerender(<ConditionalComponent show={true} />)
     expect(screen.getByTestId('conditional')).toBeInTheDocument()
   })

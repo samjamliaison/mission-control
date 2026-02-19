@@ -11,9 +11,9 @@ interface AnimatedCounterProps {
   suffix?: string
 }
 
-export function AnimatedCounter({ 
-  value, 
-  duration = 2, 
+export function AnimatedCounter({
+  value,
+  duration = 2,
   className = "",
   prefix = "",
   suffix = ""
@@ -22,13 +22,13 @@ export function AnimatedCounter({
     duration: duration * 1000,
     bounce: 0.2,
   })
-  
-  const displayValue = useTransform(springValue, (latest) => 
+
+  const displayValue = useTransform(springValue, (latest) =>
     Math.floor(latest)
   )
-  
+
   const hasAnimatedRef = useRef(false)
-  
+
   useEffect(() => {
     if (!hasAnimatedRef.current) {
       springValue.set(value)
@@ -37,7 +37,7 @@ export function AnimatedCounter({
   }, [springValue, value])
 
   return (
-    <motion.span 
+    <motion.span
       className={className}
       initial={{ opacity: 0, scale: 0.8 }}
       animate={{ opacity: 1, scale: 1 }}

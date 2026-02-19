@@ -10,7 +10,7 @@ import { PageHeader } from "@/components/ui/page-header"
 import { StatsCard } from "@/components/ui/stats-card"
 import { StaggeredList } from "@/components/ui/staggered-list"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { 
+import {
   Activity,
   Filter,
   Search,
@@ -132,21 +132,21 @@ export function ActivityView() {
   // Load activity data and set up listeners
   useEffect(() => {
     setMounted(true)
-    
+
     // Log navigation
     logNavigationAction('Activity Log')
-    
+
     // Load initial data
     loadEntries()
-    
+
     // Listen for new activity
     const handleActivityUpdate = () => {
       loadEntries()
     }
-    
+
     window.addEventListener('activityLogUpdated', handleActivityUpdate)
     window.addEventListener('activityLogCleared', handleActivityUpdate)
-    
+
     return () => {
       window.removeEventListener('activityLogUpdated', handleActivityUpdate)
       window.removeEventListener('activityLogCleared', handleActivityUpdate)
@@ -162,7 +162,7 @@ export function ActivityView() {
   const filterOptions = useMemo(() => {
     const actionTypes = [...new Set(entries.map(e => e.actionType))].sort()
     const agents = [...new Set(entries.map(e => e.agent))].sort()
-    
+
     return { actionTypes, agents }
   }, [entries])
 
@@ -174,7 +174,7 @@ export function ActivityView() {
     if (dateRangeFilter !== 'all') {
       const now = Date.now()
       let startTime = 0
-      
+
       switch (dateRangeFilter) {
         case 'today':
           startTime = new Date(now).setHours(0, 0, 0, 0)
@@ -186,7 +186,7 @@ export function ActivityView() {
           startTime = now - (30 * 24 * 60 * 60 * 1000)
           break
       }
-      
+
       if (startTime > 0) {
         filtered = filtered.filter(entry => entry.timestamp >= startTime)
       }
@@ -203,7 +203,7 @@ export function ActivityView() {
       if (dateRangeFilter !== 'all') {
         const now = Date.now()
         let startTime = 0
-        
+
         switch (dateRangeFilter) {
           case 'today':
             startTime = new Date(now).setHours(0, 0, 0, 0)
@@ -215,7 +215,7 @@ export function ActivityView() {
             startTime = now - (30 * 24 * 60 * 60 * 1000)
             break
         }
-        
+
         return startTime === 0 || entry.timestamp >= startTime
       }
       return true
@@ -274,8 +274,8 @@ export function ActivityView() {
     <div className="min-h-[calc(100vh-5rem)] relative">
       {/* Command Center Background */}
       <div className="fixed inset-0 bg-gradient-to-br from-[hsl(var(--command-background))] via-[hsl(220_13%_3%)] to-[hsl(var(--command-background))] pointer-events-none" />
-      
-      <motion.div 
+
+      <motion.div
         className="relative z-10 p-6"
         variants={containerVariants}
         initial="hidden"
@@ -458,7 +458,7 @@ export function ActivityView() {
                       const Icon = actionTypeIcons[entry.actionType]
                       const iconColor = actionTypeColors[entry.actionType]
                       const borderColor = importanceColors[entry.importance]
-                      
+
                       return (
                         <motion.div
                           key={entry.id}
@@ -471,7 +471,7 @@ export function ActivityView() {
                           <div className={cn("mt-1 p-2 rounded-lg bg-opacity-10", iconColor.replace('text-', 'bg-').replace('400', '500/10'))}>
                             <Icon className={cn("h-4 w-4", iconColor)} />
                           </div>
-                          
+
                           <div className="flex-1 min-w-0">
                             <div className="flex items-start justify-between gap-4">
                               <div>
@@ -509,7 +509,7 @@ export function ActivityView() {
                                   </div>
                                 )}
                               </div>
-                              
+
                               <div className="text-xs text-[hsl(var(--command-text-muted))] whitespace-nowrap">
                                 {new Date(entry.timestamp).toLocaleTimeString()}
                               </div>

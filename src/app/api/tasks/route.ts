@@ -55,20 +55,20 @@ async function readOpenClawConfig(): Promise<OpenClawConfig | null> {
 async function readMemoryFiles(): Promise<Task[]> {
   const tasks: Task[] = [];
   const memoryDir = path.join(OPENCLAW_WORKSPACE, 'memory');
-  
+
   try {
     // Read MEMORY.md
     const memoryPath = path.join(OPENCLAW_WORKSPACE, 'MEMORY.md');
     try {
       const memoryContent = await fs.readFile(memoryPath, 'utf-8');
-      
+
       // Extract key information as tasks
       const sections = memoryContent.split('\n## ').slice(1); // Skip title
       sections.forEach((section, index) => {
         const lines = section.split('\n');
         const sectionTitle = lines[0];
         const content = lines.slice(1).join('\n').trim();
-        
+
         if (content.length > 50) { // Only create tasks for substantial sections
           tasks.push({
             id: `memory-main-${index}`,
@@ -89,17 +89,17 @@ async function readMemoryFiles(): Promise<Task[]> {
     // Read daily memory files
     const files = await fs.readdir(memoryDir);
     const mdFiles = files.filter(f => f.endsWith('.md')).sort();
-    
+
     for (const file of mdFiles.slice(-3)) { // Last 3 files only
       const filePath = path.join(memoryDir, file);
       const content = await fs.readFile(filePath, 'utf-8');
       const date = file.replace('.md', '');
-      
+
       // Parse content for action items or important notes
       const lines = content.split('\n');
       let currentTask = '';
       let taskLines: string[] = [];
-      
+
       lines.forEach(line => {
         if (line.trim().startsWith('- ') || line.trim().startsWith('* ')) {
           if (currentTask && taskLines.length > 0) {
@@ -121,7 +121,7 @@ async function readMemoryFiles(): Promise<Task[]> {
           taskLines.push(line.trim());
         }
       });
-      
+
       // Don't forget the last task
       if (currentTask && taskLines.length > 0) {
         tasks.push({
@@ -139,13 +139,13 @@ async function readMemoryFiles(): Promise<Task[]> {
   } catch (error) {
     console.error('Failed to read memory files:', error);
   }
-  
+
   return tasks;
 }
 
 async function readCronJobs(): Promise<Task[]> {
   const tasks: Task[] = [];
-  
+
   try {
     const config = await readOpenClawConfig();
     if (config?.cron?.jobs) {
@@ -165,13 +165,13 @@ async function readCronJobs(): Promise<Task[]> {
   } catch (error) {
     console.error('Failed to read cron jobs:', error);
   }
-  
+
   return tasks;
 }
 
 async function readAgentWorkspaces(): Promise<Task[]> {
   const tasks: Task[] = [];
-  
+
   try {
     const config = await readOpenClawConfig();
     if (config?.agents?.list) {
@@ -216,7 +216,7 @@ async function readAgentWorkspaces(): Promise<Task[]> {
   } catch (error) {
     console.error('Failed to read agent workspaces:', error);
   }
-  
+
   return tasks;
 }
 
@@ -228,10 +228,10 @@ export async function GET(request: NextRequest) {
       readCronJobs(),
       readAgentWorkspaces()
     ]);
-    
+
     // Combine all tasks
     const allTasks = [...memoryTasks, ...cronTasks, ...agentTasks];
-    
+
     // Add some metadata
     const response = {
       tasks: allTasks,
@@ -250,7 +250,7 @@ export async function GET(request: NextRequest) {
       },
       timestamp: new Date().toISOString()
     };
-    
+
     return NextResponse.json(response);
   } catch (error) {
     console.error('API Error:', error);

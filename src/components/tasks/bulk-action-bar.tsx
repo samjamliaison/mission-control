@@ -21,12 +21,12 @@ interface BulkActionBarProps {
   onClear: () => void
 }
 
-export function BulkActionBar({ 
-  selectedCount, 
-  onStatusChange, 
-  onPriorityChange, 
-  onDelete, 
-  onClear 
+export function BulkActionBar({
+  selectedCount,
+  onStatusChange,
+  onPriorityChange,
+  onDelete,
+  onClear
 }: BulkActionBarProps) {
   return (
     <AnimatePresence>
@@ -43,9 +43,9 @@ export function BulkActionBar({
               <div className="text-body-small font-semibold text-[hsl(var(--command-accent))]">
                 {selectedCount} task{selectedCount > 1 ? 's' : ''} selected
               </div>
-              
+
               <div className="h-6 w-px bg-white/20" />
-              
+
               {/* Status Change */}
               <Select onValueChange={onStatusChange}>
                 <SelectTrigger className="w-32 h-9 bg-transparent border-white/20">
@@ -72,7 +72,7 @@ export function BulkActionBar({
                   </SelectItem>
                 </SelectContent>
               </Select>
-              
+
               {/* Priority Change */}
               <Select onValueChange={onPriorityChange}>
                 <SelectTrigger className="w-32 h-9 bg-transparent border-white/20">
@@ -99,9 +99,9 @@ export function BulkActionBar({
                   </SelectItem>
                 </SelectContent>
               </Select>
-              
+
               <div className="h-6 w-px bg-white/20" />
-              
+
               {/* Delete */}
               <Button
                 variant="ghost"
@@ -112,7 +112,7 @@ export function BulkActionBar({
                 <Trash2 className="h-4 w-4 mr-2" />
                 Delete
               </Button>
-              
+
               {/* Clear Selection */}
               <Button
                 variant="ghost"

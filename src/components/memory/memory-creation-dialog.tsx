@@ -20,7 +20,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Badge } from "@/components/ui/badge"
-import { 
+import {
   Brain,
   BookOpen,
   Calendar,
@@ -110,12 +110,12 @@ export function MemoryCreationDialog({ open, onOpenChange, onSave, editingMemory
       }
     }
   }, [open, editingMemory])
-  
+
   const handleSave = () => {
     if (!title.trim() || !content.trim() || !author) return
-    
+
     const wordCount = content.trim().split(/\s+/).filter(word => word.length > 0).length
-    
+
     const memoryData: Partial<MemoryEntry> = {
       ...(editingMemory && { _id: editingMemory._id }),
       title: title.trim(),
@@ -126,11 +126,11 @@ export function MemoryCreationDialog({ open, onOpenChange, onSave, editingMemory
       wordCount,
       pinned
     }
-    
+
     onSave(memoryData)
     onOpenChange(false)
   }
-  
+
   const handleCancel = () => {
     onOpenChange(false)
   }
@@ -162,21 +162,21 @@ export function MemoryCreationDialog({ open, onOpenChange, onSave, editingMemory
   const isFormValid = title.trim() && content.trim() && author
   const selectedCategory = categoryOptions.find(c => c.value === category)
   const wordCount = content.trim().split(/\s+/).filter(word => word.length > 0).length
-  
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[700px] max-h-[90vh] glass-morphism border-[hsl(var(--command-border-bright))] p-0 overflow-hidden">
         {/* Header */}
         <div className="relative p-6 pb-4">
-          <div 
+          <div
             className="absolute inset-0 opacity-10"
             style={{
-              background: selectedCategory 
+              background: selectedCategory
                 ? `linear-gradient(135deg, ${selectedCategory.color.replace('text-', 'hsl(var(--command-')} 0%, transparent 50%)`
                 : "linear-gradient(135deg, hsl(var(--command-accent)) 0%, transparent 50%)"
             }}
           />
-          
+
           <DialogHeader className="relative">
             <div className="flex items-center gap-3 mb-2">
               <div className="p-2 glass-morphism rounded-lg">
@@ -187,17 +187,17 @@ export function MemoryCreationDialog({ open, onOpenChange, onSave, editingMemory
               </DialogTitle>
             </div>
             <DialogDescription className="text-[hsl(var(--command-text-muted))]">
-              {editingMemory 
-                ? "Update this memory entry with new information or insights." 
+              {editingMemory
+                ? "Update this memory entry with new information or insights."
                 : "Capture important knowledge, insights, or daily notes for the command center."
               }
             </DialogDescription>
           </DialogHeader>
         </div>
-        
+
         <div className="px-6 pb-6 overflow-y-auto max-h-[calc(90vh-200px)] space-y-6">
           {/* Memory Title */}
-          <motion.div 
+          <motion.div
             className="space-y-2"
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
@@ -215,9 +215,9 @@ export function MemoryCreationDialog({ open, onOpenChange, onSave, editingMemory
               className="glass-morphism border-[hsl(var(--command-border))] focus:ring-1 focus:ring-[hsl(var(--command-accent))] font-medium"
             />
           </motion.div>
-          
+
           {/* Memory Content */}
-          <motion.div 
+          <motion.div
             className="space-y-2"
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
@@ -241,10 +241,10 @@ export function MemoryCreationDialog({ open, onOpenChange, onSave, editingMemory
               className="glass-morphism border-[hsl(var(--command-border))] focus:ring-1 focus:ring-[hsl(var(--command-accent))] resize-none font-mono text-sm"
             />
           </motion.div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Category */}
-            <motion.div 
+            <motion.div
               className="space-y-2"
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
@@ -282,9 +282,9 @@ export function MemoryCreationDialog({ open, onOpenChange, onSave, editingMemory
                 </SelectContent>
               </Select>
             </motion.div>
-            
+
             {/* Author */}
-            <motion.div 
+            <motion.div
               className="space-y-2"
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
@@ -318,9 +318,9 @@ export function MemoryCreationDialog({ open, onOpenChange, onSave, editingMemory
               </Select>
             </motion.div>
           </div>
-          
+
           {/* Pin Toggle */}
-          <motion.div 
+          <motion.div
             className="space-y-2"
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
@@ -338,8 +338,8 @@ export function MemoryCreationDialog({ open, onOpenChange, onSave, editingMemory
                 onClick={() => setPinned(!pinned)}
                 className={cn(
                   "glass-morphism transition-all duration-200",
-                  pinned 
-                    ? "bg-[hsl(var(--command-warning))]/20 border-[hsl(var(--command-warning))]/30 text-[hsl(var(--command-warning))]" 
+                  pinned
+                    ? "bg-[hsl(var(--command-warning))]/20 border-[hsl(var(--command-warning))]/30 text-[hsl(var(--command-warning))]"
                     : "border-[hsl(var(--command-border))]"
                 )}
               >
@@ -351,9 +351,9 @@ export function MemoryCreationDialog({ open, onOpenChange, onSave, editingMemory
               </span>
             </div>
           </motion.div>
-          
+
           {/* Tags */}
-          <motion.div 
+          <motion.div
             className="space-y-3"
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
@@ -363,7 +363,7 @@ export function MemoryCreationDialog({ open, onOpenChange, onSave, editingMemory
               <Tag className="h-4 w-4 text-[hsl(var(--command-accent))]" />
               Tags
             </label>
-            
+
             {/* Tag Input */}
             <div className="flex gap-2">
               <Input
@@ -383,16 +383,16 @@ export function MemoryCreationDialog({ open, onOpenChange, onSave, editingMemory
                 <Plus className="h-4 w-4" />
               </Button>
             </div>
-            
+
             {/* Current Tags */}
             {tags.length > 0 && (
               <div className="space-y-2">
                 <div className="text-xs font-medium text-[hsl(var(--command-text-muted))]">Current Tags:</div>
                 <div className="flex flex-wrap gap-2">
                   {tags.map((tag) => (
-                    <Badge 
-                      key={tag} 
-                      variant="outline" 
+                    <Badge
+                      key={tag}
+                      variant="outline"
                       className="bg-[hsl(var(--command-accent))]/10 text-[hsl(var(--command-accent))] border-[hsl(var(--command-accent))]/20 hover:bg-[hsl(var(--command-accent))]/20 cursor-pointer"
                       onClick={() => handleRemoveTag(tag)}
                     >
@@ -404,7 +404,7 @@ export function MemoryCreationDialog({ open, onOpenChange, onSave, editingMemory
                 </div>
               </div>
             )}
-            
+
             {/* Suggested Tags */}
             <div className="space-y-2">
               <div className="text-xs font-medium text-[hsl(var(--command-text-muted))]">Suggested Tags:</div>
@@ -413,9 +413,9 @@ export function MemoryCreationDialog({ open, onOpenChange, onSave, editingMemory
                   .filter(tag => !tags.includes(tag))
                   .slice(0, 10)
                   .map((tag) => (
-                    <Badge 
-                      key={tag} 
-                      variant="outline" 
+                    <Badge
+                      key={tag}
+                      variant="outline"
                       className="text-xs cursor-pointer hover:bg-[hsl(var(--command-surface))]/60 transition-colors"
                       onClick={() => handleSuggestedTag(tag)}
                     >
@@ -426,7 +426,7 @@ export function MemoryCreationDialog({ open, onOpenChange, onSave, editingMemory
               </div>
             </div>
           </motion.div>
-          
+
           {/* Preview */}
           {author && (
             <motion.div
@@ -438,27 +438,27 @@ export function MemoryCreationDialog({ open, onOpenChange, onSave, editingMemory
               <div className="text-center space-y-2">
                 <div className="text-xs text-[hsl(var(--command-text-muted))] font-medium">Memory Preview</div>
                 <div className="flex items-center gap-2 justify-center">
-                  <Badge 
-                    variant="outline" 
+                  <Badge
+                    variant="outline"
                     className="bg-[hsl(var(--command-accent))]/10 text-[hsl(var(--command-accent))] border-[hsl(var(--command-accent))]/20 text-sm px-3 py-1"
                   >
                     <span className="mr-1">{agentAvatars[author as keyof typeof agentAvatars]}</span>
                     {author}
                   </Badge>
-                  
+
                   {selectedCategory && (
-                    <Badge 
-                      variant="outline" 
+                    <Badge
+                      variant="outline"
                       className={cn("text-sm px-3 py-1", selectedCategory.color, "border-current/20")}
                     >
                       <selectedCategory.icon className="h-3 w-3 mr-1" />
                       {selectedCategory.label}
                     </Badge>
                   )}
-                  
+
                   {pinned && (
-                    <Badge 
-                      variant="outline" 
+                    <Badge
+                      variant="outline"
                       className="bg-[hsl(var(--command-warning))]/10 text-[hsl(var(--command-warning))] border-[hsl(var(--command-warning))]/20 text-sm px-3 py-1"
                     >
                       <Pin className="h-3 w-3 mr-1" />
@@ -466,7 +466,7 @@ export function MemoryCreationDialog({ open, onOpenChange, onSave, editingMemory
                     </Badge>
                   )}
                 </div>
-                
+
                 <div className="text-xs text-[hsl(var(--command-text-muted))]">
                   {wordCount} words • {tags.length} tags
                 </div>
@@ -474,12 +474,12 @@ export function MemoryCreationDialog({ open, onOpenChange, onSave, editingMemory
             </motion.div>
           )}
         </div>
-        
+
         {/* Action Buttons */}
         <div className="px-6 py-4 bg-[hsl(var(--command-surface))]/50 backdrop-blur border-t border-[hsl(var(--command-border))]">
           <div className="flex justify-end gap-3">
-            <Button 
-              variant="ghost" 
+            <Button
+              variant="ghost"
               onClick={handleCancel}
               className="hover:bg-[hsl(var(--command-text-muted))]/10"
             >
@@ -490,13 +490,13 @@ export function MemoryCreationDialog({ open, onOpenChange, onSave, editingMemory
               whileHover={{ scale: isFormValid ? 1.02 : 1 }}
               whileTap={{ scale: isFormValid ? 0.98 : 1 }}
             >
-              <Button 
+              <Button
                 onClick={handleSave}
                 disabled={!isFormValid}
                 className={cn(
                   "font-semibold px-6",
-                  isFormValid 
-                    ? "bg-gradient-to-r from-[hsl(var(--command-accent))] to-[hsl(199_89%_38%)] hover:from-[hsl(199_89%_58%)] hover:to-[hsl(var(--command-accent))] shadow-lg shadow-[hsl(var(--command-accent))]/20" 
+                  isFormValid
+                    ? "bg-gradient-to-r from-[hsl(var(--command-accent))] to-[hsl(199_89%_38%)] hover:from-[hsl(199_89%_58%)] hover:to-[hsl(var(--command-accent))] shadow-lg shadow-[hsl(var(--command-accent))]/20"
                     : "opacity-50 cursor-not-allowed"
                 )}
               >

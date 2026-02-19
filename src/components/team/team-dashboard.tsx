@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button"
 import { PageHeader } from "@/components/ui/page-header"
 import { StatsCard } from "@/components/ui/stats-card"
 import { StaggeredList } from "@/components/ui/staggered-list"
-import { 
+import {
   Users,
   Activity,
   CheckCircle,
@@ -79,7 +79,7 @@ const statusConfig = {
   "online": {
     color: "text-[hsl(var(--command-success))]",
     bg: "bg-[hsl(var(--command-success))]/10",
-    border: "border-[hsl(var(--command-success))]/20", 
+    border: "border-[hsl(var(--command-success))]/20",
     icon: CheckCircle,
     label: "Online"
   },
@@ -140,12 +140,12 @@ export function TeamDashboard() {
     try {
       setLoading(true)
       setError(null)
-      
+
       const response = await fetch('/api/agents')
       if (!response.ok) {
         throw new Error(`API Error: ${response.status} ${response.statusText}`)
       }
-      
+
       const data: AgentsApiResponse = await response.json()
       setAgents(data.agents)
       setLastUpdated(data.timestamp)
@@ -162,7 +162,7 @@ export function TeamDashboard() {
     loadAgentsFromApi()
   }, [])
 
-  // Team statistics  
+  // Team statistics
   const totalAgents = agents.length
   const onlineAgents = agents.filter(a => a.status === "online" || a.status === "active").length
   const totalActiveTasks = agents.reduce((sum, agent) => sum + agent.activeTasks, 0)
@@ -221,8 +221,8 @@ export function TeamDashboard() {
     <div className="min-h-[calc(100vh-5rem)] relative" data-testid="team-dashboard">
       {/* Background */}
       <div className="fixed inset-0 bg-gradient-to-br from-[hsl(var(--command-background))] via-[hsl(220_13%_3%)] to-[hsl(var(--command-background))] pointer-events-none" />
-      
-      <motion.div 
+
+      <motion.div
         className="relative z-10 p-6"
         variants={containerVariants}
         initial="hidden"
@@ -319,7 +319,7 @@ export function TeamDashboard() {
 
           {/* Agent Grid */}
           <motion.div variants={itemVariants}>
-            <StaggeredList 
+            <StaggeredList
               className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6"
               staggerDelay={0.08}
               direction="up"
@@ -346,7 +346,7 @@ export function TeamDashboard() {
               </CardHeader>
               <CardContent className="space-y-4">
                 {agents.filter(a => a.status !== "idle" && a.status !== "offline").map((agent) => (
-                  <motion.div 
+                  <motion.div
                     key={agent.id}
                     className="flex items-center gap-4 p-3 glass-morphism rounded-lg cursor-pointer"
                     whileHover={{ scale: 1.01 }}
@@ -360,7 +360,7 @@ export function TeamDashboard() {
                       </div>
                     </div>
                     <div className="flex items-center gap-2">
-                      <Badge 
+                      <Badge
                         variant="outline"
                         className={cn(
                           "text-xs",

@@ -59,13 +59,13 @@ async function analyzeAgentActivity(workspacePath: string): Promise<{
   try {
     // Check if workspace exists
     await fs.access(workspacePath)
-    
+
     // Get last activity from workspace modification time
     let lastActivity = Date.now() - (7 * 24 * 60 * 60 * 1000) // Default to 1 week ago
     try {
       const stats = await fs.stat(workspacePath)
       lastActivity = stats.mtime.getTime()
-      
+
       // Also check memory directory for more recent activity
       const memoryDir = path.join(workspacePath, 'memory')
       try {
@@ -79,7 +79,7 @@ async function analyzeAgentActivity(workspacePath: string): Promise<{
     } catch {
       // Use default
     }
-    
+
     // Estimate current activity based on recent file changes
     const taskEstimate = Math.floor(Math.random() * 8) + 1
     const activities = [
@@ -92,11 +92,11 @@ async function analyzeAgentActivity(workspacePath: string): Promise<{
       'Updating memory files',
       'Standby mode'
     ]
-    
-    const currentActivity = taskEstimate > 0 ? 
+
+    const currentActivity = taskEstimate > 0 ?
       activities[Math.floor(Math.random() * (activities.length - 1))] :
       'Standby mode'
-    
+
     return {
       lastActivity,
       taskEstimate,
@@ -114,12 +114,12 @@ async function analyzeAgentActivity(workspacePath: string): Promise<{
 function calculateUptime(agentId: string): number {
   // Simulate uptime based on agent importance
   const baseUptime = Date.now() - (Math.random() * 30 * 24 * 60 * 60 * 1000) // Up to 30 days
-  
+
   if (agentId === 'main') {
     // Main agent has higher uptime
     return Date.now() - (Math.random() * 7 * 24 * 60 * 60 * 1000) // Up to 7 days
   }
-  
+
   return baseUptime
 }
 
@@ -137,14 +137,14 @@ export async function GET(request: NextRequest) {
     if (!config?.agents?.list) {
       throw new Error('No agents configured in OpenClaw')
     }
-    
+
     const agentStatuses: AgentStatus[] = []
-    
+
     for (const agentConfig of config.agents.list) {
       const workspacePath = agentConfig.workspace || BASE_WORKSPACE
       const activity = await analyzeAgentActivity(workspacePath)
       const metrics = simulateSystemMetrics()
-      
+
       // Determine status based on recent activity
       let status: 'online' | 'active' | 'idle' | 'offline' = 'offline'
       const hoursSinceActivity = (Date.now() - activity.lastActivity) / (1000 * 60 * 60)
@@ -152,7 +152,7 @@ export async function GET(request: NextRequest) {
       else if (hoursSinceActivity < 6) status = 'active' // Last 6 hours
       else if (hoursSinceActivity < 168) status = 'idle' // Last week
       else status = 'offline'
-      
+
       const agentStatus: AgentStatus = {
         id: agentConfig.id,
         name: agentConfig.identity?.name || agentConfig.name || agentConfig.id,
@@ -168,10 +168,10 @@ export async function GET(request: NextRequest) {
         responseTime: metrics.responseTime,
         avatar: agentConfig.identity?.emoji || '🤖'
       }
-      
+
       agentStatuses.push(agentStatus)
     }
-    
+
     // Sort by status importance
     agentStatuses.sort((a, b) => {
       const statusOrder = { online: 0, active: 1, idle: 2, offline: 3 }
@@ -179,7 +179,7 @@ export async function GET(request: NextRequest) {
       if (statusDiff !== 0) return statusDiff
       return a.name.localeCompare(b.name)
     })
-    
+
     const response = {
       agents: agentStatuses,
       summary: {
@@ -204,14 +204,14 @@ export async function GET(request: NextRequest) {
       },
       timestamp: new Date().toISOString()
     }
-    
+
     return NextResponse.json(response)
   } catch (error) {
     console.error('Agent Status API Error:', error)
     return NextResponse.json(
-      { 
-        error: 'Failed to fetch agent status', 
-        details: error instanceof Error ? error.message : 'Unknown error' 
+      {
+        error: 'Failed to fetch agent status',
+        details: error instanceof Error ? error.message : 'Unknown error'
       },
       { status: 500 }
     )

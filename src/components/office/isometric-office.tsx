@@ -32,7 +32,7 @@ const agents: Agent[] = [
     timeOnTask: 45
   },
   {
-    id: '2', 
+    id: '2',
     name: 'GPT-4',
     avatar: '🧠',
     role: 'Language Model',
@@ -134,7 +134,7 @@ export function IsometricOffice() {
       </div>
 
       <div className="container mx-auto px-6 py-8 relative z-10">
-        <PageHeader 
+        <PageHeader
           title="Digital Office"
           subtitle="Isometric view of our AI agent workspace - where the magic happens"
           icon={Building2}
@@ -142,7 +142,7 @@ export function IsometricOffice() {
 
         {/* Office Stats */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-          <motion.div 
+          <motion.div
             className="bg-white/[0.03] backdrop-blur-xl border border-white/[0.06] rounded-xl p-4"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -159,7 +159,7 @@ export function IsometricOffice() {
             </div>
           </motion.div>
 
-          <motion.div 
+          <motion.div
             className="bg-white/[0.03] backdrop-blur-xl border border-white/[0.06] rounded-xl p-4"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -176,7 +176,7 @@ export function IsometricOffice() {
             </div>
           </motion.div>
 
-          <motion.div 
+          <motion.div
             className="bg-white/[0.03] backdrop-blur-xl border border-white/[0.06] rounded-xl p-4"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -193,7 +193,7 @@ export function IsometricOffice() {
             </div>
           </motion.div>
 
-          <motion.div 
+          <motion.div
             className="bg-white/[0.03] backdrop-blur-xl border border-white/[0.06] rounded-xl p-4"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -212,13 +212,13 @@ export function IsometricOffice() {
         </div>
 
         {/* Isometric Office Grid */}
-        <motion.div 
+        <motion.div
           className="flex justify-center items-center min-h-[600px] p-8"
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.5, duration: 0.8 }}
         >
-          <div 
+          <div
             className="grid grid-cols-3 gap-12"
             style={{
               transform: 'rotateX(60deg) rotateZ(-45deg)',
@@ -252,11 +252,11 @@ export function IsometricOffice() {
                     {/* Monitor Stand */}
                     <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-6 h-2 bg-gray-700 rounded-sm" />
                     <div className="absolute bottom-2 left-1/2 -translate-x-1/2 w-1 h-3 bg-gray-600" />
-                    
+
                     {/* Screen */}
-                    <div 
+                    <div
                       className="w-full h-12 rounded-sm shadow-lg relative overflow-hidden border-2"
-                      style={{ 
+                      style={{
                         backgroundColor: agent.status === 'working' ? '#1a1a1a' : '#404040',
                         borderColor: agent.color + '40'
                       }}
@@ -276,16 +276,16 @@ export function IsometricOffice() {
                               ))}
                             </div>
                             {/* Blinking cursor */}
-                            <motion.div 
+                            <motion.div
                               className="absolute bottom-1 left-1 w-0.5 h-1 bg-green-400"
                               animate={{ opacity: [1, 0, 1] }}
                               transition={{ duration: 1, repeat: Infinity }}
                             />
                           </>
                         )}
-                        
+
                         {/* Screen glow */}
-                        <motion.div 
+                        <motion.div
                           className="absolute inset-0 opacity-30"
                           style={{ backgroundColor: agent.color }}
                           animate={{ opacity: [0.1, 0.3, 0.1] }}
@@ -309,7 +309,7 @@ export function IsometricOffice() {
                   </div>
 
                   {/* Status Indicator */}
-                  <motion.div 
+                  <motion.div
                     className={cn(
                       "absolute -top-2 -right-2 w-4 h-4 rounded-full border-2 border-white/20 shadow-lg",
                       statusConfig[agent.status].pulse && "animate-pulse"
@@ -341,11 +341,11 @@ export function IsometricOffice() {
                   <motion.div
                     className="absolute inset-0 rounded-lg pointer-events-none"
                     initial={{ opacity: 0 }}
-                    animate={{ 
+                    animate={{
                       opacity: selectedAgent?.id === agent.id ? 0.3 : 0,
                       scale: selectedAgent?.id === agent.id ? 1.1 : 1
                     }}
-                    style={{ 
+                    style={{
                       boxShadow: `0 0 30px ${agent.color}`,
                       backgroundColor: agent.color + '10'
                     }}
@@ -372,8 +372,8 @@ export function IsometricOffice() {
                             <h3 className="font-semibold text-white">{agent.name}</h3>
                             <p className="text-xs text-white/60">{agent.role}</p>
                           </div>
-                          <Badge 
-                            variant="outline" 
+                          <Badge
+                            variant="outline"
                             className="ml-auto text-xs"
                             style={{ borderColor: statusConfig[agent.status].color }}
                           >
@@ -400,7 +400,7 @@ export function IsometricOffice() {
         </motion.div>
 
         {/* Office Legend */}
-        <motion.div 
+        <motion.div
           className="flex justify-center mt-8"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -411,7 +411,7 @@ export function IsometricOffice() {
             <div className="flex gap-6">
               {Object.entries(statusConfig).map(([status, config]) => (
                 <div key={status} className="flex items-center gap-2">
-                  <motion.div 
+                  <motion.div
                     className={cn("w-3 h-3 rounded-full", config.pulse && "animate-pulse")}
                     style={{ backgroundColor: config.color }}
                   />

@@ -32,7 +32,7 @@ const notificationIcons = {
 
 const notificationColors = {
   cron: 'text-blue-500',
-  agent: 'text-green-500', 
+  agent: 'text-green-500',
   error: 'text-red-500',
   system: 'text-purple-500',
   task: 'text-cyan-500'
@@ -72,11 +72,11 @@ export default function NotificationsPage() {
             source: activity.source || 'system',
             data: activity
           }))
-        
+
         // Merge with existing notifications
         const existingIds = new Set(notifications.map(n => n.id))
         const newNotifications = activityNotifications.filter((n: Notification) => !existingIds.has(n.id))
-        
+
         if (newNotifications.length > 0) {
           const updated = [...notifications, ...newNotifications]
           setNotifications(updated)
@@ -101,7 +101,7 @@ export default function NotificationsPage() {
           source: 'claude-main'
         },
         {
-          id: '2', 
+          id: '2',
           type: 'cron',
           title: 'Daily Backup',
           message: 'System backup completed successfully. 2.4GB archived.',
@@ -135,7 +135,7 @@ export default function NotificationsPage() {
   const unreadCount = notifications.filter(n => !n.read).length
 
   const markAsRead = (id: string) => {
-    const updated = notifications.map(n => 
+    const updated = notifications.map(n =>
       n.id === id ? { ...n, read: true } : n
     )
     setNotifications(updated)
@@ -174,7 +174,7 @@ export default function NotificationsPage() {
 
   return (
     <div className="container mx-auto px-6 py-8 max-w-4xl">
-      <PageHeader 
+      <PageHeader
         title="Notifications"
         subtitle="System alerts, agent completions, and activity updates"
         icon={Bell}
@@ -192,7 +192,7 @@ export default function NotificationsPage() {
             All ({notifications.length})
           </Button>
           <Button
-            variant={filter === 'unread' ? 'default' : 'ghost'} 
+            variant={filter === 'unread' ? 'default' : 'ghost'}
             size="sm"
             onClick={() => setFilter('unread')}
             className="text-sm"
@@ -201,7 +201,7 @@ export default function NotificationsPage() {
           </Button>
           <Button
             variant={filter === 'errors' ? 'default' : 'ghost'}
-            size="sm" 
+            size="sm"
             onClick={() => setFilter('errors')}
             className="text-sm"
           >
@@ -241,7 +241,7 @@ export default function NotificationsPage() {
               icon={Bell}
               title="No notifications"
               description={
-                filter === 'all' 
+                filter === 'all'
                   ? "You're all caught up! No notifications at the moment."
                   : filter === 'unread'
                   ? "All notifications have been read."
@@ -254,7 +254,7 @@ export default function NotificationsPage() {
             filteredNotifications.map((notification, index) => {
               const IconComponent = notificationIcons[notification.type] || AlertCircle
               const iconColor = notificationColors[notification.type] || 'text-gray-500'
-              
+
               return (
                 <motion.div
                   key={notification.id}

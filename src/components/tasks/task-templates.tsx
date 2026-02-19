@@ -12,7 +12,7 @@ import {
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent } from "@/components/ui/card"
-import { 
+import {
   Bug,
   Sparkles,
   Search,
@@ -129,7 +129,7 @@ const priorityIcons = {
 
 const priorityColors = {
   low: "text-[hsl(var(--command-success))]",
-  medium: "text-[hsl(var(--command-warning))]", 
+  medium: "text-[hsl(var(--command-warning))]",
   high: "text-[hsl(var(--command-danger))]"
 }
 
@@ -158,13 +158,13 @@ export function TaskTemplatesDialog({ open, onOpenChange, onSelectTemplate }: Ta
       <DialogContent className="sm:max-w-[800px] max-h-[90vh] glass-morphism border-[hsl(var(--command-border-bright))] p-0 overflow-hidden">
         {/* Header */}
         <div className="relative p-6 pb-4">
-          <div 
+          <div
             className="absolute inset-0 opacity-10"
             style={{
               background: "linear-gradient(135deg, hsl(var(--command-accent)) 0%, hsl(220_89%_48%) 100%)"
             }}
           />
-          
+
           <DialogHeader className="relative">
             <div className="flex items-center gap-3 mb-2">
               <div className="p-2 glass-morphism rounded-lg">
@@ -186,7 +186,7 @@ export function TaskTemplatesDialog({ open, onOpenChange, onSelectTemplate }: Ta
               const Icon = template.icon
               const PriorityIcon = priorityIcons[template.priority]
               const isSelected = selectedTemplate?.id === template.id
-              
+
               return (
                 <motion.div
                   key={template.id}
@@ -194,11 +194,11 @@ export function TaskTemplatesDialog({ open, onOpenChange, onSelectTemplate }: Ta
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.1, duration: 0.4 }}
                 >
-                  <Card 
+                  <Card
                     className={cn(
                       "cursor-pointer transition-all duration-200 hover:shadow-lg glass-morphism border-[hsl(var(--command-border))]",
-                      isSelected 
-                        ? "ring-2 ring-[hsl(var(--command-accent))] border-[hsl(var(--command-accent))] shadow-[hsl(var(--command-accent))]/20 shadow-lg" 
+                      isSelected
+                        ? "ring-2 ring-[hsl(var(--command-accent))] border-[hsl(var(--command-accent))] shadow-[hsl(var(--command-accent))]/20 shadow-lg"
                         : "hover:border-[hsl(var(--command-border-bright))]"
                     )}
                     onClick={() => handleSelectTemplate(template)}
@@ -208,14 +208,14 @@ export function TaskTemplatesDialog({ open, onOpenChange, onSelectTemplate }: Ta
                         <div className={cn("p-2 rounded-lg", template.bgColor)}>
                           <Icon className={cn("h-5 w-5", template.color)} />
                         </div>
-                        
+
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center justify-between mb-2">
                             <h3 className="font-semibold font-display">{template.name}</h3>
                             <div className="flex items-center gap-1">
                               <PriorityIcon className={cn("h-3 w-3", priorityColors[template.priority])} />
-                              <Badge 
-                                variant="outline" 
+                              <Badge
+                                variant="outline"
                                 className={cn(
                                   "text-xs px-2 py-0.5 capitalize",
                                   template.priority === 'high' ? "border-red-200 text-red-400" :
@@ -227,11 +227,11 @@ export function TaskTemplatesDialog({ open, onOpenChange, onSelectTemplate }: Ta
                               </Badge>
                             </div>
                           </div>
-                          
+
                           <p className="text-sm text-[hsl(var(--command-text-muted))] mb-3">
                             {template.description}
                           </p>
-                          
+
                           <div className="space-y-2">
                             <div className="flex items-center gap-2 text-xs text-[hsl(var(--command-text-muted))]">
                               <User className="h-3 w-3" />
@@ -244,13 +244,13 @@ export function TaskTemplatesDialog({ open, onOpenChange, onSelectTemplate }: Ta
                                 </>
                               )}
                             </div>
-                            
+
                             {template.tags && (
                               <div className="flex flex-wrap gap-1">
                                 {template.tags.map((tag) => (
-                                  <Badge 
-                                    key={tag} 
-                                    variant="outline" 
+                                  <Badge
+                                    key={tag}
+                                    variant="outline"
                                     className="text-xs px-1.5 py-0 bg-[hsl(var(--command-surface))]/50"
                                   >
                                     {tag}
@@ -282,7 +282,7 @@ export function TaskTemplatesDialog({ open, onOpenChange, onSelectTemplate }: Ta
                     <FileText className="h-4 w-4 text-[hsl(var(--command-accent))]" />
                     Template Preview
                   </h4>
-                  
+
                   <div className="space-y-3">
                     <div>
                       <div className="text-sm font-medium text-[hsl(var(--command-text-muted))] mb-1">Title Template:</div>
@@ -290,7 +290,7 @@ export function TaskTemplatesDialog({ open, onOpenChange, onSelectTemplate }: Ta
                         {selectedTemplate.titleTemplate}
                       </div>
                     </div>
-                    
+
                     <div>
                       <div className="text-sm font-medium text-[hsl(var(--command-text-muted))] mb-1">Description Template:</div>
                       <div className="text-sm font-mono bg-[hsl(var(--command-surface))]/50 rounded px-2 py-1 whitespace-pre-line max-h-32 overflow-y-auto">
@@ -314,10 +314,10 @@ export function TaskTemplatesDialog({ open, onOpenChange, onSelectTemplate }: Ta
                 "Choose a template to continue"
               )}
             </div>
-            
+
             <div className="flex gap-3">
-              <Button 
-                variant="ghost" 
+              <Button
+                variant="ghost"
                 onClick={handleCancel}
                 className="hover:bg-[hsl(var(--command-text-muted))]/10"
               >
@@ -327,13 +327,13 @@ export function TaskTemplatesDialog({ open, onOpenChange, onSelectTemplate }: Ta
                 whileHover={{ scale: selectedTemplate ? 1.02 : 1 }}
                 whileTap={{ scale: selectedTemplate ? 0.98 : 1 }}
               >
-                <Button 
+                <Button
                   onClick={handleUseTemplate}
                   disabled={!selectedTemplate}
                   className={cn(
                     "font-semibold px-6",
-                    selectedTemplate 
-                      ? "bg-gradient-to-r from-[hsl(var(--command-accent))] to-[hsl(199_89%_38%)] hover:from-[hsl(199_89%_58%)] hover:to-[hsl(var(--command-accent))] shadow-lg shadow-[hsl(var(--command-accent))]/20" 
+                    selectedTemplate
+                      ? "bg-gradient-to-r from-[hsl(var(--command-accent))] to-[hsl(199_89%_38%)] hover:from-[hsl(199_89%_58%)] hover:to-[hsl(var(--command-accent))] shadow-lg shadow-[hsl(var(--command-accent))]/20"
                       : "opacity-50 cursor-not-allowed"
                   )}
                 >

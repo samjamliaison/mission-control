@@ -7,7 +7,7 @@ import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { PageHeader } from "@/components/ui/page-header"
 import { StatsCard } from "@/components/ui/stats-card"
-import { 
+import {
   Calendar as CalendarIcon,
   ChevronLeft,
   ChevronRight,
@@ -33,7 +33,7 @@ const agentColors = {
   },
   "Manus": {
     bg: "bg-purple-500/15",
-    text: "text-purple-400", 
+    text: "text-purple-400",
     border: "border-purple-500/30",
     color: "#8b5cf6"
   },
@@ -90,8 +90,8 @@ const itemVariants = {
 
 const dayVariants = {
   hidden: { opacity: 0, scale: 0.8 },
-  visible: { 
-    opacity: 1, 
+  visible: {
+    opacity: 1,
     scale: 1,
     transition: {
       duration: 0.2,
@@ -128,20 +128,20 @@ export function CalendarView() {
   const calendarData = useMemo(() => {
     const year = currentMonth.getFullYear()
     const month = currentMonth.getMonth()
-    
+
     // First day of the month
     const firstDay = new Date(year, month, 1)
     const lastDay = new Date(year, month + 1, 0)
-    
+
     // Start from Monday (1) to Sunday (0)
     const startDate = new Date(firstDay)
     const startDayOfWeek = (firstDay.getDay() + 6) % 7 // Convert to Monday = 0
     startDate.setDate(startDate.getDate() - startDayOfWeek)
-    
+
     // Generate 6 weeks (42 days)
     const days = []
     const current = new Date(startDate)
-    
+
     for (let i = 0; i < 42; i++) {
       const dayEvents = events.filter(event => {
         const eventDate = new Date(event.scheduledTime)
@@ -151,20 +151,20 @@ export function CalendarView() {
           eventDate.getFullYear() === current.getFullYear()
         )
       })
-      
+
       days.push({
         date: new Date(current),
         isCurrentMonth: current.getMonth() === month,
-        isToday: 
+        isToday:
           current.getDate() === new Date().getDate() &&
           current.getMonth() === new Date().getMonth() &&
           current.getFullYear() === new Date().getFullYear(),
         events: dayEvents
       })
-      
+
       current.setDate(current.getDate() + 1)
     }
-    
+
     return days
   }, [currentMonth, events])
 
@@ -208,17 +208,17 @@ export function CalendarView() {
       createdAt: Date.now(),
       updatedAt: Date.now()
     }
-    
+
     // Handle recurring events
     const eventsToAdd = [newEvent]
-    
+
     if (newEvent.recurrence && newEvent.recurrence !== "none") {
       const baseDate = new Date(newEvent.scheduledTime)
       const endDate = new Date(baseDate.getFullYear() + 1, baseDate.getMonth(), baseDate.getDate()) // One year ahead
-      
+
       let nextDate = new Date(baseDate)
       let count = 1
-      
+
       while (nextDate < endDate && count < 52) { // Max 52 recurrences
         switch (newEvent.recurrence) {
           case "daily":
@@ -231,18 +231,18 @@ export function CalendarView() {
             nextDate.setMonth(nextDate.getMonth() + 1)
             break
         }
-        
+
         const recurringEvent: CalendarEventData = {
           ...newEvent,
           _id: `event-${Date.now()}-${count}`,
           scheduledTime: nextDate.getTime()
         }
-        
+
         eventsToAdd.push(recurringEvent)
         count++
       }
     }
-    
+
     setEvents(prev => [...prev, ...eventsToAdd])
     toast.success('Event Created', `"${newEvent.title}" ${eventsToAdd.length > 1 ? `and ${eventsToAdd.length - 1} recurring events` : ''} added to calendar.`)
   }
@@ -252,15 +252,15 @@ export function CalendarView() {
     const now = Date.now()
     const thisMonth = currentMonth.getMonth()
     const thisYear = currentMonth.getFullYear()
-    
+
     const monthEvents = events.filter(event => {
       const eventDate = new Date(event.scheduledTime)
       return eventDate.getMonth() === thisMonth && eventDate.getFullYear() === thisYear
     })
-    
+
     const upcomingEvents = events.filter(event => event.scheduledTime > now && event.status === "scheduled").length
     const completedEvents = events.filter(event => event.status === "completed").length
-    
+
     return {
       thisMonth: monthEvents.length,
       upcoming: upcomingEvents,
@@ -283,8 +283,8 @@ export function CalendarView() {
     <div className="min-h-[calc(100vh-5rem)] relative" data-testid="calendar-view">
       {/* Command Center Background */}
       <div className="fixed inset-0 bg-gradient-to-br from-[hsl(var(--command-background))] via-[hsl(220_13%_3%)] to-[hsl(var(--command-background))] pointer-events-none" />
-      
-      <motion.div 
+
+      <motion.div
         className="relative z-10 p-6"
         variants={containerVariants}
         initial="hidden"
@@ -319,11 +319,11 @@ export function CalendarView() {
                   >
                     <ChevronLeft className="h-5 w-5" />
                   </Button>
-                  
+
                   <h2 className="text-2xl font-display font-bold min-w-[200px] text-center">
                     {monthYearDisplay}
                   </h2>
-                  
+
                   <Button
                     variant="ghost"
                     size="icon"
@@ -333,7 +333,7 @@ export function CalendarView() {
                     <ChevronRight className="h-5 w-5" />
                   </Button>
                 </div>
-                
+
                 <Button
                   variant="outline"
                   onClick={goToToday}
@@ -350,9 +350,9 @@ export function CalendarView() {
                   <span className="text-sm font-medium text-[hsl(var(--command-text-muted))]">Agents:</span>
                   {Object.entries(agentColors).map(([agent, colors]) => (
                     <div key={agent} className="flex items-center gap-1">
-                      <div 
+                      <div
                         className="w-3 h-3 rounded-full border"
-                        style={{ 
+                        style={{
                           backgroundColor: colors.color + "40",
                           borderColor: colors.color + "60"
                         }}
@@ -361,9 +361,9 @@ export function CalendarView() {
                     </div>
                   ))}
                 </div>
-                
+
                 <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-                  <Button 
+                  <Button
                     onClick={() => {
                       setSelectedDate(new Date())
                       setCreateDialogOpen(true)
@@ -390,7 +390,7 @@ export function CalendarView() {
                     </div>
                   ))}
                 </div>
-                
+
                 {/* Calendar Days */}
                 <div className="grid grid-cols-7">
                   <AnimatePresence>
@@ -413,18 +413,18 @@ export function CalendarView() {
                         {/* Day Number */}
                         <div className={cn(
                           "text-sm font-medium mb-1",
-                          day.isToday ? "text-[hsl(var(--command-accent))] font-bold" : 
-                          day.isCurrentMonth ? "text-[hsl(var(--command-text))]" : 
+                          day.isToday ? "text-[hsl(var(--command-accent))] font-bold" :
+                          day.isCurrentMonth ? "text-[hsl(var(--command-text))]" :
                           "text-[hsl(var(--command-text-muted))]"
                         )}>
                           {day.date.getDate()}
                         </div>
-                        
+
                         {/* Events */}
                         <div className="space-y-1">
                           {day.events.slice(0, 3).map((event, eventIndex) => {
                             const agentStyle = agentColors[event.agent as keyof typeof agentColors] || agentColors["Hamza"]
-                            
+
                             return (
                               <motion.div
                                 key={event._id}
@@ -455,14 +455,14 @@ export function CalendarView() {
                               </motion.div>
                             )
                           })}
-                          
+
                           {day.events.length > 3 && (
                             <div className="text-xs text-[hsl(var(--command-text-muted))] px-2">
                               +{day.events.length - 3} more
                             </div>
                           )}
                         </div>
-                        
+
                         {/* Hover Add Button */}
                         <motion.div
                           initial={{ opacity: 0, scale: 0.8 }}

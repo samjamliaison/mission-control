@@ -8,7 +8,7 @@ import { Activity, CheckCircle, Clock } from "lucide-react"
 /**
  * Demo component showcasing the consistent card design system
  * - backdrop-blur-xl bg-white/[0.03] border border-white/[0.06]
- * - rounded-xl overflow-hidden  
+ * - rounded-xl overflow-hidden
  * - Hover: scale(1.01) + border-white/[0.12] + subtle shadow
  * - Transition: all 200ms ease
  */

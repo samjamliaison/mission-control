@@ -13,18 +13,18 @@ interface StatsCardProps {
   className?: string
 }
 
-export function StatsCard({ 
-  icon: Icon, 
-  label, 
-  value, 
-  subLabel, 
-  subValue, 
-  className = "" 
+export function StatsCard({
+  icon: Icon,
+  label,
+  value,
+  subLabel,
+  subValue,
+  className = ""
 }: StatsCardProps) {
   return (
-    <motion.div 
+    <motion.div
       className={`backdrop-blur-xl bg-white/[0.03] border border-white/[0.06] rounded-xl overflow-hidden p-5 transition-all duration-200 ease-out hover:scale-[1.01] hover:border-white/[0.12] hover:shadow-lg hover:shadow-black/10 ${className}`}
-      whileHover={{ 
+      whileHover={{
         boxShadow: "0 8px 32px rgba(6, 182, 212, 0.05)",
       }}
     >

@@ -15,9 +15,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { 
+import {
   Brain,
-  Search, 
+  Search,
   Filter,
   Calendar,
   BookOpen,
@@ -75,7 +75,7 @@ const categoryConfig = {
   },
   "longterm": {
     icon: BookOpen,
-    color: "text-green-400", 
+    color: "text-green-400",
     bg: "bg-green-500/10",
     border: "border-green-500/20",
     label: "Long-term Memory"
@@ -83,7 +83,7 @@ const categoryConfig = {
   "section": {
     icon: Lightbulb,
     color: "text-yellow-400",
-    bg: "bg-yellow-500/10", 
+    bg: "bg-yellow-500/10",
     border: "border-yellow-500/20",
     label: "Knowledge Sections"
   }
@@ -125,12 +125,12 @@ export function MemoryViewer() {
     try {
       setLoading(true)
       setError(null)
-      
+
       const response = await fetch('/api/memory')
       if (!response.ok) {
         throw new Error(`API Error: ${response.status} ${response.statusText}`)
       }
-      
+
       const data: MemoryApiResponse = await response.json()
       setMemories(data.memories)
       setLastUpdated(data.timestamp)
@@ -156,10 +156,10 @@ export function MemoryViewer() {
       filtered = filtered.filter(memory => memory.type === selectedCategory)
     }
 
-    // Search filter  
+    // Search filter
     if (searchQuery.trim()) {
       const query = searchQuery.toLowerCase()
-      filtered = filtered.filter(memory => 
+      filtered = filtered.filter(memory =>
         memory.title.toLowerCase().includes(query) ||
         memory.content.toLowerCase().includes(query) ||
         memory.tags.some(tag => tag.toLowerCase().includes(query))
@@ -228,8 +228,8 @@ export function MemoryViewer() {
     <div className="min-h-[calc(100vh-5rem)] relative">
       {/* Background */}
       <div className="fixed inset-0 bg-gradient-to-br from-[hsl(var(--command-background))] via-[hsl(220_13%_3%)] to-[hsl(var(--command-background))] pointer-events-none" />
-      
-      <motion.div 
+
+      <motion.div
         className="relative z-10 p-6"
         variants={containerVariants}
         initial="hidden"
@@ -318,7 +318,7 @@ export function MemoryViewer() {
                   {Object.entries(categoryCounts).map(([category, count]) => {
                     const config = categoryConfig[category as keyof typeof categoryConfig]
                     if (!config) return null
-                    
+
                     return (
                       <motion.div
                         key={category}
@@ -424,7 +424,7 @@ function RealMemoryCard({ memory, onClick }: { memory: ApiMemoryEntry, onClick: 
             {memory.content.substring(0, 150)}
             {memory.content.length > 150 && '...'}
           </p>
-          
+
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-center gap-3 text-xs text-[hsl(var(--command-text-muted))]">
               <div className="flex items-center gap-1">
@@ -440,7 +440,7 @@ function RealMemoryCard({ memory, onClick }: { memory: ApiMemoryEntry, onClick: 
               {config?.label || memory.type}
             </Badge>
           </div>
-          
+
           {memory.tags.length > 0 && (
             <div className="flex flex-wrap gap-1">
               {memory.tags.slice(0, 3).map((tag) => (
