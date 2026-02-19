@@ -6,9 +6,11 @@ import Link from "next/link"
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { Edit, Trash2, User, Calendar, Clock, Zap, ExternalLink } from "lucide-react"
+import { Edit, Trash2, User, Calendar, Clock, Zap, ExternalLink, Timer } from "lucide-react"
 import { Checkbox } from "@/components/ui/checkbox"
 import { StarButton } from "@/components/ui/star-button"
+import { TimeTracker } from "./time-tracker"
+import { useTimeTracking } from "@/hooks/use-time-tracking"
 import { cn } from "@/lib/utils"
 
 export interface Task {
@@ -99,6 +101,10 @@ const priorityConfig = {
 }
 
 export function TaskCard({ task, index, onEdit, onDelete, isSelected = false, onSelect, showSelection = false }: TaskCardProps) {
+  const { getTotalTime, formatTime, getTaskTimeData } = useTimeTracking()
+  const totalTime = getTotalTime(task._id)
+  const isTracking = getTaskTimeData(task._id)?.isTracking || false
+
   const formatDate = (timestamp: number) => {
     return new Date(timestamp).toLocaleDateString("en-US", {
       month: "short",
@@ -248,6 +254,11 @@ export function TaskCard({ task, index, onEdit, onDelete, isSelected = false, on
                   </h3>
                 </Link>
                 <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200 shrink-0">
+                  <TimeTracker 
+                    taskId={task._id} 
+                    compact 
+                    className="h-9 w-auto sm:h-7"
+                  />
                   <StarButton
                     item={{
                       id: task._id,
@@ -359,9 +370,35 @@ export function TaskCard({ task, index, onEdit, onDelete, isSelected = false, on
                   </div>
                 </div>
 
-                <div className="flex items-center gap-1 text-muted text-body-small">
-                  <Calendar className="h-3 w-3" />
-                  <span>{formatDate(task.createdAt)}</span>
+                <div className="flex items-center gap-3 text-muted text-body-small">
+                  <div className="flex items-center gap-1">
+                    <Calendar className="h-3 w-3" />
+                    <span>{formatDate(task.createdAt)}</span>
+                  </div>
+                  
+                  {totalTime > 0 && (
+                    <div className={cn(
+                      "flex items-center gap-1",
+                      isTracking && "text-[hsl(var(--command-accent))]"
+                    )}>
+                      <Timer className="h-3 w-3" />
+                      <span className="font-mono">{formatTime(totalTime)}</span>
+                      {isTracking && (
+                        <motion.div
+                          animate={{
+                            opacity: [0.5, 1, 0.5],
+                            scale: [1, 1.2, 1]
+                          }}
+                          transition={{
+                            duration: 1.5,
+                            repeat: Infinity,
+                            ease: "easeInOut"
+                          }}
+                          className="w-1.5 h-1.5 bg-[hsl(var(--command-accent))] rounded-full"
+                        />
+                      )}
+                    </div>
+                  )}
                 </div>
               </div>
 
