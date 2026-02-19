@@ -195,6 +195,72 @@
   .text-muted {
     color: rgba(255, 255, 255, 0.4);
   }
+
+  /* Interactive polish - premium hover/focus/active states */
+  .interactive-element {
+    transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+  }
+
+  .interactive-element:hover {
+    transform: scale(1.01);
+  }
+
+  .interactive-element:active {
+    transform: scale(0.98);
+    transition: transform 100ms ease-out;
+  }
+
+  .interactive-element:focus-visible {
+    outline: none;
+    ring-width: 2px;
+    ring-color: #06b6d4;
+    ring-opacity: 0.6;
+  }
+
+  /* Premium button interactive states */
+  .btn-interactive {
+    transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .btn-interactive:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+  }
+
+  .btn-interactive:active {
+    transform: scale(0.98);
+    transition: transform 100ms ease-out;
+  }
+
+  .btn-interactive:focus-visible {
+    outline: none;
+    ring: 2px solid #06b6d4;
+    ring-opacity: 0.6;
+    ring-offset: 2px;
+    ring-offset-color: #09090b;
+  }
+
+  /* Loading skeleton animation */
+  .loading-skeleton {
+    background: linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.03) 0%,
+      rgba(255, 255, 255, 0.08) 50%,
+      rgba(255, 255, 255, 0.03) 100%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 1.5s ease-in-out infinite;
+  }
+
+  @keyframes shimmer {
+    0% {
+      background-position: -200% 0;
+    }
+    100% {
+      background-position: 200% 0;
+    }
+  }
   
   /* Command Center Utilities */
   .glass-morphism {

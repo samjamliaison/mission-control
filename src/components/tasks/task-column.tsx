@@ -188,17 +188,27 @@ export function TaskColumn({ title, status, tasks, onEditTask, onDeleteTask }: T
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 0.3 }}
-                    className="text-center py-12"
+                    className="space-y-4"
                   >
+                    {/* Loading skeleton cards */}
                     <div className="space-y-3">
-                      <div className="w-12 h-12 mx-auto glass-morphism rounded-full flex items-center justify-center">
-                        <IconComponent className={cn("h-5 w-5", config.color)} />
+                      {[1, 2, 3].map((i) => (
+                        <div key={i} className="glass-morphism rounded-xl p-4 loading-skeleton h-24" />
+                      ))}
+                    </div>
+                    
+                    {/* Empty state message */}
+                    <div className="text-center py-8">
+                      <div className="space-y-3">
+                        <div className="w-12 h-12 mx-auto glass-morphism rounded-full flex items-center justify-center">
+                          <IconComponent className={cn("h-5 w-5", config.color)} />
+                        </div>
+                        <p className="text-muted text-body">
+                          {status === "todo" && "Ready for new missions"}
+                          {status === "in-progress" && "No active operations"}
+                          {status === "done" && "No completed missions"}
+                        </p>
                       </div>
-                      <p className="text-muted text-body">
-                        {status === "todo" && "Ready for new missions"}
-                        {status === "in-progress" && "No active operations"}
-                        {status === "done" && "No completed missions"}
-                      </p>
                     </div>
                   </motion.div>
                 )}

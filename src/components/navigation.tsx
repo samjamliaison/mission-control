@@ -99,7 +99,7 @@ export function Navigation() {
             {/* Collapse Button */}
             <motion.button
               onClick={() => setIsCollapsed(!isCollapsed)}
-              className="p-2 rounded-lg hover:backdrop-blur-xl hover:bg-white/[0.03] hover:border hover:border-white/[0.06] transition-all duration-200 text-white/50 hover:text-[#06b6d4]"
+              className="p-2 rounded-lg hover:backdrop-blur-xl hover:bg-white/[0.03] hover:border hover:border-white/[0.06] transition-all duration-200 text-white/50 hover:text-[#06b6d4] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#06b6d4] focus-visible:ring-opacity-60"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
@@ -127,7 +127,7 @@ export function Navigation() {
                   <Link
                     href={item.href}
                     className={cn(
-                      "relative w-full py-3 px-4 rounded-xl transition-all duration-200 group flex items-center",
+                      "relative w-full py-3 px-4 rounded-xl transition-all duration-200 group flex items-center interactive-element focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#06b6d4] focus-visible:ring-opacity-60",
                       isCollapsed ? "justify-center" : "gap-3",
                       isActive 
                         ? "text-[#06b6d4] bg-white/[0.05] border-white/[0.08]" 
@@ -219,7 +219,7 @@ export function Navigation() {
             {/* Settings Button */}
             <motion.button 
               className={cn(
-                "w-full flex items-center gap-3 p-3 rounded-xl transition-all duration-200 text-white/50 hover:text-white/90 hover:bg-white/[0.03]",
+                "w-full flex items-center gap-3 p-3 rounded-xl transition-all duration-200 text-white/50 hover:text-white/90 hover:bg-white/[0.03] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#06b6d4] focus-visible:ring-opacity-60",
                 isCollapsed && "justify-center"
               )}
               whileHover={{ scale: 1.02 }}

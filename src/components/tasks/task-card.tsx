@@ -193,7 +193,7 @@ export function TaskCard({ task, index, onEdit, onDelete }: TaskCardProps) {
                   <Button
                     variant="ghost"
                     size="icon"
-                    className="h-7 w-7 hover:bg-[hsl(var(--command-accent))]/20 hover:text-[hsl(var(--command-accent))] rounded-lg"
+                    className="h-7 w-7 hover:bg-[hsl(var(--command-accent))]/20 hover:text-[hsl(var(--command-accent))] rounded-lg transition-all duration-200 hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#06b6d4] focus-visible:ring-opacity-60"
                     onClick={(e) => {
                       e.stopPropagation()
                       onEdit(task)
@@ -204,7 +204,7 @@ export function TaskCard({ task, index, onEdit, onDelete }: TaskCardProps) {
                   <Button
                     variant="ghost"
                     size="icon"
-                    className="h-7 w-7 hover:bg-[hsl(var(--command-danger))]/20 hover:text-[hsl(var(--command-danger))] rounded-lg"
+                    className="h-7 w-7 hover:bg-[hsl(var(--command-danger))]/20 hover:text-[hsl(var(--command-danger))] rounded-lg transition-all duration-200 hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#06b6d4] focus-visible:ring-opacity-60"
                     onClick={(e) => {
                       e.stopPropagation()
                       onDelete(task._id)
