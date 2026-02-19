@@ -24,6 +24,7 @@ import {
 import { useStarred } from "@/hooks/use-starred"
 import { cn } from "@/lib/utils"
 import { Input } from "@/components/ui/input"
+import { StarredEmptyState } from "@/components/ui/empty-state"
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -226,42 +227,7 @@ export function StarredView() {
             </div>
           ) : (
             <motion.div variants={itemVariants}>
-              <Card className="glass-morphism border-[hsl(var(--command-border-bright))]">
-                <CardContent className="py-12">
-                  <div className="text-center space-y-4">
-                    <div className="w-16 h-16 mx-auto glass-morphism rounded-full flex items-center justify-center">
-                      <Star className="h-8 w-8 text-[hsl(var(--command-text-muted))]" />
-                    </div>
-                    <div>
-                      <h3 className="text-lg font-medium text-contrast-high mb-2">
-                        {starredItems.length === 0 ? "No starred items yet" : "No matching items"}
-                      </h3>
-                      <p className="text-[hsl(var(--command-text-muted))] mb-4">
-                        {starredItems.length === 0 
-                          ? "Star your favorite tasks, content, and memories for quick access."
-                          : "Try adjusting your search or filter criteria."
-                        }
-                      </p>
-                      {starredItems.length === 0 && (
-                        <div className="flex justify-center gap-4">
-                          <Link href="/tasks">
-                            <Button variant="outline">
-                              <CheckSquare className="h-4 w-4 mr-2" />
-                              View Tasks
-                            </Button>
-                          </Link>
-                          <Link href="/pipeline">
-                            <Button variant="outline">
-                              <Film className="h-4 w-4 mr-2" />
-                              View Content
-                            </Button>
-                          </Link>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
+              <StarredEmptyState onExploreContent={() => window.location.href = '/tasks'} />
             </motion.div>
           )}
         </div>

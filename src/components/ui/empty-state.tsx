@@ -1,93 +1,210 @@
 "use client"
 
-import { motion } from "framer-motion"
 import { Button } from "@/components/ui/button"
-import { LucideIcon } from "lucide-react"
+import { Card } from "@/components/ui/card"
+import { cn } from "@/lib/utils"
 
 interface EmptyStateProps {
-  icon: LucideIcon | string // Can be a Lucide icon or emoji
+  icon: string
   title: string
   description: string
-  actionLabel: string
-  onAction: () => void
-  illustration?: React.ReactNode
+  action?: {
+    label: string
+    onClick: () => void
+  }
+  className?: string
 }
 
-export function EmptyState({
-  icon: Icon,
-  title,
-  description,
-  actionLabel,
-  onAction,
-  illustration
-}: EmptyStateProps) {
+export function EmptyState({ icon, title, description, action, className }: EmptyStateProps) {
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6, ease: [0.04, 0.62, 0.23, 0.98] }}
-      className="flex flex-col items-center justify-center min-h-[400px] text-center space-y-6 p-8"
-    >
-      {/* Background decoration */}
-      <div className="absolute inset-0 bg-gradient-radial from-[hsl(var(--command-accent))]/5 via-transparent to-transparent opacity-50 pointer-events-none" />
-
-      {/* Icon or Illustration */}
-      <motion.div
-        initial={{ scale: 0.8, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        transition={{ delay: 0.2, duration: 0.5 }}
-        className="relative"
-      >
-        {illustration ? (
-          illustration
-        ) : typeof Icon === "string" ? (
-          <div className="text-8xl mb-4 opacity-80">
-            {Icon}
-          </div>
-        ) : (
-          <div className="glass-morphism p-6 rounded-2xl">
-            <Icon className="h-12 w-12 text-[hsl(var(--command-accent))]" />
-          </div>
-        )}
-      </motion.div>
-
-      {/* Content */}
-      <motion.div
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.4, duration: 0.5 }}
-        className="space-y-4 max-w-md"
-      >
-        <h3 className="text-2xl font-bold text-[hsl(var(--command-text))]">
-          {title}
-        </h3>
-        <p className="text-[hsl(var(--command-text-muted))] text-base leading-relaxed">
-          {description}
-        </p>
-      </motion.div>
-
-      {/* Action Button */}
-      <motion.div
-        initial={{ opacity: 0, scale: 0.9 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ delay: 0.6, duration: 0.4 }}
-      >
-        <Button
-          onClick={onAction}
-          className="btn-premium font-semibold px-8 py-3 text-base"
-          size="lg"
+    <Card className={cn("flex flex-col items-center justify-center p-12 text-center max-w-md mx-auto", className)}>
+      <div className="relative mb-6">
+        {/* Floating background effect */}
+        <div className="absolute inset-0 bg-gradient-to-r from-violet-500/10 to-cyan-500/10 rounded-full blur-xl animate-pulse"></div>
+        <div className="relative text-6xl animate-float">
+          {icon}
+        </div>
+      </div>
+      
+      <h3 className="text-xl font-semibold text-white mb-3">
+        {title}
+      </h3>
+      
+      <p className="text-white/60 leading-relaxed mb-8">
+        {description}
+      </p>
+      
+      {action && (
+        <Button 
+          onClick={action.onClick}
+          className="bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-white border-0"
         >
-          {actionLabel}
+          {action.label}
         </Button>
-      </motion.div>
+      )}
+    </Card>
+  )
+}
 
-      {/* Subtle animation elements */}
-      <div className="absolute top-20 left-1/4 w-2 h-2 bg-[hsl(var(--command-accent))]/30 rounded-full animate-pulse"
-           style={{ animationDelay: "0s", animationDuration: "3s" }} />
-      <div className="absolute bottom-32 right-1/3 w-1.5 h-1.5 bg-[hsl(var(--command-accent))]/20 rounded-full animate-pulse"
-           style={{ animationDelay: "1.5s", animationDuration: "3s" }} />
-      <div className="absolute top-1/3 right-1/4 w-1 h-1 bg-[hsl(var(--command-accent))]/40 rounded-full animate-pulse"
-           style={{ animationDelay: "0.8s", animationDuration: "3s" }} />
-    </motion.div>
+// Specific empty states for different pages
+interface TasksEmptyStateProps {
+  onAddTask: () => void
+}
+
+export function TasksEmptyState({ onAddTask }: TasksEmptyStateProps) {
+  return (
+    <EmptyState
+      icon="✅"
+      title="No tasks yet"
+      description="Start organizing your work and boost productivity. Create your first task to get things moving."
+      action={{
+        label: "Create First Task",
+        onClick: onAddTask
+      }}
+    />
+  )
+}
+
+interface AgentsEmptyStateProps {
+  onAddAgent: () => void
+}
+
+export function AgentsEmptyState({ onAddAgent }: AgentsEmptyStateProps) {
+  return (
+    <EmptyState
+      icon="🤖"
+      title="No agents deployed"
+      description="Deploy AI agents to automate your workflows. Your digital workforce is ready to get started."
+      action={{
+        label: "Deploy First Agent",
+        onClick: onAddAgent
+      }}
+    />
+  )
+}
+
+interface CalendarEmptyStateProps {
+  onAddEvent: () => void
+}
+
+export function CalendarEmptyState({ onAddEvent }: CalendarEmptyStateProps) {
+  return (
+    <EmptyState
+      icon="📅"
+      title="No events scheduled"
+      description="Keep track of important meetings and deadlines. Schedule your first event to start planning."
+      action={{
+        label: "Add Event",
+        onClick: onAddEvent
+      }}
+    />
+  )
+}
+
+interface MemoryEmptyStateProps {
+  onAddMemory: () => void
+}
+
+export function MemoryEmptyState({ onAddMemory }: MemoryEmptyStateProps) {
+  return (
+    <EmptyState
+      icon="🧠"
+      title="No memories stored"
+      description="Capture important knowledge and insights. Store your first memory to build your knowledge base."
+      action={{
+        label: "Save First Memory",
+        onClick: onAddMemory
+      }}
+    />
+  )
+}
+
+interface PipelineEmptyStateProps {
+  onAddContent: () => void
+}
+
+export function PipelineEmptyState({ onAddContent }: PipelineEmptyStateProps) {
+  return (
+    <EmptyState
+      icon="🔄"
+      title="No content in pipeline"
+      description="Start building your content workflow. Add items to track progress from idea to completion."
+      action={{
+        label: "Add Content",
+        onClick: onAddContent
+      }}
+    />
+  )
+}
+
+interface AnalyticsEmptyStateProps {
+  onStartTracking: () => void
+}
+
+export function AnalyticsEmptyState({ onStartTracking }: AnalyticsEmptyStateProps) {
+  return (
+    <EmptyState
+      icon="📊"
+      title="No data to analyze"
+      description="Analytics will appear here as you use Mission Control. Start using features to generate insights."
+      action={{
+        label: "Explore Dashboard",
+        onClick: onStartTracking
+      }}
+    />
+  )
+}
+
+interface NotificationsEmptyStateProps {
+  onEnableNotifications: () => void
+}
+
+export function NotificationsEmptyState({ onEnableNotifications }: NotificationsEmptyStateProps) {
+  return (
+    <EmptyState
+      icon="🔔"
+      title="No notifications"
+      description="You're all caught up! Notifications for important updates and alerts will appear here."
+      action={{
+        label: "Notification Settings",
+        onClick: onEnableNotifications
+      }}
+    />
+  )
+}
+
+interface StarredEmptyStateProps {
+  onExploreContent: () => void
+}
+
+export function StarredEmptyState({ onExploreContent }: StarredEmptyStateProps) {
+  return (
+    <EmptyState
+      icon="⭐"
+      title="No starred items"
+      description="Star important tasks, memories, or content to quickly access them later. Nothing starred yet."
+      action={{
+        label: "Explore Content",
+        onClick: onExploreContent
+      }}
+    />
+  )
+}
+
+interface OfficeEmptyStateProps {
+  onStartOffice: () => void
+}
+
+export function OfficeEmptyState({ onStartOffice }: OfficeEmptyStateProps) {
+  return (
+    <EmptyState
+      icon="🏢"
+      title="Office is empty"
+      description="Your virtual office workspace is ready. Add agents and tasks to see them come to life."
+      action={{
+        label: "Populate Office",
+        onClick: onStartOffice
+      }}
+    />
   )
 }

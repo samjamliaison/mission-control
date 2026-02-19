@@ -31,7 +31,7 @@ import { Task } from "./task-card"
 import { TaskTemplate, createTaskFromTemplate } from "@/lib/task-templates"
 import { PageHeader } from "@/components/ui/page-header"
 import { StatsCard } from "@/components/ui/stats-card"
-import { EmptyState } from "@/components/ui/empty-state"
+import { TasksEmptyState } from "@/components/ui/empty-state"
 // import { loadTasks, saveTasks } from "@/lib/data-persistence" - Replaced with API calls
 import { useToastActions } from "@/components/ui/toast"
 import { logTaskAction, logNavigationAction } from "@/lib/activity-logger"
@@ -858,13 +858,7 @@ export function TasksBoard() {
           <SectionErrorBoundary sectionName="Task Board">
             <motion.div variants={itemVariants}>
               {tasks.length === 0 ? (
-                <EmptyState
-                  icon="🚀"
-                  title="Mission Control Awaiting Orders"
-                  description="No active tasks detected. Initialize your first mission to begin coordinating operations across all agents and systems. The command center is ready for deployment."
-                  actionLabel="Deploy First Task"
-                  onAction={handleAddNewTask}
-                />
+                <TasksEmptyState onAddTask={handleAddNewTask} />
               ) : (
                 <DragDropContext onDragEnd={handleDragEnd}>
                   <div className="grid gap-4 overflow-x-auto pb-4 print-content" style={{ gridTemplateColumns: `repeat(${columns.length}, minmax(300px, 1fr))` }}>

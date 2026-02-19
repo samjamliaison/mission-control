@@ -7,7 +7,7 @@ import { PageHeader } from "@/components/ui/page-header"
 import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { EmptyState } from "@/components/ui/empty-state"
+import { NotificationsEmptyState } from "@/components/ui/empty-state"
 import { cn } from "@/lib/utils"
 
 interface Notification {
@@ -237,18 +237,8 @@ export default function NotificationsPage() {
       <div className="space-y-4">
         <AnimatePresence mode="popLayout">
           {filteredNotifications.length === 0 ? (
-            <EmptyState
-              icon={Bell}
-              title="No notifications"
-              description={
-                filter === 'all'
-                  ? "You're all caught up! No notifications at the moment."
-                  : filter === 'unread'
-                  ? "All notifications have been read."
-                  : "No error notifications found."
-              }
-              actionLabel="Go to Dashboard"
-              onAction={() => window.location.href = '/'}
+            <NotificationsEmptyState 
+              onEnableNotifications={() => window.location.href = '/settings'}
             />
           ) : (
             filteredNotifications.map((notification, index) => {
