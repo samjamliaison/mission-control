@@ -153,13 +153,49 @@ export function ContentPipeline() {
 
     const newStatus = destination.droppableId as "idea" | "script" | "thumbnail" | "filming" | "published"
     
-    setContent(prevContent => 
-      prevContent.map(item => 
-        item._id === draggableId 
-          ? { ...item, status: newStatus, updatedAt: Date.now() }
-          : item
-      )
-    )
+    setContent(prevContent => {
+      // Create a new array of content
+      const newContent = [...prevContent]
+      
+      // Find the dragged item
+      const draggedItemIndex = newContent.findIndex(item => item._id === draggableId)
+      const draggedItem = newContent[draggedItemIndex]
+      
+      if (!draggedItem) return prevContent
+      
+      // Remove the item from its original position
+      newContent.splice(draggedItemIndex, 1)
+      
+      // Update the item's status
+      const updatedItem = { ...draggedItem, status: newStatus, updatedAt: Date.now() }
+      
+      // If moving to a different column, add at the specified index within that column
+      if (source.droppableId !== destination.droppableId) {
+        // Find all items in the destination column
+        const destColumnItems = newContent.filter(item => item.status === newStatus)
+        
+        // Calculate the correct insertion position in the overall array
+        const insertIndex = destination.index === 0 
+          ? newContent.findIndex(item => item.status === newStatus)
+          : Math.min(
+              newContent.findIndex(item => item.status === newStatus) + destination.index,
+              newContent.length
+            )
+        
+        // Insert the item at the calculated position
+        newContent.splice(Math.max(0, insertIndex), 0, updatedItem)
+      } else {
+        // Moving within the same column - handle reordering
+        const sourceColumnItems = newContent.filter(item => item.status === newStatus)
+        const firstColumnIndex = newContent.findIndex(item => item.status === newStatus)
+        
+        // Insert at the new position within the same column
+        const insertIndex = firstColumnIndex + destination.index
+        newContent.splice(insertIndex, 0, updatedItem)
+      }
+      
+      return newContent
+    })
   }
 
   const handleAddContent = (contentData: Partial<ContentItem>) => {

@@ -166,6 +166,7 @@ export function CalendarView() {
   const [currentDate, setCurrentDate] = useState(new Date(2024, 1, 19)) // Feb 19, 2024
   const [viewMode, setViewMode] = useState<ViewMode>("month")
   const [selectedEvent, setSelectedEvent] = useState<CalendarEvent | null>(null)
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null)
   const [events] = useState<CalendarEvent[]>(mockEvents)
   const [mounted, setMounted] = useState(false)
 
@@ -412,10 +413,12 @@ export function CalendarView() {
                           "hover:from-white/8 hover:to-white/0 hover:border-white/10",
                           "transition-all duration-200",
                           !day.isCurrentMonth && "opacity-40",
-                          day.isToday && "ring-2 ring-[hsl(var(--command-accent))]/50 bg-gradient-to-br from-[hsl(var(--command-accent))]/10 to-transparent"
+                          day.isToday && "ring-2 ring-[hsl(var(--command-accent))]/50 bg-gradient-to-br from-[hsl(var(--command-accent))]/10 to-transparent",
+                          selectedDate && selectedDate.toDateString() === day.date.toDateString() && "ring-2 ring-white/30 bg-gradient-to-br from-white/10 to-transparent"
                         )}
                         whileHover={{ scale: 1.02 }}
                         transition={{ duration: 0.2 }}
+                        onClick={() => setSelectedDate(day.date)}
                       >
                         <div className="flex items-center justify-between mb-2">
                           <div className={cn(
@@ -567,6 +570,109 @@ export function CalendarView() {
               </Card>
             )}
           </motion.div>
+
+          {/* Selected Day Events */}
+          {selectedDate && (
+            <motion.div 
+              variants={itemVariants}
+              initial="hidden"
+              animate="visible"
+            >
+              <Card className="glass-morphism border-[hsl(var(--command-border-bright))] mt-6">
+                <CardHeader className="pb-4">
+                  <div className="flex items-center justify-between">
+                    <CardTitle className="font-heading font-semibold">
+                      Events for {selectedDate.toLocaleDateString('en-US', { 
+                        weekday: 'long',
+                        year: 'numeric', 
+                        month: 'long', 
+                        day: 'numeric' 
+                      })}
+                    </CardTitle>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => setSelectedDate(null)}
+                      className="text-[hsl(var(--command-text-muted))] hover:text-white"
+                    >
+                      <X className="h-4 w-4" />
+                    </Button>
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  {(() => {
+                    const dayEvents = events.filter(event => {
+                      const eventDate = new Date(event.scheduledTime)
+                      return eventDate.toDateString() === selectedDate.toDateString()
+                    }).sort((a, b) => a.scheduledTime - b.scheduledTime)
+
+                    if (dayEvents.length === 0) {
+                      return (
+                        <div className="text-center py-8">
+                          <Clock className="h-12 w-12 mx-auto text-[hsl(var(--command-text-muted))] mb-4" />
+                          <p className="text-[hsl(var(--command-text-muted))]">
+                            No events scheduled for this day
+                          </p>
+                        </div>
+                      )
+                    }
+
+                    return (
+                      <div className="space-y-3">
+                        {dayEvents.map((event) => {
+                          const eventDate = new Date(event.scheduledTime)
+                          const statusStyle = statusConfig[event.status]
+                          const StatusIcon = statusStyle.icon
+                          
+                          return (
+                            <motion.div
+                              key={event._id}
+                              className={cn(
+                                "p-4 glass-morphism rounded-xl border cursor-pointer group",
+                                statusStyle.border
+                              )}
+                              style={{ boxShadow: statusStyle.glow }}
+                              whileHover={{ scale: 1.02, y: -2 }}
+                              onClick={() => setSelectedEvent(event)}
+                            >
+                              <div className="flex items-center justify-between">
+                                <div className="flex items-center gap-4">
+                                  <div className={cn("p-2 rounded-lg", statusStyle.bg)}>
+                                    <StatusIcon className={cn("h-4 w-4", statusStyle.color)} />
+                                  </div>
+                                  <div>
+                                    <h3 className="font-heading font-semibold">{event.title}</h3>
+                                    <p className="text-body-small text-secondary">
+                                      {event.description}
+                                    </p>
+                                  </div>
+                                </div>
+                                
+                                <div className="flex items-center gap-4">
+                                  <div className="text-right">
+                                    <div className="text-body font-semibold">
+                                      {eventDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                    </div>
+                                    <div className="text-body-small text-secondary">
+                                      {event.duration} minutes • {event.agent}
+                                    </div>
+                                  </div>
+                                  
+                                  <Badge variant="outline" className={cn(statusStyle.bg, statusStyle.color, "text-body-small")}>
+                                    {event.status}
+                                  </Badge>
+                                </div>
+                              </div>
+                            </motion.div>
+                          )
+                        })}
+                      </div>
+                    )
+                  })()}
+                </CardContent>
+              </Card>
+            </motion.div>
+          )}
         </div>
       </motion.div>
 

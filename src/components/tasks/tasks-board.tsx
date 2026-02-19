@@ -126,6 +126,23 @@ export function TasksBoard() {
     setMounted(true)
   }, [])
 
+  // Keyboard shortcut: N to add new task
+  useEffect(() => {
+    const handleKeydown = (e: KeyboardEvent) => {
+      if (e.key === 'n' || e.key === 'N') {
+        // Don't trigger if user is typing in an input/textarea
+        if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) {
+          return
+        }
+        e.preventDefault()
+        handleAddNewTask()
+      }
+    }
+
+    document.addEventListener('keydown', handleKeydown)
+    return () => document.removeEventListener('keydown', handleKeydown)
+  }, [])
+
   // Filter tasks by assignee
   const filteredTasks = useMemo(() => {
     if (selectedAssignee === "All") return tasks
@@ -313,10 +330,14 @@ export function TasksBoard() {
               <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
                 <Button 
                   onClick={handleAddNewTask} 
-                  className="btn-premium text-body font-semibold px-6"
+                  className="btn-premium text-body font-semibold px-6 relative group"
+                  title="Press 'N' to quickly add a new task"
                 >
                   <Plus className="h-4 w-4 mr-2" />
                   Deploy Task
+                  <kbd className="hidden group-hover:block absolute -bottom-8 left-1/2 transform -translate-x-1/2 px-2 py-1 text-xs bg-black/80 text-white rounded border border-white/20 pointer-events-none">
+                    N
+                  </kbd>
                 </Button>
               </motion.div>
             </div>
