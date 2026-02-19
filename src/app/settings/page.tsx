@@ -17,6 +17,10 @@ const ThemeSettings = dynamic(() => import("@/components/settings/theme-settings
   loading: () => <div className="p-6"><PageSkeleton /></div>
 })
 
+const SoundSettings = dynamic(() => import("@/components/settings/sound-settings").then(mod => ({ default: mod.SoundSettings })), {
+  loading: () => <div className="p-6"><PageSkeleton /></div>
+})
+
 export default function SettingsPage() {
   useEffect(() => {
     logNavigationAction('Settings')
@@ -56,6 +60,9 @@ export default function SettingsPage() {
 
             {/* Theme Settings Section */}
             <ThemeSettings />
+
+            {/* Sound Settings Section */}
+            <SoundSettings />
 
             {/* Data Management Section */}
             <DataManagement />

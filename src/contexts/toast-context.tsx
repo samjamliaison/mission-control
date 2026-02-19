@@ -2,6 +2,7 @@
 
 import React, { createContext, useContext, useState, useCallback } from 'react'
 import { nanoid } from 'nanoid'
+import { soundSystem } from '@/lib/sound-system'
 
 export type ToastVariant = 'success' | 'error' | 'info' | 'warning'
 
@@ -46,6 +47,27 @@ export function ToastProvider({
       id: nanoid(),
       createdAt: Date.now(),
       duration: toast.duration ?? defaultDuration
+    }
+
+    // Play appropriate sound based on variant
+    try {
+      switch (newToast.variant) {
+        case 'success':
+          soundSystem.playSuccess()
+          break
+        case 'error':
+          soundSystem.playError()
+          break
+        case 'info':
+          soundSystem.playNotificationPing()
+          break
+        case 'warning':
+          soundSystem.playError()
+          break
+      }
+    } catch (error) {
+      // Silently fail - don't block toast
+      console.debug('Toast sound failed:', error)
     }
 
     setToasts(prev => {
