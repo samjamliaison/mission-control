@@ -11,6 +11,7 @@ import { useCommandPalette } from "@/hooks/use-command-palette"
 import { useKeyboardShortcuts } from "@/hooks/use-keyboard-shortcuts"
 import { ShortcutsHelpModal } from "@/components/keyboard-shortcuts/shortcuts-help-modal"
 import { ThemeProvider } from "@/lib/theme-context"
+import { ThemeToggle } from "@/components/ui/theme-toggle"
 
 interface RootLayoutClientProps {
   children: React.ReactNode
@@ -40,7 +41,10 @@ export function RootLayoutClient({ children }: RootLayoutClientProps) {
                 {/* Header with Breadcrumbs and Search */}
                 <div className="flex items-center justify-between mb-6">
                   <Breadcrumbs />
-                  <GlobalSearch />
+                  <div className="flex items-center gap-3">
+                    <GlobalSearch />
+                    <ThemeToggle />
+                  </div>
                 </div>
                 {children}
               </div>
