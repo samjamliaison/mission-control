@@ -136,7 +136,7 @@ export function TaskColumn({ title, status, tasks, onEditTask, onDeleteTask, sel
                 ref={provided.innerRef}
                 {...provided.droppableProps}
                 className={cn(
-                  "min-h-[420px] transition-all duration-300 rounded-xl p-3 relative overflow-hidden",
+                  "min-h-[420px] transition-all duration-500 ease-out rounded-xl p-3 relative overflow-hidden",
                   snapshot.isDraggingOver && "ring-2 ring-dashed animate-pulse"
                 )}
                 style={{

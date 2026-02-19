@@ -155,9 +155,13 @@ export function TaskCard({ task, index, onEdit, onDelete, isSelected = false, on
           }}
           whileHover={!snapshot.isDragging ? { y: -2, scale: 1.01 } : {}}
           whileTap={!snapshot.isDragging ? { scale: 0.98 } : {}}
+          layout="position"
           transition={{ 
-            duration: snapshot.isDragging ? 0.15 : 0.2, 
-            ease: snapshot.isDragging ? [0.2, 0, 0.2, 1] : "easeInOut"
+            duration: snapshot.isDragging ? 0.15 : 0.4, 
+            ease: snapshot.isDragging ? [0.2, 0, 0.2, 1] : [0.23, 1, 0.32, 1],
+            type: snapshot.isDragging ? "tween" : "spring",
+            stiffness: snapshot.isDragging ? undefined : 120,
+            damping: snapshot.isDragging ? undefined : 14
           }}
           className={cn(
             "mb-3 cursor-grab active:cursor-grabbing group relative select-none",
