@@ -26,6 +26,7 @@ import { ContentItem } from "@/types/content"
 import { PageHeader } from "@/components/ui/page-header"
 import { StatsCard } from "@/components/ui/stats-card"
 import { EmptyState } from "@/components/ui/empty-state"
+import { PrintButton } from "@/components/ui/print-button"
 import { loadContent, saveContent } from "@/lib/data-persistence"
 import { useToastActions } from "@/components/ui/toast"
 import { exportPipelineAsJSON, downloadFile, generateFilename } from "@/lib/export-utils"
@@ -353,6 +354,13 @@ export function ContentPipeline() {
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
+
+                <PrintButton 
+                  title="Print content pipeline for offline reference"
+                  onBeforePrint={() => {
+                    document.body.setAttribute('data-print-page', 'pipeline')
+                  }}
+                />
 
                 <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
                   <Button

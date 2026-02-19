@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import { Geist, Plus_Jakarta_Sans } from "next/font/google"
 import { RootLayoutClient } from "@/components/layout/root-layout-client"
 import "./globals.css"
+import "../styles/print.css"
 
 const geist = Geist({
   subsets: ["latin"],

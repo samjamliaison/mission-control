@@ -22,6 +22,7 @@ import { loadEvents, saveEvents } from "@/lib/data-persistence"
 import { EventCreationDialog } from "./event-creation-dialog"
 import { EventDetails } from "./event-details"
 import { useToastActions } from "@/components/ui/toast"
+import { PrintButton } from "@/components/ui/print-button"
 import { cn } from "@/lib/utils"
 
 const agentColors = {
@@ -361,6 +362,13 @@ export function CalendarView() {
                     </div>
                   ))}
                 </div>
+
+                <PrintButton 
+                  title="Print calendar for offline planning"
+                  onBeforePrint={() => {
+                    document.body.setAttribute('data-print-page', 'calendar')
+                  }}
+                />
 
                 <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
                   <Button

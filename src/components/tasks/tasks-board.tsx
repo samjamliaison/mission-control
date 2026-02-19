@@ -19,12 +19,13 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { Plus, Filter, Command, Activity, Users, Target, CheckSquare, FileText, Sparkles, Square, CheckSquare as CheckedSquare, ArrowUpDown, Download, Settings } from "lucide-react"
+import { Plus, Filter, Command, Activity, Users, Target, CheckSquare, FileText, Sparkles, Square, CheckSquare as CheckedSquare, ArrowUpDown, Download, Settings, Printer } from "lucide-react"
 import { TaskColumn } from "./task-column"
 import { AddTaskDialog } from "./add-task-dialog"
 import { TaskTemplatePicker } from "./task-template-picker"
 import { BulkActionBar } from "./bulk-action-bar"
 import { ColumnCustomizationDialog } from "./column-customization-dialog"
+import { PrintButton } from "@/components/ui/print-button"
 import { SectionErrorBoundary } from "@/components/ui/error-boundary"
 import { Task } from "./task-card"
 import { TaskTemplate, createTaskFromTemplate } from "@/lib/task-templates"
@@ -672,6 +673,14 @@ export function TasksBoard() {
                   </DropdownMenuContent>
                 </DropdownMenu>
 
+                <PrintButton 
+                  title="Print tasks for offline reference"
+                  onBeforePrint={() => {
+                    // Add print-specific data attributes for styling
+                    document.body.setAttribute('data-print-page', 'tasks')
+                  }}
+                />
+
                 <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
                   <Button
                     variant="outline"
@@ -732,7 +741,7 @@ export function TasksBoard() {
                 />
               ) : (
                 <DragDropContext onDragEnd={handleDragEnd}>
-                  <div className="grid gap-4 overflow-x-auto pb-4" style={{ gridTemplateColumns: `repeat(${columns.length}, minmax(300px, 1fr))` }}>
+                  <div className="grid gap-4 overflow-x-auto pb-4 print-content" style={{ gridTemplateColumns: `repeat(${columns.length}, minmax(300px, 1fr))` }}>
                     {columns.map((column) => (
                       <TaskColumn
                         key={column.id}

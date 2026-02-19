@@ -182,6 +182,7 @@ export function TaskCard({ task, index, onEdit, onDelete, isSelected = false, on
             className={cn(
               "backdrop-blur-xl bg-gradient-to-br from-[hsl(var(--command-surface-elevated))]/95 to-[hsl(var(--command-surface))]/90",
               "border border-white/5 rounded-xl relative overflow-hidden card-hover-premium transition-all duration-200",
+              "task-card-print", // Print-friendly class
               snapshot.isDragging && "border-[hsl(var(--command-accent))]/40 bg-gradient-to-br from-[hsl(var(--command-surface-elevated))]/98 to-[hsl(var(--command-surface))]/95",
               isCompleted && !snapshot.isDragging && "opacity-70",
               isActive && !snapshot.isDragging && "ring-1 ring-[hsl(var(--command-accent))]/30"
@@ -250,10 +251,10 @@ export function TaskCard({ task, index, onEdit, onDelete, isSelected = false, on
                     isCompleted && "line-through text-muted"
                   )}>
                     {task.title}
-                    <ExternalLink className="h-3 w-3 opacity-0 group-hover/title:opacity-100 transition-opacity duration-200" />
+                    <ExternalLink className="h-3 w-3 opacity-0 group-hover/title:opacity-100 transition-opacity duration-200 print-hide" />
                   </h3>
                 </Link>
-                <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200 shrink-0">
+                <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200 shrink-0 print-hide">
                   <TimeTracker 
                     taskId={task._id} 
                     compact 
@@ -298,7 +299,7 @@ export function TaskCard({ task, index, onEdit, onDelete, isSelected = false, on
             <CardContent className="pt-0 pb-5 px-5 space-y-3">
               {task.description && (
                 <p className={cn(
-                  "text-body-small text-secondary line-clamp-3",
+                  "text-body-small text-secondary line-clamp-3 task-description",
                   isCompleted && "line-through opacity-60"
                 )}>
                   {task.description}
@@ -323,7 +324,7 @@ export function TaskCard({ task, index, onEdit, onDelete, isSelected = false, on
                     <span>{agentAvatars[task.assignee as keyof typeof agentAvatars]}</span>
                   </div>
                   <div className="flex flex-col">
-                    <span className={cn("text-body-small font-semibold", agentColor.text)}>
+                    <span className={cn("text-body-small font-semibold task-assignee", agentColor.text)}>
                       {task.assignee}
                     </span>
                     <span className="text-body-small text-muted">
@@ -370,35 +371,45 @@ export function TaskCard({ task, index, onEdit, onDelete, isSelected = false, on
                   </div>
                 </div>
 
-                <div className="flex items-center gap-3 text-muted text-body-small">
-                  <div className="flex items-center gap-1">
-                    <Calendar className="h-3 w-3" />
-                    <span>{formatDate(task.createdAt)}</span>
+                <div className="flex items-center justify-between task-meta">
+                  <div className="flex items-center gap-3 text-muted text-body-small">
+                    <div className="flex items-center gap-1">
+                      <Calendar className="h-3 w-3" />
+                      <span>{formatDate(task.createdAt)}</span>
+                    </div>
+                    
+                    {totalTime > 0 && (
+                      <div className={cn(
+                        "flex items-center gap-1",
+                        isTracking && "text-[hsl(var(--command-accent))]"
+                      )}>
+                        <Timer className="h-3 w-3" />
+                        <span className="font-mono">{formatTime(totalTime)}</span>
+                        {isTracking && (
+                          <motion.div
+                            animate={{
+                              opacity: [0.5, 1, 0.5],
+                              scale: [1, 1.2, 1]
+                            }}
+                            transition={{
+                              duration: 1.5,
+                              repeat: Infinity,
+                              ease: "easeInOut"
+                            }}
+                            className="w-1.5 h-1.5 bg-[hsl(var(--command-accent))] rounded-full print-hide"
+                          />
+                        )}
+                      </div>
+                    )}
                   </div>
                   
-                  {totalTime > 0 && (
-                    <div className={cn(
-                      "flex items-center gap-1",
-                      isTracking && "text-[hsl(var(--command-accent))]"
-                    )}>
-                      <Timer className="h-3 w-3" />
-                      <span className="font-mono">{formatTime(totalTime)}</span>
-                      {isTracking && (
-                        <motion.div
-                          animate={{
-                            opacity: [0.5, 1, 0.5],
-                            scale: [1, 1.2, 1]
-                          }}
-                          transition={{
-                            duration: 1.5,
-                            repeat: Infinity,
-                            ease: "easeInOut"
-                          }}
-                          className="w-1.5 h-1.5 bg-[hsl(var(--command-accent))] rounded-full"
-                        />
-                      )}
-                    </div>
-                  )}
+                  {/* Print-visible status badge */}
+                  <div className={cn(
+                    "task-status hidden",
+                    `status-${task.status}`
+                  )}>
+                    {task.status === 'todo' ? 'To Do' : task.status === 'in-progress' ? 'In Progress' : 'Done'}
+                  </div>
                 </div>
               </div>
 
